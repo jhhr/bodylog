@@ -1,0 +1,1 @@
+ke 11.3 klo 16-17:30 aihemäärittelyn kirjoitus

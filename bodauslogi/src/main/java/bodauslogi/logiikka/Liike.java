@@ -7,7 +7,7 @@ public class Liike {
 
     private String nimi;
     private LinkedHashSet<String> muuttujat;
-    private ArrayList<ArrayList<Double>> sarjat;
+    private ArrayList<Sarja> sarjat;
 
     public Liike(String nimi) {
         this.nimi = nimi;
@@ -19,11 +19,11 @@ public class Liike {
         return nimi;
     }
 
-    public LinkedHashSet<String> getMuuttujat() {
+    public LinkedHashSet<String> getMuuttujaJoukko() {
         return muuttujat;
     }
 
-    public ArrayList<ArrayList<Double>> getSarjat() {
+    public ArrayList<Sarja> getSarjaLista() {
         return sarjat;
     }
 
@@ -31,21 +31,7 @@ public class Liike {
         muuttujat.add(nimike);
     }
 
-    public boolean lisaaSarja(ArrayList<Double> sarja) {
-        if (muuttujat.isEmpty() || sarja.size() != muuttujat.size()) {
-            return false;
-        } else {
-            sarjat.add(sarja);
-            return true;
-        }
+    public void lisaaSarja(Sarja sarja) {
+        sarjat.add(sarja);
     }
-
-//    @Override
-//    public String toString() {
-//        String str = nimi + "\n" + muuttujat.toString() + "\n";
-//        for (ArrayList<Double> sarja : sarjat) {
-//            str += sarja + "\n";
-//        }
-//        return str;
-//    }
 }

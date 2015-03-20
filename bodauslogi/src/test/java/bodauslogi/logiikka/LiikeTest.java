@@ -1,67 +1,45 @@
 package bodauslogi.logiikka;
 
-import java.util.ArrayList;
-import org.junit.After;
-import org.junit.AfterClass;
 import static org.junit.Assert.*;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class LiikeTest {
 
     Liike penkki;
+    Sarja sarja;
 
     @Before
     public void SetUp() {
         penkki = new Liike("penkki");
+        sarja = new Sarja();
     }
 
     @Test
     public void LiikkeenMuuttujaJoukkoAlussaTyhja() {
-        assertTrue(penkki.getMuuttujat().isEmpty());
+        assertTrue(penkki.getMuuttujaJoukko().isEmpty());
     }
 
     @Test
     public void LiikkeenSarjaListaAlussaTyhja() {
-        assertTrue(penkki.getSarjat().isEmpty());
+        assertTrue(penkki.getSarjaLista().isEmpty());
     }
-    
+
     @Test
-    public void LiikkeeseenLisattyYksiMuuttujaNiinMuuttujaJoukonKokoYksi(){
+    public void LiikkeenMuuttujaJoukonKokoYksiKunLisattyYksiMuuttuja() {
         penkki.lisaaMuuttuja("paino");
-        assertEquals(1, penkki.getMuuttujat().size());
-    }   
-    
-    @Test
-    public void LiikkeeseenEiVoiLisataSarjaaJosMuuttujiaEiOle(){
-        assertFalse(penkki.lisaaSarja(new ArrayList<Double>()));
+        assertEquals(1, penkki.getMuuttujaJoukko().size());
     }
-    
+
     @Test
-    public void LiikkeeseenEiVoiLisataSarjaaJonkaKokoKaksiKunMuuttujiaYksi(){
-        penkki.lisaaMuuttuja("paino");
-        ArrayList sarja = new ArrayList<>();
-        sarja.add(50.0);
-        sarja.add(60.0);
-        assertFalse(penkki.lisaaSarja(sarja));
-    }
-    
-    @Test
-    public void OikeanKokoisenLisattySarjaOnnistuuKunMuuttujiaYksi(){
-        penkki.lisaaMuuttuja("paino");        
-        ArrayList sarja = new ArrayList<>();
-        sarja.add(50.0);
-        assertTrue(penkki.lisaaSarja(sarja));
-    }
-    
-    @Test
-    public void OikeanKokoisenLisattySarjaLoytyyOikeastaPaikastaKunMuuttujiaYksi(){
-        penkki.lisaaMuuttuja("paino");        
-        ArrayList sarja = new ArrayList<>();
-        sarja.add(50.0);
+    public void LiikkeeseenLisattyTyhjaSarjaLoytyyOikeastaPaikasta(){
         penkki.lisaaSarja(sarja);
-        assertEquals(sarja, penkki.getSarjat().get(0));
+        assertEquals(sarja, penkki.getSarjaLista().get(0));
     }
     
+    @Test
+    public void LiikkeenSarjaListanKokoYksiKunSarjojaYksi(){
+        penkki.lisaaSarja(sarja);
+        assertEquals(1, penkki.getSarjaLista().size());
+    }
 }

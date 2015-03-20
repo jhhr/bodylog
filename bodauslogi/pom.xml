@@ -34,7 +34,7 @@
     <configuration>
         <instrumentation>
             <includes>
-                <include>bodauslogi/*.class</include>
+                <include>bodauslogi/**/*.class</include>
             </includes>
         </instrumentation>
     </configuration>
@@ -46,10 +46,12 @@
     <version>1.1.4</version>
     <configuration>
         <targetClasses>
-            <param>bodauslogi.logiikka.*</param>
+            <param>bodauslogi.logiikka.*</param>            
+            <param>bodauslogi.tiedostokasittely.*</param>
         </targetClasses>
         <targetTests>
-            <param>bodauslogi.logiikka.*</param>
+            <param>bodauslogi.logiikka.*</param>      
+            <param>bodauslogi.tiedostokasittely.*</param>
         </targetTests>
     </configuration>
 </plugin>

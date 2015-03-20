@@ -1,6 +1,6 @@
 package bodauslogi.logiikka;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
@@ -8,12 +8,16 @@ import java.util.TreeMap;
 
 public class Sessio {
 
-    private Date pvm;
+    private Date paivamaara;
     private TreeMap<String, Liike> liikkeet;
 
     public Sessio(Date pvm) {
-        this.pvm = pvm;
+        this.paivamaara = pvm;
         this.liikkeet = new TreeMap<>();
+    }
+
+    public Date getPaivamaara() {
+        return paivamaara;
     }
 
     public Set<String> getLiikkeidenNimienJoukko() {
@@ -29,24 +33,21 @@ public class Sessio {
     }
 
     public boolean lisaaLiike(Liike liike) {
-        if (liikkeet.containsKey(liike.getNimi())) {
+        if (liike.getNimi().equals("") || liikkeet.containsKey(liike.getNimi())) {
             return false;
         } else {
-        liikkeet.put(liike.getNimi(), liike);
-        return true;
+            liikkeet.put(liike.getNimi(), liike);
+            return true;
         }
     }
 
-    public boolean lisaaSarjaLiikkeelle(String nimi, ArrayList<Double> sarja) {
-        return liikkeet.get(nimi).lisaaSarja(sarja);
+    public boolean lisaaSarjaLiikkeelle(String nimi, Sarja sarja) {
+        Liike liike = liikkeet.get(nimi);
+        if (liike == null || liike.getMuuttujaJoukko().isEmpty()
+                || !Arrays.equals(liike.getMuuttujaJoukko().toArray(new String[0]), sarja.getAvainJoukko().toArray(new String[0]))) {
+            return false;
+        }
+        liikkeet.get(nimi).lisaaSarja(sarja);
+        return true;
     }
-
-//    @Override
-//    public String toString() {
-//        String str = pvm + "\n";
-//        for (Liike liike : liikkeet.values()) {
-//            str += liike + "\n";
-//        }
-//        return str;
-//    }
 }

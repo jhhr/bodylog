@@ -23,7 +23,7 @@ public class Sarja {
     public void lisaaArvo(String muuttuja, double arvo) {
         arvot.put(muuttuja, arvo);
     }
-    
+
     public void lisaaArvo(String muuttuja) {
         arvot.put(muuttuja, null);
     }

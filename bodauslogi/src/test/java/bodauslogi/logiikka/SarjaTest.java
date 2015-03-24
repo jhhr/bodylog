@@ -38,7 +38,7 @@ public class SarjaTest {
     }
     
     @Test
-    public void ArvojenJarjestysOikeaKahdellaMuuttujallaArvonMuokkauksenJalkeen(){
+    public void ArvojenJarjestysOikeinKahdellaMuuttujallaArvonMuokkauksenJalkeen(){
         sarja.lisaaArvo("paino", 60.0);
         sarja.lisaaArvo("toistot", 15.0);
         sarja.lisaaArvo("paino", 70.0);
@@ -57,6 +57,12 @@ public class SarjaTest {
         sarja.lisaaArvo("paino", 60.0);
         sarja.lisaaArvo("toistot", 15.0);
         assertEquals("[60.0,15.0]", sarja.toString());
+    }    
+    
+    @Test
+    public void ToStringMuotoOikeinNullArvolla() {
+        sarja.lisaaArvo("paino");
+        assertEquals("[null]",sarja.toString());        
     }
     
 }

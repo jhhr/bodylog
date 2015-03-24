@@ -3,6 +3,7 @@ package bodauslogi.tiedostokasittely;
 import bodauslogi.logiikka.Liike;
 import bodauslogi.logiikka.Sarja;
 import bodauslogi.logiikka.Sessio;
+import java.io.File;
 import static org.junit.Assert.*;
 import java.util.Date;
 import org.junit.Before;
@@ -17,7 +18,7 @@ public class SessionTallennusTest {
     Sarja sarja2;
     Sarja sarja3;
     SessionTallennus tallennus;
-    
+
     @Before
     public void setUp() {
         Sessio sessio = new Sessio(new Date(0));
@@ -42,5 +43,18 @@ public class SessionTallennusTest {
         penkki.lisaaSarja(sarja2);
         mave.lisaaSarja(sarja3);
         SessionTallennus tallennus = new SessionTallennus(sessio);
+    }
+
+    @Test
+    public void SessiotKansionLuontiJosEiAiemminOlemassaOnnistuu() throws Exception {
+        File sessiotKansio = new File("Sessiot\\");
+        if (!sessiotKansio.exists()) {
+            tallennus.LuoSessiotKansio();
+        }
+        assertTrue(sessiotKansio.exists());
+    }
+
+    @Test
+    public void PaivamaaraFormaattiOikein() {
     }
 }

@@ -17,37 +17,24 @@ public class SessionTallennus {
         this.sessio = sessio;
     }
 
-    public void LuoSessiotKansio() {
-        try {
-            new File("Sessiot\\").mkdir();
-        } catch (Exception e) {
-            System.out.println("Sessiokansion luonti epäonnistui:" + e.getMessage());
+    public void LuoSessiotKansio() throws Exception {
+        new File("Sessiot\\").mkdir();
+    }
+
+    public void LuoKansiotLiikkeille() throws Exception {
+        for (String liikkeenNimi : sessio.getLiikkeidenNimienJoukko()) {
+            new File("Sessiot\\" + liikkeenNimi + "\\").mkdir();
         }
     }
 
-    public void LuoKansiotLiikkeille() {
-        try {
-            for (String liikkeenNimi : sessio.getLiikkeidenNimienJoukko()) {
-                new File("Sessiot\\" + liikkeenNimi + "\\").mkdir();
-            }
-        } catch (Exception e) {
-            System.out.println("Liikekansion luonti epäonnistui:" + e.getMessage());
-        }
-    }
-
-    public void kirjoitaSessioTiedostoihin() {
+    public void kirjoitaSessioTiedostoihin() throws Exception {
         for (String liikkeenNimi : sessio.getLiikkeidenNimienJoukko()) {
             File liikkeenSessio = new File("Sessiot\\" + liikkeenNimi + "\\" + pvmteksti + ".txt");
-            try {
-                FileWriter kirjoittaja = new FileWriter(liikkeenSessio);
-                for (Sarja sarja : sessio.getLiike(liikkeenNimi).getSarjaLista()) {
-                    kirjoittaja.write(sarja.toString() + "\n");
-                }
-                kirjoittaja.close();
-
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
+            FileWriter kirjoittaja = new FileWriter(liikkeenSessio);
+            for (Sarja sarja : sessio.getLiike(liikkeenNimi).getSarjaLista()) {
+                kirjoittaja.write(sarja.toString() + "\n");
             }
+            kirjoittaja.close();
         }
     }
 }

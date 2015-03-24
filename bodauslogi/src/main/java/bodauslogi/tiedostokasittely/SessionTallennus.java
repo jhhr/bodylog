@@ -18,18 +18,18 @@ public class SessionTallennus {
     }
 
     public void LuoSessiotKansio() throws Exception {
-        new File("Sessiot\\").mkdir();
+        new File("Sessiot").mkdir();
     }
 
     public void LuoKansiotLiikkeille() throws Exception {
         for (String liikkeenNimi : sessio.getLiikkeidenNimienJoukko()) {
-            new File("Sessiot\\" + liikkeenNimi + "\\").mkdir();
+            new File("Sessiot/" + liikkeenNimi + "/").mkdir();
         }
     }
 
     public void kirjoitaSessioTiedostoihin() throws Exception {
         for (String liikkeenNimi : sessio.getLiikkeidenNimienJoukko()) {
-            File liikkeenSessio = new File("Sessiot\\" + liikkeenNimi + "\\" + pvmteksti + ".txt");
+            File liikkeenSessio = new File("Sessiot/" + liikkeenNimi + "/" + pvmteksti + ".txt");
             FileWriter kirjoittaja = new FileWriter(liikkeenSessio);
             for (Sarja sarja : sessio.getLiike(liikkeenNimi).getSarjaLista()) {
                 kirjoittaja.write(sarja.toString() + "\n");

@@ -50,6 +50,20 @@ public class SessioTest {
         sessio.lisaaLiike(penkki);
         assertEquals(1, sessio.getLiikkeidenJoukko().size());
     }
+    
+    @Test
+    public void LiikkeenPoisto_TreeMapAvaimiaOikeaMaara(){
+        sessio.lisaaLiike(penkki);
+        sessio.poistaLiike("penkki");
+        assertTrue(sessio.getLiikkeidenNimienJoukko().isEmpty());
+    }
+    
+    @Test
+    public void LiikkeenPoisto_TreeMapArvojaOikeaMaara(){
+        sessio.lisaaLiike(penkki);
+        sessio.poistaLiike("penkki");
+        assertTrue(sessio.getLiikkeidenJoukko().isEmpty());
+    }
 
     @Test
     public void YhdenLiikkeenLisaysOnnistuuKunAiempiaNolla() {

@@ -4,3 +4,5 @@
 - ke 18.3 klo 12-18 luokkien ja testien koodausta
 - to 19.3 klo 21~~ kovaa mietintää
 - pe 20.3 klo 13-19 luokkien muokkausta, testien laajentamista, tiedostojärjestelmää aloitettu
+- ti 24.3 klo 12-14 koodausta pajassa
+- ke 25.3 klo 12-19.30 tiedostokasittelyn laajentamista

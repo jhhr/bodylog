@@ -40,6 +40,10 @@ public class Sessio {
             return true;
         }
     }
+    
+    public void poistaLiike(String nimi){
+        liikkeet.remove(nimi);
+    }
 
     public boolean lisaaSarjaLiikkeelle(String nimi, Sarja sarja) {
         Liike liike = liikkeet.get(nimi);

@@ -56,13 +56,13 @@ public class SarjaTest {
     public void toStringMuotoOikeinKahdellaMuuttujalla(){
         sarja.lisaaArvo("paino", 60.0);
         sarja.lisaaArvo("toistot", 15.0);
-        assertEquals("[60.0,15.0]", sarja.toString());
+        assertEquals("{paino:60.0,toistot:15.0}", sarja.toString());
     }    
     
     @Test
     public void ToStringMuotoOikeinNullArvolla() {
         sarja.lisaaArvo("paino");
-        assertEquals("[null]",sarja.toString());        
+        assertEquals("{paino:null}",sarja.toString());        
     }
     
 }

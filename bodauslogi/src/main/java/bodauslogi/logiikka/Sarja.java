@@ -34,11 +34,11 @@ public class Sarja {
 
     @Override
     public String toString() {
-        String str = "[";
-        for (Double arvo : arvot.values()) {
-            str += arvo + ",";
+        String str = "{";
+        for (String muuttuja : arvot.keySet()) {
+            str += muuttuja + ":" + arvot.get(muuttuja) + ",";
         }
-        str = str.substring(0, str.length() - 1) + "]";
+        str = str.substring(0, str.length() - 1) + "}";
         return str;
     }
 }

@@ -3,7 +3,8 @@ package bodauslogi;
 import bodauslogi.logiikka.Liike;
 import bodauslogi.logiikka.Sarja;
 import bodauslogi.logiikka.Sessio;
-import bodauslogi.tiedostokasittely.SessionTallennus;
+import bodauslogi.tiedostokasittely.SessioTiedostoihin;
+import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 

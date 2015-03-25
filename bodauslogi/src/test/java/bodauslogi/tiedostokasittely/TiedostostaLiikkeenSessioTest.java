@@ -1,4 +1,4 @@
-package bodauslogi.logiikka;
+package bodauslogi.tiedostokasittely;
 
 import bodauslogi.tiedostokasittely.Kansiot;
 import bodauslogi.tiedostokasittely.TiedostostaLiikkeenSessio;

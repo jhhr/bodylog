@@ -6,3 +6,4 @@
 - pe 20.3 klo 13-19 luokkien muokkausta, testien laajentamista, tiedostojärjestelmää aloitettu
 - ti 24.3 klo 12-14 koodausta pajassa
 - ke 25.3 klo 12-19.30 tiedostokasittelyn laajentamista
+- to 26.3 klo 12-13 luokkakaavion piirtelyä

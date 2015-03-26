@@ -8,26 +8,23 @@ import java.text.SimpleDateFormat;
 
 public class SessioTiedostoihin {
 
-    private final Sessio sessio;
-    private final String pvmteksti;
-
-    public SessioTiedostoihin(Sessio sessio) {
-        this.pvmteksti = new SimpleDateFormat("dd.MM.yyyy").format(sessio.getPaivamaara());
-        this.sessio = sessio;
+    private SessioTiedostoihin() {
     }
 
-    public void luoTilastotKansio() throws Exception {
+    public static void luoDATAKansio() throws Exception {
         new File(Kansiot.DATA).mkdir();
     }
 
-    public void luoKansiotLiikkeille() throws Exception {
+    public static void luoKansiotLiikkeille(Sessio sessio) throws Exception {
         for (String liikkeenNimi : sessio.getLiikkeidenNimienJoukko()) {
             new File(Kansiot.DATA + "/" + liikkeenNimi + "/").mkdir();
         }
     }
 
-    public void kirjoitaSessioTiedostoihin() throws Exception {
+    public static void kirjoita(Sessio sessio) throws Exception {
+        
         for (String liikkeenNimi : sessio.getLiikkeidenNimienJoukko()) {
+            String pvmteksti = new SimpleDateFormat("dd.MM.yyyy").format(sessio.getPaivamaara());
             File sessioTiedosto = new File(Kansiot.DATA+"/" + liikkeenNimi + "/" + pvmteksti + ".txt");
             FileWriter kirjoittaja = new FileWriter(sessioTiedosto);
             for (Sarja sarja : sessio.getLiike(liikkeenNimi).getSarjaLista()) {

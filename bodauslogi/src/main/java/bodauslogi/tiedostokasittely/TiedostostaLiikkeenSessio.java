@@ -10,22 +10,17 @@ import java.util.Scanner;
 
 public class TiedostostaLiikkeenSessio {
 
-    private final File sessioTiedosto;
-    private final Scanner lukija;
-
-    public TiedostostaLiikkeenSessio(File sessioTiedosto) throws Exception {
-        this.sessioTiedosto = sessioTiedosto;
-        lukija = new Scanner(sessioTiedosto);
+    private TiedostostaLiikkeenSessio(){
     }
 
-    private Liike luoLiikeTiedostoista() throws Exception {
+    private static Liike luoLiike(File sessioTiedosto) throws Exception {
         String nimi = sessioTiedosto.getParentFile().getName();
         File liikeTiedosto = new File(Kansiot.LIIKKEET + "/" + nimi + ".txt");
-        Liike liike = new TiedostostaLiike(liikeTiedosto).luoLiike();
+        Liike liike = TiedostostaLiike.luoLiike(liikeTiedosto);
         return liike;
     }
 
-    private Sarja luoSarjaSessioTiedostosta() {
+    private static Sarja luoSarja(Scanner lukija) {
         Sarja sarja = new Sarja();
         String rivi = lukija.nextLine();
         rivi = rivi.substring(rivi.indexOf("{")+1, rivi.indexOf("}"));
@@ -43,19 +38,20 @@ public class TiedostostaLiikkeenSessio {
         return sarja;
     }
 
-    private Date luoPaivamaaraSessioTiedostosta() throws Exception {
+    private static Date luoPaivamaara(File sessioTiedosto) throws Exception {
         String pvm = sessioTiedosto.getName();
         pvm = pvm.substring(0,pvm.length() - 4);
         return new SimpleDateFormat("dd.MM.yyyy").parse(pvm);
     }
 
-    public LiikkeenSessio luoLiikkeenSessio() throws Exception {
-        Liike liike = luoLiikeTiedostoista();
+    public static LiikkeenSessio luo(File sessioTiedosto) throws Exception {
+        Scanner lukija = new Scanner(sessioTiedosto);
+        Liike liike = luoLiike(sessioTiedosto);
         while (lukija.hasNextLine()) {
-            liike.lisaaSarja(luoSarjaSessioTiedostosta());
+            liike.lisaaSarja(luoSarja(lukija));
         }
         lukija.close();
-        return new LiikkeenSessio(liike, luoPaivamaaraSessioTiedostosta());
+        return new LiikkeenSessio(liike, luoPaivamaara(sessioTiedosto));
     }
 
 }

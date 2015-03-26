@@ -18,7 +18,6 @@ public class TiedostostaLiikkeenSessioTest {
     private File liikkeetKansio;
     private File sessioTiedosto;
     private File liikeTiedosto;
-    private TiedostostaLiikkeenSessio liises;
 
     @Before
     public void setUp() throws Exception {
@@ -36,7 +35,6 @@ public class TiedostostaLiikkeenSessioTest {
         FileWriter muuttujaKirjoittaja = new FileWriter(liikeTiedosto);
         muuttujaKirjoittaja.write("pisteitä\nankka");
         muuttujaKirjoittaja.close();
-        liises = new TiedostostaLiikkeenSessio(sessioTiedosto);
     }
 
     @After
@@ -58,24 +56,24 @@ public class TiedostostaLiikkeenSessioTest {
 
     @Test
     public void luodunLiikkeenNimiOikein() throws Exception {
-        assertEquals("lehdenluku", liises.luoLiikkeenSessio().getLiike().getNimi());
+        assertEquals("lehdenluku", TiedostostaLiikkeenSessio.luo(sessioTiedosto).getLiike().getNimi());
     }
 
     @Test
     public void luodunLiikkeenSarjatOikein() throws Exception {
         assertEquals("[{pisteitä:60.0,ankka:5.0}, {pisteitä:40.0,ankka:null}]",
-                liises.luoLiikkeenSessio().getLiike().getSarjaLista().toString());
+                TiedostostaLiikkeenSessio.luo(sessioTiedosto).getLiike().getSarjaLista().toString());
     }
 
     @Test
     public void luodunLiikkeenMuuttujatOikein() throws Exception {
         assertArrayEquals(new String[]{"pisteitä", "ankka"},
-                liises.luoLiikkeenSessio().getLiike().getMuuttujaJoukko().toArray(new String[0]));
+                TiedostostaLiikkeenSessio.luo(sessioTiedosto).getLiike().getMuuttujaJoukko().toArray(new String[0]));
     }
 
     @Test
     public void luodunLiikkeenSessionPaivamaarOikein() throws Exception {
         assertEquals(new SimpleDateFormat("dd.MM.yyyy").parse("04.07.2014"),
-                liises.luoLiikkeenSessio().getPaivamaara());
+                TiedostostaLiikkeenSessio.luo(sessioTiedosto).getPaivamaara());
     }
 }

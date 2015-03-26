@@ -15,14 +15,12 @@ public class LiikeTiedostoonTest {
     Liike penkki;
     File liikkeetKansio;
     File penkkiTiedosto;
-    LiikeTiedostoon tallennus;
 
     @Before
     public void setUp() throws Exception {
         penkki = new Liike("penkki");
         liikkeetKansio = new File(Kansiot.LIIKKEET);
         penkkiTiedosto = new File(Kansiot.LIIKKEET + "/penkki.txt");
-        tallennus = new LiikeTiedostoon(penkki);
     }
 
     @After
@@ -38,7 +36,7 @@ public class LiikeTiedostoonTest {
     @Test
     public void LiikkeetKansionLuontiJosEiAiemminOlemassaOnnistuu() throws Exception {
         if (!liikkeetKansio.exists()) {
-            tallennus.luoLiikkeetKansio();
+            LiikeTiedostoon.luoLiikkeetKansio();
         }
         assertTrue(liikkeetKansio.exists());
     }
@@ -47,7 +45,7 @@ public class LiikeTiedostoonTest {
     public void LiikeTiedostonLuontiOnnistuu() throws Exception {
         liikkeetKansio.mkdir();
         penkki.lisaaMuuttuja("paino");
-        tallennus.kirjoitaMuuttujatTiedostoon();
+        LiikeTiedostoon.kirjoita(penkki);
         assertTrue(penkkiTiedosto.exists());
     }
 
@@ -56,7 +54,7 @@ public class LiikeTiedostoonTest {
         liikkeetKansio.mkdir();
         penkki.lisaaMuuttuja("paino");
         penkki.lisaaMuuttuja("toistot");
-        tallennus.kirjoitaMuuttujatTiedostoon();
+        LiikeTiedostoon.kirjoita(penkki);
         Scanner lukija = new Scanner(penkkiTiedosto);
         lukija.useDelimiter("\\Z");
         String tiedostonSisalto = "";

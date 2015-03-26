@@ -6,17 +6,13 @@ import java.util.Scanner;
 
 public class TiedostostaLiike {
 
-    private final File liikeTiedosto;
-    private final Scanner lukija;
-
-    public TiedostostaLiike(File liikeTiedosto) throws Exception {
-        this.liikeTiedosto = liikeTiedosto;
-        lukija = new Scanner(liikeTiedosto);
+    private TiedostostaLiike() {
     }
 
-    public Liike luoLiike() {
+    public static Liike luoLiike(File liikeTiedosto) throws Exception {
+        Scanner lukija = new Scanner(liikeTiedosto);
         String nimi = liikeTiedosto.getName();
-        nimi = nimi.substring(0,nimi.length() - 4);
+        nimi = nimi.substring(0, nimi.length() - 4);
         Liike liike = new Liike(nimi);
         while (lukija.hasNextLine()) {
             liike.lisaaMuuttuja(lukija.nextLine());

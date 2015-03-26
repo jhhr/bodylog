@@ -13,7 +13,6 @@ import static org.junit.Assert.*;
 public class TiedostostaLiikeTest {
     File testiLiikeTiedosto;
     File liikkeetKansio;
-    TiedostostaLiike liikkeenLuoja;
     
     @Before
     public void setUp() throws Exception{
@@ -23,7 +22,6 @@ public class TiedostostaLiikeTest {
         FileWriter kirjoittaja = new FileWriter(testiLiikeTiedosto);
         kirjoittaja.write("kenkä\nkukka");
         kirjoittaja.close();
-        liikkeenLuoja = new TiedostostaLiike(testiLiikeTiedosto);
     }
     
     @After
@@ -37,14 +35,14 @@ public class TiedostostaLiikeTest {
     }
     
     @Test
-    public void luodunLiikkeeNimiOikein(){
-        Liike liike = liikkeenLuoja.luoLiike();
+    public void luodunLiikkeeNimiOikein() throws Exception{
+        Liike liike = TiedostostaLiike.luoLiike(testiLiikeTiedosto);
         assertEquals("testi", liike.getNimi());
     }
     
     @Test
-    public void luotuLiikeSisaltaaMuuttujatKenkaJaKukka(){
-        Liike liike = liikkeenLuoja.luoLiike();
+    public void luotuLiikeSisaltaaMuuttujatKenkaJaKukka() throws Exception{
+        Liike liike = TiedostostaLiike.luoLiike(testiLiikeTiedosto);
         assertArrayEquals(new String[]{"kenkä","kukka"},liike.getMuuttujaJoukko().toArray(new String[0]));
     }
 

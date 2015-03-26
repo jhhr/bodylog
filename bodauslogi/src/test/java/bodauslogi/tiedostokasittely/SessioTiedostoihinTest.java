@@ -19,7 +19,6 @@ public class SessioTiedostoihinTest {
     Sarja sarja1;
     Sarja sarja2;
     Sarja sarja3;
-    SessioTiedostoihin tallennus;
     File dataKansio;
     File penkkiKansio;
     File maveKansio;
@@ -29,7 +28,6 @@ public class SessioTiedostoihinTest {
     @Before
     public void setUp() {
         sessio = new Sessio(new Date(0));
-        tallennus = new SessioTiedostoihin(sessio);
         penkki = new Liike("penkki");
         mave = new Liike("mave");
         dataKansio = new File(Kansiot.DATA);
@@ -81,7 +79,7 @@ public class SessioTiedostoihinTest {
     @Test
     public void TilastotKansionLuontiJosEiAiemminOlemassaOnnistuu() throws Exception {
         if (!dataKansio.exists()) {
-            tallennus.luoTilastotKansio();
+            SessioTiedostoihin.luoDATAKansio();
         }
         assertTrue(dataKansio.exists());
     }
@@ -91,7 +89,7 @@ public class SessioTiedostoihinTest {
         sessio.lisaaLiike(mave);
         dataKansio.mkdir();
         if (!maveKansio.exists()) {
-            tallennus.luoKansiotLiikkeille();
+            SessioTiedostoihin.luoKansiotLiikkeille(sessio);
         }
         assertTrue(maveKansio.exists());
     }
@@ -102,7 +100,7 @@ public class SessioTiedostoihinTest {
         dataKansio.mkdir();
         maveKansio.mkdir();
         try {
-            tallennus.luoKansiotLiikkeille();
+            SessioTiedostoihin.luoKansiotLiikkeille(sessio);
         } catch (Exception e) {
             assertTrue(false);
         }
@@ -115,7 +113,7 @@ public class SessioTiedostoihinTest {
         dataKansio.mkdir();
         sessio.lisaaLiike(penkki);
         if (!maveKansio.exists() || !penkkiKansio.exists()) {
-            tallennus.luoKansiotLiikkeille();
+            SessioTiedostoihin.luoKansiotLiikkeille(sessio);
         }
         assertTrue(maveKansio.exists() && penkkiKansio.exists());
     }
@@ -125,7 +123,7 @@ public class SessioTiedostoihinTest {
         sessio.lisaaLiike(mave);
         dataKansio.mkdir();
         maveKansio.mkdir();
-        tallennus.kirjoitaSessioTiedostoihin();
+        SessioTiedostoihin.kirjoita(sessio);
         assertTrue(maveSessioTiedosto.exists());
     }
 
@@ -136,7 +134,7 @@ public class SessioTiedostoihinTest {
         dataKansio.mkdir();
         maveKansio.mkdir();
         penkkiKansio.mkdir();
-        tallennus.kirjoitaSessioTiedostoihin();
+        SessioTiedostoihin.kirjoita(sessio);
         assertTrue(maveSessioTiedosto.exists() && penkkiSessioTiedosto.exists());
     }
 
@@ -146,7 +144,7 @@ public class SessioTiedostoihinTest {
         lisaaMaveSarjat();
         dataKansio.mkdir();
         maveKansio.mkdir();
-        tallennus.kirjoitaSessioTiedostoihin();
+        SessioTiedostoihin.kirjoita(sessio);
         Scanner lukija = new Scanner(maveSessioTiedosto);
         lukija.useDelimiter("\\Z");
         String tiedostonSisalto = lukija.next();
@@ -160,7 +158,7 @@ public class SessioTiedostoihinTest {
         lisaaPenkkiSarjat();
         dataKansio.mkdir();
         penkkiKansio.mkdir();
-        tallennus.kirjoitaSessioTiedostoihin();
+        SessioTiedostoihin.kirjoita(sessio);
         Scanner lukija = new Scanner(penkkiSessioTiedosto);
         lukija.useDelimiter("\\Z");
         String tiedostonSisalto = lukija.next();

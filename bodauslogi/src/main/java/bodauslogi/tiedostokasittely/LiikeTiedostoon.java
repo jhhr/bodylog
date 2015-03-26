@@ -1,29 +1,25 @@
 package bodauslogi.tiedostokasittely;
-
+ 
 import bodauslogi.logiikka.Liike;
 import java.io.File;
 import java.io.FileWriter;
-
+ 
 public class LiikeTiedostoon {
-
-    private final Liike liike;
-    private final File liikeTiedosto;
-
-    public LiikeTiedostoon(Liike liike) {
-        this.liike = liike;
-        this.liikeTiedosto = new File(Kansiot.LIIKKEET + "/" + liike.getNimi() + ".txt");
+ 
+    private LiikeTiedostoon() {
     }
-
-    public void luoLiikkeetKansio() throws Exception {
+ 
+    public static void luoLiikkeetKansio() throws Exception {
         new File(Kansiot.LIIKKEET).mkdir();
     }
-
-    public void kirjoitaMuuttujatTiedostoon() throws Exception {
-        FileWriter kirjoittaja = new FileWriter(this.liikeTiedosto);
+ 
+    public static void kirjoita(Liike liike) throws Exception {
+        File liikeTiedosto = new File(Kansiot.LIIKKEET + "/" + liike.getNimi() + ".txt");
+        FileWriter kirjoittaja = new FileWriter(liikeTiedosto);
         for (String muuttuja : liike.getMuuttujaJoukko()) {
             kirjoittaja.write(muuttuja + "\n");
         }
         kirjoittaja.close();
     }
-
+ 
 }

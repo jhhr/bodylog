@@ -10,15 +10,24 @@ public class Liike {
     private ArrayList<Sarja> sarjat;
 
     public Liike(String nimi) {
+        tarkistaNimi(nimi);
+        this.nimi = nimi;
+        this.muuttujat = new LinkedHashSet<>();
+        this.sarjat = new ArrayList<>();
+    }
+
+    private void tarkistaNimi(String nimi) {
         if (nimi.contains("{")
                 || nimi.contains("}")
                 || nimi.contains(":")
                 || nimi.contains(",")) {
             throw new IllegalArgumentException("merkit {}:, eivät ole sallittu");
         }
-        this.nimi = nimi;
-        this.muuttujat = new LinkedHashSet<>();
-        this.sarjat = new ArrayList<>();
+    }
+
+    public void setNimi(String uusiNimi) {
+        tarkistaNimi(uusiNimi);
+        nimi = uusiNimi;
     }
 
     public String getNimi() {

@@ -30,13 +30,13 @@ public class LiikeTest {
         penkki.lisaaMuuttuja("paino");
         assertEquals(1, penkki.getMuuttujaJoukko().size());
     }
-    
+
     @Test
     public void LaittomiaMerkkejaEiVoiKayttaaLiikkeenNimessä() {
         boolean liikeLuotu = false;
-        for (char ch : new char[]{'{','}',':',','}) {
+        for (char ch : new char[]{'{', '}', ':', ','}) {
             try {
-                new Liike("asd"+ch+"fjkl");
+                new Liike("asd" + ch + "fjkl");
                 liikeLuotu = true;
             } catch (IllegalArgumentException e) {
             }
@@ -47,9 +47,9 @@ public class LiikeTest {
     @Test
     public void LaittomiaMerkkejaEiVoiKayttaaMuuttujassa() {
         boolean muuttujaLisatty = false;
-        for (char ch : new char[]{'{','}',':',','}) {
+        for (char ch : new char[]{'{', '}', ':', ','}) {
             try {
-                penkki.lisaaMuuttuja("asd"+ch+"fjkl");
+                penkki.lisaaMuuttuja("asd" + ch + "fjkl");
                 muuttujaLisatty = true;
             } catch (IllegalArgumentException e) {
             }

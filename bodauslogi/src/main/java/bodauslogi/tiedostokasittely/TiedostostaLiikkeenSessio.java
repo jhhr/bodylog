@@ -27,21 +27,13 @@ public class TiedostostaLiikkeenSessio {
 
     private Sarja luoSarjaSessioTiedostosta() {
         Sarja sarja = new Sarja();
-        String[] muuttujatJaArvotArray = lukija.nextLine().split(",");
+        String rivi = lukija.nextLine();
+        rivi = rivi.substring(rivi.indexOf("{")+1, rivi.indexOf("}"));
+        String[] muuttujatJaArvotArray = rivi.split(",");
         for (String pari : muuttujatJaArvotArray) {
             String[] muuttujaJaArvo = pari.split(":");            
             String muuttuja = muuttujaJaArvo[0];
             String arvo = muuttujaJaArvo[1];
-            if (muuttuja.contains("{")) {
-                StringBuilder sb = new StringBuilder(muuttuja); 
-                sb.deleteCharAt(sb.indexOf("{"));
-                muuttuja = sb.toString();
-            }
-            if (arvo.contains("}")) {
-                StringBuilder sb = new StringBuilder(arvo);
-                sb.deleteCharAt(sb.indexOf("}"));
-                arvo = sb.toString();
-            }
             if (arvo.equals("null")) {
                 sarja.lisaaArvo(muuttuja);
             } else {

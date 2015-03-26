@@ -10,6 +10,12 @@ public class Liike {
     private ArrayList<Sarja> sarjat;
 
     public Liike(String nimi) {
+        if (nimi.contains("{")
+                || nimi.contains("}")
+                || nimi.contains(":")
+                || nimi.contains(",")) {
+            throw new IllegalArgumentException("merkit {}:, eivät ole sallittu");
+        }
         this.nimi = nimi;
         this.muuttujat = new LinkedHashSet<>();
         this.sarjat = new ArrayList<>();
@@ -28,6 +34,12 @@ public class Liike {
     }
 
     public void lisaaMuuttuja(String nimike) {
+        if (nimike.contains("{")
+                || nimike.contains("}")
+                || nimike.contains(":")
+                || nimike.contains(",")) {
+            throw new IllegalArgumentException("merkit {}:, eivät ole sallittu");
+        }
         muuttujat.add(nimike);
     }
 

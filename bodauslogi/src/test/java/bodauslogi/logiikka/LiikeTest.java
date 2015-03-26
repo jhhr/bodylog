@@ -26,19 +26,45 @@ public class LiikeTest {
     }
 
     @Test
-    public void LiikkeenMuuttujaJoukonKokoYksiKunLisattyYksiMuuttuja() {
+    public void MuuttujaJoukonKokoYksiKunLisattyYksiMuuttuja() {
         penkki.lisaaMuuttuja("paino");
         assertEquals(1, penkki.getMuuttujaJoukko().size());
     }
+    
+    @Test
+    public void LaittomiaMerkkejaEiVoiKayttaaLiikkeenNimessä() {
+        boolean liikeLuotu = false;
+        for (char ch : new char[]{'{','}',':',','}) {
+            try {
+                new Liike("asd"+ch+"fjkl");
+                liikeLuotu = true;
+            } catch (IllegalArgumentException e) {
+            }
+        }
+        assertFalse(liikeLuotu);
+    }
 
     @Test
-    public void LiikkeeseenLisattyTyhjaSarjaLoytyyOikeastaPaikasta(){
+    public void LaittomiaMerkkejaEiVoiKayttaaMuuttujassa() {
+        boolean muuttujaLisatty = false;
+        for (char ch : new char[]{'{','}',':',','}) {
+            try {
+                penkki.lisaaMuuttuja("asd"+ch+"fjkl");
+                muuttujaLisatty = true;
+            } catch (IllegalArgumentException e) {
+            }
+        }
+        assertFalse(muuttujaLisatty);
+    }
+
+    @Test
+    public void LisattyTyhjaSarjaLoytyyOikeastaPaikasta() {
         penkki.lisaaSarja(sarja);
         assertEquals(sarja, penkki.getSarjaLista().get(0));
     }
-    
+
     @Test
-    public void LiikkeenSarjaListanKokoYksiKunSarjojaYksi(){
+    public void SarjaListanKokoYksiKunSarjojaYksi() {
         penkki.lisaaSarja(sarja);
         assertEquals(1, penkki.getSarjaLista().size());
     }

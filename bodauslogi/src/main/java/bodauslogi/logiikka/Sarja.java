@@ -21,10 +21,12 @@ public class Sarja {
     }
 
     public void lisaaArvo(String muuttuja, double arvo) {
+        Merkit.tarkistaOnkoSallittu(muuttuja);
         arvot.put(muuttuja, arvo);
     }
 
     public void lisaaArvo(String muuttuja) {
+        Merkit.tarkistaOnkoSallittu(muuttuja);
         arvot.put(muuttuja, null);
     }
 

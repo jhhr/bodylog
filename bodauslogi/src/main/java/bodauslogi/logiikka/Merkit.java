@@ -6,5 +6,13 @@ public class Merkit {
 
     private Merkit() {
     }
+    
+    public static void tarkistaOnkoSallittu(String tarkistettava){
+        for (char ch : Merkit.kielletyt) {
+            if (tarkistettava.contains("" + ch)) {
+                throw new IllegalArgumentException("merkit {}:, eivät ole sallittu");
+            }
+        }
+    }
 
 }

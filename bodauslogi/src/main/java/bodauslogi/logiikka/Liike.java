@@ -10,22 +10,14 @@ public class Liike {
     private ArrayList<Sarja> sarjat;
 
     public Liike(String nimi) {
-        tarkistaOnkoMerkitSallittu(nimi);
+        Merkit.tarkistaOnkoSallittu(nimi);
         this.nimi = nimi;
         this.muuttujat = new LinkedHashSet<>();
         this.sarjat = new ArrayList<>();
     }
 
-    private void tarkistaOnkoMerkitSallittu(String tarkistettava) {
-        for (char ch : Merkit.kielletyt) {
-            if (tarkistettava.contains("" + ch)) {
-                throw new IllegalArgumentException("merkit {}:, eivät ole sallittu");
-            }
-        }
-    }
-
     public void setNimi(String uusiNimi) {
-        tarkistaOnkoMerkitSallittu(uusiNimi);
+        Merkit.tarkistaOnkoSallittu(uusiNimi);
         nimi = uusiNimi;
     }
 
@@ -42,7 +34,7 @@ public class Liike {
     }
 
     public void lisaaMuuttuja(String nimike) {
-        tarkistaOnkoMerkitSallittu(nimike);
+        Merkit.tarkistaOnkoSallittu(nimike);
         muuttujat.add(nimike);
     }
 

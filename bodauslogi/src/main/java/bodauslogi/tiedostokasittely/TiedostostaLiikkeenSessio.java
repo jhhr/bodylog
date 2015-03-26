@@ -48,7 +48,6 @@ public class TiedostostaLiikkeenSessio {
                 sarja.lisaaArvo(muuttuja, Double.parseDouble(arvo));
             }
         }
-
         return sarja;
     }
 

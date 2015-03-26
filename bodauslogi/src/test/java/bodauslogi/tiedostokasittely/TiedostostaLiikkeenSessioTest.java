@@ -28,7 +28,7 @@ public class TiedostostaLiikkeenSessioTest {
         liikeKansio.mkdir();
         sessioTiedosto = new File(Kansiot.DATA + "/lehdenluku/04.07.2014.txt");
         FileWriter sessioKirjoittaja = new FileWriter(sessioTiedosto);
-        sessioKirjoittaja.write("{pisteitä:60.0,ankka:5.0}\n{pisteitä:40.0,ankka:3.0}");
+        sessioKirjoittaja.write("{pisteitä:60.0,ankka:5.0}\n{pisteitä:40.0,ankka:null}");
         sessioKirjoittaja.close();
         liikkeetKansio = new File(Kansiot.LIIKKEET);
         liikkeetKansio.mkdir();
@@ -63,7 +63,7 @@ public class TiedostostaLiikkeenSessioTest {
 
     @Test
     public void luodunLiikkeenSarjatOikein() throws Exception {
-        assertEquals("[{pisteitä:60.0,ankka:5.0}, {pisteitä:40.0,ankka:3.0}]",
+        assertEquals("[{pisteitä:60.0,ankka:5.0}, {pisteitä:40.0,ankka:null}]",
                 liises.luoLiikkeenSessio().getLiike().getSarjaLista().toString());
     }
 

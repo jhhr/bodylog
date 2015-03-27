@@ -8,3 +8,4 @@
 - ke 25.3 klo 12-19.30 tiedostokasittelyn laajentamista
 - to 26.3 klo 12-14 luokkakaavion piirtelyä, pieniä parannuksia koodiin
 - to 26.3 klo 14-15 aihemäärittelyn laajentamista ja tarkentamista
+- pe 27.3 klo 15-19 käyttöliittymän aloitteluaw

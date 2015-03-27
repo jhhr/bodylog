@@ -1,4 +1,3 @@
-
 package bodauslogi.tiedostokasittely;
 
 import bodauslogi.logiikka.Liike;
@@ -9,13 +8,13 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-
 public class TiedostostaLiikeTest {
+
     File testiLiikeTiedosto;
     File liikkeetKansio;
-    
+
     @Before
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
         liikkeetKansio = new File(Kansiot.LIIKKEET);
         liikkeetKansio.mkdir();
         testiLiikeTiedosto = new File(Kansiot.LIIKKEET + "/testi.txt");
@@ -23,9 +22,9 @@ public class TiedostostaLiikeTest {
         kirjoittaja.write("kenkä\nkukka");
         kirjoittaja.close();
     }
-    
+
     @After
-    public void tearDown(){
+    public void tearDown() {
         if (liikkeetKansio.exists()) {
             for (String liikeFilu : liikkeetKansio.list()) {
                 new File(Kansiot.LIIKKEET + "/" + liikeFilu).delete();
@@ -33,17 +32,17 @@ public class TiedostostaLiikeTest {
             liikkeetKansio.delete();
         }
     }
-    
+
     @Test
-    public void luodunLiikkeeNimiOikein() throws Exception{
-        Liike liike = TiedostostaLiike.luoLiike(testiLiikeTiedosto);
+    public void luodunLiikkeeNimiOikein() throws Exception {
+        Liike liike = TiedostostaLiike.luo(testiLiikeTiedosto);
         assertEquals("testi", liike.getNimi());
     }
-    
+
     @Test
-    public void luotuLiikeSisaltaaMuuttujatKenkaJaKukka() throws Exception{
-        Liike liike = TiedostostaLiike.luoLiike(testiLiikeTiedosto);
-        assertArrayEquals(new String[]{"kenkä","kukka"},liike.getMuuttujaJoukko().toArray(new String[0]));
+    public void luotuLiikeSisaltaaMuuttujatKenkaJaKukka() throws Exception {
+        Liike liike = TiedostostaLiike.luo(testiLiikeTiedosto);
+        assertArrayEquals(new String[]{"kenkä", "kukka"}, liike.getMuuttujaJoukko().toArray(new String[0]));
     }
 
 }

@@ -1,7 +1,7 @@
 package bodauslogi.tiedostokasittely;
 
 import bodauslogi.tiedostokasittely.Kansiot;
-import bodauslogi.tiedostokasittely.TiedostostaLiikkeenSessio;
+import bodauslogi.tiedostokasittely.TiedostostaLiikkeenTaulukkoData;
 import java.io.File;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class TiedostostaLiikkeenSessioTest {
+public class TiedostostaLiikkeenTaulukkoDataTest {
 
     private File dataKansio;
     private File liikeKansio;
@@ -56,24 +56,24 @@ public class TiedostostaLiikkeenSessioTest {
 
     @Test
     public void luodunLiikkeenNimiOikein() throws Exception {
-        assertEquals("lehdenluku", TiedostostaLiikkeenSessio.luo(sessioTiedosto).getLiike().getNimi());
+        assertEquals("lehdenluku", TiedostostaLiikkeenTaulukkoData.luo(sessioTiedosto).getLiike().getNimi());
     }
 
     @Test
     public void luodunLiikkeenSarjatOikein() throws Exception {
         assertEquals("[{pisteitä:60.0,ankka:5.0}, {pisteitä:40.0,ankka:null}]",
-                TiedostostaLiikkeenSessio.luo(sessioTiedosto).getLiike().getSarjaLista().toString());
+                TiedostostaLiikkeenTaulukkoData.luo(sessioTiedosto).getLiike().getSarjaLista().toString());
     }
 
     @Test
     public void luodunLiikkeenMuuttujatOikein() throws Exception {
         assertArrayEquals(new String[]{"pisteitä", "ankka"},
-                TiedostostaLiikkeenSessio.luo(sessioTiedosto).getLiike().getMuuttujaJoukko().toArray(new String[0]));
+                TiedostostaLiikkeenTaulukkoData.luo(sessioTiedosto).getLiike().getMuuttujaJoukko().toArray(new String[0]));
     }
 
     @Test
     public void luodunLiikkeenSessionPaivamaarOikein() throws Exception {
         assertEquals(new SimpleDateFormat("dd.MM.yyyy").parse("04.07.2014"),
-                TiedostostaLiikkeenSessio.luo(sessioTiedosto).getPaivamaara());
+                TiedostostaLiikkeenTaulukkoData.luo(sessioTiedosto).getPaivamaara());
     }
 }

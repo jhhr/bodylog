@@ -24,8 +24,9 @@ public class SessioTest {
     public void SessionTreemapAvaimetAlussaTyhja() {
         assertTrue(sessio.getLiikkeidenNimienJoukko().isEmpty());
     }
-    
-    @Test public void SessionPaivamaaraSamaKuinAnnettu(){
+
+    @Test
+    public void SessionPaivamaaraSamaKuinAnnettu() {
         assertEquals(tanaan, sessio.getPaivamaara());
     }
 
@@ -33,7 +34,7 @@ public class SessioTest {
     public void SessionTreemapArvotAlussaTyhja() {
         assertTrue(sessio.getLiikkeidenJoukko().isEmpty());
     }
-    
+
     @Test
     public void SessioonEiVoiLisataLiikettaJollaTyhjaNimi() {
         assertFalse(sessio.lisaaLiike(new Liike("")));
@@ -50,16 +51,16 @@ public class SessioTest {
         sessio.lisaaLiike(penkki);
         assertEquals(1, sessio.getLiikkeidenJoukko().size());
     }
-    
+
     @Test
-    public void LiikkeenPoisto_TreeMapAvaimiaOikeaMaara(){
+    public void LiikkeenPoisto_TreeMapAvaimiaOikeaMaara() {
         sessio.lisaaLiike(penkki);
         sessio.poistaLiike("penkki");
         assertTrue(sessio.getLiikkeidenNimienJoukko().isEmpty());
     }
-    
+
     @Test
-    public void LiikkeenPoisto_TreeMapArvojaOikeaMaara(){
+    public void LiikkeenPoisto_TreeMapArvojaOikeaMaara() {
         sessio.lisaaLiike(penkki);
         sessio.poistaLiike("penkki");
         assertTrue(sessio.getLiikkeidenJoukko().isEmpty());
@@ -106,18 +107,18 @@ public class SessioTest {
         Liike penkki2 = new Liike("vinopenkki");
         assertTrue(sessio.lisaaLiike(penkki2));
     }
-    
+
     @Test
-    public void EiVoiLisataSarjaaLiikkeelleIlmanMuuttujia(){
+    public void EiVoiLisataSarjaaLiikkeelleIlmanMuuttujia() {
         sessio.lisaaLiike(penkki);
         assertFalse(sessio.lisaaSarjaLiikkeelle("penkki", sarja));
     }
-    
+
     @Test
-    public void EiVoiLisataSarjaaOlemattomalleLiikkeelle(){
+    public void EiVoiLisataSarjaaOlemattomalleLiikkeelle() {
         assertFalse(sessio.lisaaSarjaLiikkeelle("penkki", sarja));
     }
-    
+
     @Test
     public void LisattyOikeanlainenSarjaLoytyyOikeastaPaikasta_EiMuuttujia() {
         sessio.lisaaLiike(penkki);
@@ -126,31 +127,31 @@ public class SessioTest {
         sessio.lisaaSarjaLiikkeelle("penkki", sarja);
         assertEquals(sarja, penkki.getSarjaLista().get(0));
     }
-    
+
     @Test
-    public void OikeanlaisenSarjanLisaysLiikkeelle_OnnistuuKunMuuttujiaYksi(){
+    public void OikeanlaisenSarjanLisaysLiikkeelle_OnnistuuKunMuuttujiaYksi() {
         penkki.lisaaMuuttuja("paino");
         sarja.lisaaArvo("paino", 60.0);
         sessio.lisaaLiike(penkki);
         assertTrue(sessio.lisaaSarjaLiikkeelle("penkki", sarja));
     }
-    
+
     @Test
-    public void VaaranlaisenSarjanLisaysLiikkeelle_EiOnnistuKunMuuttujiaNollavsYksi(){
+    public void VaaranlaisenSarjanLisaysLiikkeelle_EiOnnistuKunMuuttujiaNollavsYksi() {
         penkki.lisaaMuuttuja("paino");
         sessio.lisaaLiike(penkki);
         assertFalse(sessio.lisaaSarjaLiikkeelle("penkki", sarja));
     }
-    
+
     @Test
-    public void VaaranlaisenSarjanLisaysLiikkeelle_EiOnnistuKunMuuttujiaYksiVsNolla(){
+    public void VaaranlaisenSarjanLisaysLiikkeelle_EiOnnistuKunMuuttujiaYksiVsNolla() {
         sarja.lisaaArvo("paino", 60.0);
         sessio.lisaaLiike(penkki);
         assertFalse(sessio.lisaaSarjaLiikkeelle("penkki", sarja));
     }
-    
+
     @Test
-    public void VaaranlaisenSarjanLisaysLiikkeelle_EiOnnistuKunMuuttujiaKaksiMuttaJarjestysEri(){
+    public void VaaranlaisenSarjanLisaysLiikkeelle_EiOnnistuKunMuuttujiaKaksiMuttaJarjestysEri() {
         penkki.lisaaMuuttuja("paino");
         penkki.lisaaMuuttuja("toistot");
         sarja.lisaaArvo("toistot", 15.0);

@@ -22,10 +22,10 @@ public class SessioTiedostoihin {
     }
 
     public static void kirjoita(Sessio sessio) throws Exception {
-        
+
         for (String liikkeenNimi : sessio.getLiikkeidenNimienJoukko()) {
             String pvmteksti = new SimpleDateFormat("dd.MM.yyyy").format(sessio.getPaivamaara());
-            File sessioTiedosto = new File(Kansiot.DATA+"/" + liikkeenNimi + "/" + pvmteksti + ".txt");
+            File sessioTiedosto = new File(Kansiot.DATA + "/" + liikkeenNimi + "/" + pvmteksti + ".txt");
             FileWriter kirjoittaja = new FileWriter(sessioTiedosto);
             for (Sarja sarja : sessio.getLiike(liikkeenNimi).getSarjaLista()) {
                 kirjoittaja.write(sarja.toString() + "\n");

@@ -40,8 +40,8 @@ public class Sessio {
             return true;
         }
     }
-    
-    public void poistaLiike(String nimi){
+
+    public void poistaLiike(String nimi) {
         liikkeet.remove(nimi);
     }
 

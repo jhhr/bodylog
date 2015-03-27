@@ -9,7 +9,7 @@ public class TiedostostaLiike {
     private TiedostostaLiike() {
     }
 
-    public static Liike luoLiike(File liikeTiedosto) throws Exception {
+    public static Liike luo(File liikeTiedosto) throws Exception {
         Scanner lukija = new Scanner(liikeTiedosto);
         String nimi = liikeTiedosto.getName();
         nimi = nimi.substring(0, nimi.length() - 4);

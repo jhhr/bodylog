@@ -1,44 +1,39 @@
 package bodauslogi.logiikka;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
 public class Sarja {
 
-    private LinkedHashMap<String, Double> arvot;
+    private ArrayList<Double> arvot;
 
     public Sarja() {
-        this.arvot = new LinkedHashMap<>();
+        this.arvot = new ArrayList<>();
     }
 
-    public Set<String> getAvainJoukko() {
-        return arvot.keySet();
+    public ArrayList<Double> getArvot() {
+        return arvot;
     }
 
-    public Collection<Double> getArvoKokoelma() {
-        return arvot.values();
+    public void lisaaArvo(double arvo) {
+        arvot.add(arvo);
     }
 
-    public void lisaaArvo(String muuttuja, double arvo) {
-        Merkit.tarkistaOnkoSallittu(muuttuja);
-        arvot.put(muuttuja, arvo);
+    public void lisaaArvo() {
+        arvot.add(null);
     }
 
-    public void lisaaArvo(String muuttuja) {
-        Merkit.tarkistaOnkoSallittu(muuttuja);
-        arvot.put(muuttuja, null);
-    }
-
-    public double getArvo(String muuttuja) {
-        return arvot.get(muuttuja);
+    public double getArvo(int indeksi) {
+        return arvot.get(indeksi);
     }
 
     @Override
     public String toString() {
         String str = "{";
-        for (String muuttuja : arvot.keySet()) {
-            str += muuttuja + ":" + arvot.get(muuttuja) + ",";
+        for (Object arvo : arvot) {
+            str += arvo + ",";
         }
         str = str.substring(0, str.length() - 1) + "}";
         return str;

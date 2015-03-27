@@ -1,16 +1,16 @@
 package bodauslogi.tiedostokasittely;
 
 import bodauslogi.logiikka.Liike;
-import bodauslogi.logiikka.LiikkeenTaulukkoData;
+import bodauslogi.logiikka.Taulukko;
 import bodauslogi.logiikka.Sarja;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-public class TiedostostaLiikkeenTaulukkoData {
+public class TiedostostaTaulukko {
 
-    private TiedostostaLiikkeenTaulukkoData() {
+    private TiedostostaTaulukko() {
     }
 
     private static Liike luoLiike(File sessioTiedosto) throws Exception {
@@ -24,15 +24,12 @@ public class TiedostostaLiikkeenTaulukkoData {
         Sarja sarja = new Sarja();
         String rivi = lukija.nextLine();
         rivi = rivi.substring(rivi.indexOf("{") + 1, rivi.indexOf("}"));
-        String[] muuttujatJaArvotArray = rivi.split(",");
-        for (String pari : muuttujatJaArvotArray) {
-            String[] muuttujaJaArvo = pari.split(":");
-            String muuttuja = muuttujaJaArvo[0];
-            String arvo = muuttujaJaArvo[1];
+        String[] arvotArray = rivi.split(",");
+        for (String arvo : arvotArray) {
             if (arvo.equals("null")) {
-                sarja.lisaaArvo(muuttuja);
+                sarja.lisaaArvo();
             } else {
-                sarja.lisaaArvo(muuttuja, Double.parseDouble(arvo));
+                sarja.lisaaArvo(Double.parseDouble(arvo));
             }
         }
         return sarja;
@@ -44,14 +41,14 @@ public class TiedostostaLiikkeenTaulukkoData {
         return new SimpleDateFormat("dd.MM.yyyy").parse(pvm);
     }
 
-    public static LiikkeenTaulukkoData luo(File sessioTiedosto) throws Exception {
+    public static Taulukko luo(File sessioTiedosto) throws Exception {
         Scanner lukija = new Scanner(sessioTiedosto);
         Liike liike = luoLiike(sessioTiedosto);
         while (lukija.hasNextLine()) {
             liike.lisaaSarja(luoSarja(lukija));
         }
         lukija.close();
-        return new LiikkeenTaulukkoData(liike, luoPaivamaara(sessioTiedosto));
+        return new Taulukko(liike, luoPaivamaara(sessioTiedosto));
     }
 
 }

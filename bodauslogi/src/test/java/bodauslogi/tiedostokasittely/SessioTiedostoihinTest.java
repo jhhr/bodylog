@@ -39,8 +39,8 @@ public class SessioTiedostoihinTest {
 
     private void lisaaMaveSarjat() {
         sarja3 = new Sarja();
-        sarja3.lisaaArvo("paino", 125.0);
-        sarja3.lisaaArvo("toistot", 5);
+        sarja3.lisaaArvo(125.0);
+        sarja3.lisaaArvo(5);
         mave.lisaaMuuttuja("paino");
         mave.lisaaMuuttuja("toistot");
         mave.lisaaSarja(sarja3);
@@ -48,11 +48,11 @@ public class SessioTiedostoihinTest {
 
     private void lisaaPenkkiSarjat() {
         sarja1 = new Sarja();
-        sarja1.lisaaArvo("paino", 65.0);
-        sarja1.lisaaArvo("toistot", 10);
+        sarja1.lisaaArvo(65.0);
+        sarja1.lisaaArvo(10);
         sarja2 = new Sarja();
-        sarja2.lisaaArvo("paino", 55.0);
-        sarja2.lisaaArvo("toistot", 8);
+        sarja2.lisaaArvo(55.0);
+        sarja2.lisaaArvo(8);
         penkki.lisaaMuuttuja("paino");
         penkki.lisaaMuuttuja("toistot");
         penkki.lisaaSarja(sarja1);

@@ -39,6 +39,9 @@ public class Liike {
     }
 
     public void lisaaSarja(Sarja sarja) {
+        if (sarja == null) {
+            throw new NullPointerException("yritetty lisata null liikkeen sarjalistaan");
+        }
         sarjat.add(sarja);
     }
 }

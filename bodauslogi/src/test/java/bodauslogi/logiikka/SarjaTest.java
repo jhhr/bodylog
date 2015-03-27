@@ -15,68 +15,33 @@ public class SarjaTest {
 
     @Test
     public void SarjaAlussaTyhja() {
-        assertTrue(sarja.getArvoKokoelma().isEmpty() && sarja.getAvainJoukko().isEmpty());
+        assertTrue(sarja.getArvot().isEmpty());
     }
 
     @Test
     public void LisattyArvoLoytyy() {
-        sarja.lisaaArvo("paino", 60.0);
-        assertEquals(60.0, sarja.getArvo("paino"), 0.001);
-    }
-
-    @Test
-    public void LisattyAvainLoytyy() {
-        sarja.lisaaArvo("paino", 60.0);
-        assertTrue(sarja.getAvainJoukko().contains("paino"));
-    }
-    
-    @Test
-    public void EiVoiKayttaaKielletyjaMerkkejaMuuttujassa(){
-        boolean muuttujaLisatty = false;
-        for (char ch : new char[]{'{', '}', ':', ','}) {
-            try {
-                sarja.lisaaArvo("asd" + ch + "fjkl");
-                sarja.lisaaArvo("asd" + ch + "fjkl",0.0);
-                muuttujaLisatty = true;
-            } catch (IllegalArgumentException e) {
-            }
-        }
-        assertFalse(muuttujaLisatty);
+        sarja.lisaaArvo(60.0);
+        assertEquals(60.0, sarja.getArvo(0), 0.001);
     }
 
     @Test
     public void ArvojenJarjestysOikeaKahdellaMuuttujalla() {
-        sarja.lisaaArvo("paino", 60.0);
-        sarja.lisaaArvo("toistot", 15.0);
-        assertArrayEquals(new Double[]{60.0, 15.0}, sarja.getArvoKokoelma().toArray(new Double[0]));
-    }
-
-    @Test
-    public void ArvojenJarjestysOikeinKahdellaMuuttujallaArvonMuokkauksenJalkeen() {
-        sarja.lisaaArvo("paino", 60.0);
-        sarja.lisaaArvo("toistot", 15.0);
-        sarja.lisaaArvo("paino", 70.0);
-        assertArrayEquals(new Double[]{70.0, 15.0}, sarja.getArvoKokoelma().toArray(new Double[0]));
-    }
-
-    @Test
-    public void AvaintenJarjestysOikeaKahdellaMuuttujalla() {
-        sarja.lisaaArvo("paino", 60.0);
-        sarja.lisaaArvo("toistot", 15.0);
-        assertArrayEquals(new String[]{"paino", "toistot"}, sarja.getAvainJoukko().toArray(new String[0]));
+        sarja.lisaaArvo(60.0);
+        sarja.lisaaArvo(15.0);
+        assertArrayEquals(new Double[]{60.0, 15.0}, sarja.getArvot().toArray(new Double[0]));
     }
 
     @Test
     public void toStringMuotoOikeinKahdellaMuuttujalla() {
-        sarja.lisaaArvo("paino", 60.0);
-        sarja.lisaaArvo("toistot", 15.0);
-        assertEquals("{paino:60.0,toistot:15.0}", sarja.toString());
+        sarja.lisaaArvo(60.0);
+        sarja.lisaaArvo(15.0);
+        assertEquals("{60.0,15.0}", sarja.toString());
     }
 
     @Test
     public void ToStringMuotoOikeinNullArvolla() {
-        sarja.lisaaArvo("paino");
-        assertEquals("{paino:null}", sarja.toString());
+        sarja.lisaaArvo();
+        assertEquals("{null}", sarja.toString());
     }
 
 }

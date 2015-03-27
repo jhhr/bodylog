@@ -48,7 +48,7 @@ public class Sessio {
     public boolean lisaaSarjaLiikkeelle(String nimi, Sarja sarja) {
         Liike liike = liikkeet.get(nimi);
         if (liike == null || liike.getMuuttujaJoukko().isEmpty()
-                || !Arrays.equals(liike.getMuuttujaJoukko().toArray(new String[0]), sarja.getAvainJoukko().toArray(new String[0]))) {
+                || liike.getMuuttujaJoukko().size() != sarja.getArvot().size()) {
             return false;
         }
         liikkeet.get(nimi).lisaaSarja(sarja);

@@ -33,21 +33,23 @@ public class LiikeTest {
 
     @Test
     public void LaittomiaMerkkejaEiVoiKayttaaLiikkeenNimessä() {
-        boolean liikeLuotu = false;
-        for (char ch : new char[]{'{', '}', ':', ','}) {
+        boolean nimiLaitettu = false;
+        for (char ch : Merkit.kielletyt) {
             try {
-                new Liike("asd" + ch + "fjkl");
-                liikeLuotu = true;
+                String nimi = "asd" + ch + "fjkl";
+                new Liike(nimi);
+                penkki.setNimi(nimi);
+                nimiLaitettu = true;
             } catch (IllegalArgumentException e) {
             }
         }
-        assertFalse(liikeLuotu);
+        assertFalse(nimiLaitettu);
     }
 
     @Test
     public void LaittomiaMerkkejaEiVoiKayttaaMuuttujassa() {
         boolean muuttujaLisatty = false;
-        for (char ch : new char[]{'{', '}', ':', ','}) {
+        for (char ch : Merkit.kielletyt) {
             try {
                 penkki.lisaaMuuttuja("asd" + ch + "fjkl");
                 muuttujaLisatty = true;
@@ -61,6 +63,11 @@ public class LiikeTest {
     public void LisattyTyhjaSarjaLoytyyOikeastaPaikasta() {
         penkki.lisaaSarja(sarja);
         assertEquals(sarja, penkki.getSarjaLista().get(0));
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void EiVoiLisataNulliaSarjalistaan(){
+        penkki.lisaaSarja(null);
     }
 
     @Test

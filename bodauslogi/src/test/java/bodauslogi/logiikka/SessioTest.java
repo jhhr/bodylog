@@ -120,10 +120,10 @@ public class SessioTest {
     }
 
     @Test
-    public void LisattyOikeanlainenSarjaLoytyyOikeastaPaikasta_EiMuuttujia() {
+    public void LisattyOikeanKokoinenSarjaLoytyyOikeastaPaikasta_YksiMuuttuja() {
         sessio.lisaaLiike(penkki);
         penkki.lisaaMuuttuja("paino");
-        sarja.lisaaArvo("paino", 50.0);
+        sarja.lisaaArvo(50.0);
         sessio.lisaaSarjaLiikkeelle("penkki", sarja);
         assertEquals(sarja, penkki.getSarjaLista().get(0));
     }
@@ -131,31 +131,21 @@ public class SessioTest {
     @Test
     public void OikeanlaisenSarjanLisaysLiikkeelle_OnnistuuKunMuuttujiaYksi() {
         penkki.lisaaMuuttuja("paino");
-        sarja.lisaaArvo("paino", 60.0);
+        sarja.lisaaArvo(60.0);
         sessio.lisaaLiike(penkki);
         assertTrue(sessio.lisaaSarjaLiikkeelle("penkki", sarja));
     }
 
     @Test
-    public void VaaranlaisenSarjanLisaysLiikkeelle_EiOnnistuKunMuuttujiaNollavsYksi() {
+    public void VaaranKokoisenSarjanLisaysLiikkeelle_EiOnnistuKunMuuttujiaNollavsYksi() {
         penkki.lisaaMuuttuja("paino");
         sessio.lisaaLiike(penkki);
         assertFalse(sessio.lisaaSarjaLiikkeelle("penkki", sarja));
     }
 
     @Test
-    public void VaaranlaisenSarjanLisaysLiikkeelle_EiOnnistuKunMuuttujiaYksiVsNolla() {
-        sarja.lisaaArvo("paino", 60.0);
-        sessio.lisaaLiike(penkki);
-        assertFalse(sessio.lisaaSarjaLiikkeelle("penkki", sarja));
-    }
-
-    @Test
-    public void VaaranlaisenSarjanLisaysLiikkeelle_EiOnnistuKunMuuttujiaKaksiMuttaJarjestysEri() {
-        penkki.lisaaMuuttuja("paino");
-        penkki.lisaaMuuttuja("toistot");
-        sarja.lisaaArvo("toistot", 15.0);
-        sarja.lisaaArvo("paino", 60.0);
+    public void VaaranKokoisenSarjanLisaysLiikkeelle_EiOnnistuKunMuuttujiaYksiVsNolla() {
+        sarja.lisaaArvo(60.0);
         sessio.lisaaLiike(penkki);
         assertFalse(sessio.lisaaSarjaLiikkeelle("penkki", sarja));
     }

@@ -1,7 +1,7 @@
 package bodauslogi.tiedostokasittely;
 
 import bodauslogi.tiedostokasittely.Kansiot;
-import bodauslogi.tiedostokasittely.TiedostostaLiikkeenTaulukkoData;
+import bodauslogi.tiedostokasittely.TiedostostaTaulukko;
 import java.io.File;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
@@ -11,7 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class TiedostostaLiikkeenTaulukkoDataTest {
+public class TiedostostaTaulukkoTest {
 
     private File dataKansio;
     private File liikeKansio;
@@ -27,7 +27,7 @@ public class TiedostostaLiikkeenTaulukkoDataTest {
         liikeKansio.mkdir();
         sessioTiedosto = new File(Kansiot.DATA + "/lehdenluku/04.07.2014.txt");
         FileWriter sessioKirjoittaja = new FileWriter(sessioTiedosto);
-        sessioKirjoittaja.write("{pisteitä:60.0,ankka:5.0}\n{pisteitä:40.0,ankka:null}");
+        sessioKirjoittaja.write("{60.0,5.0}\n{40.0,null}");
         sessioKirjoittaja.close();
         liikkeetKansio = new File(Kansiot.LIIKKEET);
         liikkeetKansio.mkdir();
@@ -56,24 +56,24 @@ public class TiedostostaLiikkeenTaulukkoDataTest {
 
     @Test
     public void luodunLiikkeenNimiOikein() throws Exception {
-        assertEquals("lehdenluku", TiedostostaLiikkeenTaulukkoData.luo(sessioTiedosto).getLiike().getNimi());
+        assertEquals("lehdenluku", TiedostostaTaulukko.luo(sessioTiedosto).getLiike().getNimi());
     }
 
     @Test
     public void luodunLiikkeenSarjatOikein() throws Exception {
-        assertEquals("[{pisteitä:60.0,ankka:5.0}, {pisteitä:40.0,ankka:null}]",
-                TiedostostaLiikkeenTaulukkoData.luo(sessioTiedosto).getLiike().getSarjaLista().toString());
+        assertEquals("[{60.0,5.0}, {40.0,null}]",
+                TiedostostaTaulukko.luo(sessioTiedosto).getLiike().getSarjaLista().toString());
     }
 
     @Test
     public void luodunLiikkeenMuuttujatOikein() throws Exception {
         assertArrayEquals(new String[]{"pisteitä", "ankka"},
-                TiedostostaLiikkeenTaulukkoData.luo(sessioTiedosto).getLiike().getMuuttujaJoukko().toArray(new String[0]));
+                TiedostostaTaulukko.luo(sessioTiedosto).getLiike().getMuuttujaJoukko().toArray(new String[0]));
     }
 
     @Test
     public void luodunLiikkeenSessionPaivamaarOikein() throws Exception {
         assertEquals(new SimpleDateFormat("dd.MM.yyyy").parse("04.07.2014"),
-                TiedostostaLiikkeenTaulukkoData.luo(sessioTiedosto).getPaivamaara());
+                TiedostostaTaulukko.luo(sessioTiedosto).getPaivamaara());
     }
 }

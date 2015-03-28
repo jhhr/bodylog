@@ -11,9 +11,10 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SessioTiedostoihinTest {
+public class SessiotTiedostoihinTest {
 
-    Sessio sessio;
+    Sessio maveSessio;
+    Sessio penkkiSessio;
     Liike penkki;
     Liike mave;
     Sarja sarja1;
@@ -27,14 +28,15 @@ public class SessioTiedostoihinTest {
 
     @Before
     public void setUp() {
-        sessio = new Sessio(new Date(0));
+        maveSessio = new Sessio(new Date(0));
+        penkkiSessio = new Sessio(new Date(0));
         penkki = new Liike("penkki");
         mave = new Liike("mave");
-        dataKansio = new File(Kansiot.DATA);
-        maveKansio = new File(Kansiot.DATA + "/mave");
-        penkkiKansio = new File(Kansiot.DATA + "/penkki");
-        maveSessioTiedosto = new File(Kansiot.DATA + "/mave/01.01.1970.txt");
-        penkkiSessioTiedosto = new File(Kansiot.DATA + "/penkki/01.01.1970.txt");
+        dataKansio = new File(Vakiot.DATA);
+        maveKansio = new File(Vakiot.DATA + "/mave");
+        penkkiKansio = new File(Vakiot.DATA + "/penkki");
+        maveSessioTiedosto = new File(Vakiot.DATA + "/mave/1970.01.01.txt");
+        penkkiSessioTiedosto = new File(Vakiot.DATA + "/penkki/1970.01.01.txt");
     }
 
     private void lisaaMaveSarjat() {
@@ -43,7 +45,8 @@ public class SessioTiedostoihinTest {
         sarja3.lisaaArvo(5);
         mave.lisaaMuuttuja("paino");
         mave.lisaaMuuttuja("toistot");
-        mave.lisaaSarja(sarja3);
+        maveSessio.lisaaSarja(sarja3);
+        mave.lisaaSessio(maveSessio);
     }
 
     private void lisaaPenkkiSarjat() {
@@ -55,21 +58,22 @@ public class SessioTiedostoihinTest {
         sarja2.lisaaArvo(8);
         penkki.lisaaMuuttuja("paino");
         penkki.lisaaMuuttuja("toistot");
-        penkki.lisaaSarja(sarja1);
-        penkki.lisaaSarja(sarja2);
+        penkkiSessio.lisaaSarja(sarja1);
+        penkkiSessio.lisaaSarja(sarja2);
+        penkki.lisaaSessio(penkkiSessio);
     }
 
     @After
     public void tearDown() {
         if (maveKansio.exists()) {
             for (String maveFilu : maveKansio.list()) {
-                new File(Kansiot.DATA + "/mave/" + maveFilu).delete();
+                new File(Vakiot.DATA + "/mave/" + maveFilu).delete();
             }
             maveKansio.delete();
         }
         if (penkkiKansio.exists()) {
             for (String penkkiFilu : penkkiKansio.list()) {
-                new File(Kansiot.DATA + "/penkki/" + penkkiFilu).delete();
+                new File(Vakiot.DATA + "/penkki/" + penkkiFilu).delete();
             }
             penkkiKansio.delete();
         }
@@ -77,74 +81,30 @@ public class SessioTiedostoihinTest {
     }
 
     @Test
-    public void TilastotKansionLuontiJosEiAiemminOlemassaOnnistuu() throws Exception {
-        if (!dataKansio.exists()) {
-            SessioTiedostoihin.luoDATAKansio();
-        }
-        assertTrue(dataKansio.exists());
-    }
-
-    @Test
-    public void YhdenLiikeKansionLuontiJosEiAiemminOlemassaOnnistuu() throws Exception {
-        sessio.lisaaLiike(mave);
-        dataKansio.mkdir();
-        if (!maveKansio.exists()) {
-            SessioTiedostoihin.luoKansiotLiikkeille(sessio);
-        }
-        assertTrue(maveKansio.exists());
-    }
-
-    @Test
-    public void YhdenLiikeKansionLuontiJosAiemminOlemassaToimii() {
-        sessio.lisaaLiike(mave);
-        dataKansio.mkdir();
-        maveKansio.mkdir();
-        try {
-            SessioTiedostoihin.luoKansiotLiikkeille(sessio);
-        } catch (Exception e) {
-            assertTrue(false);
-        }
-        assertTrue(true);
-    }
-
-    @Test
-    public void KahdenLiikeKansionLuontiJosEiAiemminOlemassaOnnistuu() throws Exception {
-        sessio.lisaaLiike(mave);
-        dataKansio.mkdir();
-        sessio.lisaaLiike(penkki);
-        if (!maveKansio.exists() || !penkkiKansio.exists()) {
-            SessioTiedostoihin.luoKansiotLiikkeille(sessio);
-        }
+    public void KansioidenLuontiKahdelleLiikkeelle_KunEiOlemassa() throws Exception {
+        SessiotTiedostoihin.luoKansiot(mave);
+        SessiotTiedostoihin.luoKansiot(penkki);
         assertTrue(maveKansio.exists() && penkkiKansio.exists());
     }
 
     @Test
-    public void YhdenLiikkeenSessioTiedostojenLuontiJosEiAiemminOlemassaOnnistuu() throws Exception {
-        sessio.lisaaLiike(mave);
-        dataKansio.mkdir();
-        maveKansio.mkdir();
-        SessioTiedostoihin.kirjoita(sessio);
-        assertTrue(maveSessioTiedosto.exists());
-    }
-
-    @Test
-    public void KahdenLiikkeenSessioTiedostojenLuontiJosEiAiemminOlemassaOnnistuu() throws Exception {
-        sessio.lisaaLiike(penkki);
-        sessio.lisaaLiike(mave);
+    public void KahdenLiikkeenSessioTiedostojenLuontiOnnistuu() throws Exception {
+        lisaaMaveSarjat();
+        lisaaPenkkiSarjat();
         dataKansio.mkdir();
         maveKansio.mkdir();
         penkkiKansio.mkdir();
-        SessioTiedostoihin.kirjoita(sessio);
+        SessiotTiedostoihin.kirjoita(mave);
+        SessiotTiedostoihin.kirjoita(penkki);
         assertTrue(maveSessioTiedosto.exists() && penkkiSessioTiedosto.exists());
     }
 
     @Test
     public void YksisarjaisenLiikkeenSessioTiedostonSisaltoOikein() throws Exception {
-        sessio.lisaaLiike(mave);
         lisaaMaveSarjat();
         dataKansio.mkdir();
         maveKansio.mkdir();
-        SessioTiedostoihin.kirjoita(sessio);
+        SessiotTiedostoihin.kirjoita(mave);
         Scanner lukija = new Scanner(maveSessioTiedosto);
         lukija.useDelimiter("\\Z");
         String tiedostonSisalto = lukija.next();
@@ -154,11 +114,10 @@ public class SessioTiedostoihinTest {
 
     @Test
     public void KaksisarjaisenLiikkeenSessioTiedostonSisaltoOikein() throws Exception {
-        sessio.lisaaLiike(penkki);
         lisaaPenkkiSarjat();
         dataKansio.mkdir();
         penkkiKansio.mkdir();
-        SessioTiedostoihin.kirjoita(sessio);
+        SessiotTiedostoihin.kirjoita(penkki);
         Scanner lukija = new Scanner(penkkiSessioTiedosto);
         lukija.useDelimiter("\\Z");
         String tiedostonSisalto = lukija.next();

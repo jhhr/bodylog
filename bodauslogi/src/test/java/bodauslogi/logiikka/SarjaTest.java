@@ -15,7 +15,7 @@ public class SarjaTest {
 
     @Test
     public void SarjaAlussaTyhja() {
-        assertTrue(sarja.getArvot().isEmpty());
+        assertTrue(sarja.koko() == 0);
     }
 
     @Test
@@ -25,10 +25,16 @@ public class SarjaTest {
     }
 
     @Test
+    public void LisattyArvoKasvattaaKokoa() {
+        sarja.lisaaArvo(60.0);
+        assertEquals(1, sarja.koko());
+    }
+
+    @Test
     public void ArvojenJarjestysOikeaKahdellaMuuttujalla() {
         sarja.lisaaArvo(60.0);
         sarja.lisaaArvo(15.0);
-        assertArrayEquals(new Double[]{60.0, 15.0}, sarja.getArvot().toArray(new Double[0]));
+        assertArrayEquals(new Double[]{60.0, 15.0}, sarja.toArray());
     }
 
     @Test

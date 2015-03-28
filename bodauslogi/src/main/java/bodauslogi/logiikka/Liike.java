@@ -7,13 +7,13 @@ public class Liike {
 
     private String nimi;
     private LinkedHashSet<String> muuttujat;
-    private ArrayList<Sarja> sarjat;
+    private ArrayList<Sessio> sessiot;
 
     public Liike(String nimi) {
         Merkit.tarkistaOnkoSallittu(nimi);
         this.nimi = nimi;
         this.muuttujat = new LinkedHashSet<>();
-        this.sarjat = new ArrayList<>();
+        this.sessiot = new ArrayList<>();
     }
 
     public void setNimi(String uusiNimi) {
@@ -25,12 +25,16 @@ public class Liike {
         return nimi;
     }
 
-    public LinkedHashSet<String> getMuuttujaJoukko() {
-        return muuttujat;
+    public String[] muuttujatToArray() {
+        return muuttujat.toArray(new String[0]);
     }
 
-    public ArrayList<Sarja> getSarjaLista() {
-        return sarjat;
+    public ArrayList<Sessio> getSessiot() {
+        return sessiot;
+    }
+
+    public Sessio getSessio(int indeksi) {
+        return sessiot.get(indeksi);
     }
 
     public void lisaaMuuttuja(String nimike) {
@@ -38,10 +42,10 @@ public class Liike {
         muuttujat.add(nimike);
     }
 
-    public void lisaaSarja(Sarja sarja) {
-        if (sarja == null) {
-            throw new NullPointerException("yritetty lisata null liikkeen sarjalistaan");
+    public void lisaaSessio(Sessio sessio) {
+        if (sessio == null) {
+            throw new NullPointerException("yritetty lisata null liikkeen sessiolistaan");
         }
-        sarjat.add(sarja);
+        sessiot.add(sessio);
     }
 }

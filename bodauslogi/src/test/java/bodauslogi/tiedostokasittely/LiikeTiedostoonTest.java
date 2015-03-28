@@ -19,15 +19,15 @@ public class LiikeTiedostoonTest {
     @Before
     public void setUp() throws Exception {
         penkki = new Liike("penkki");
-        liikkeetKansio = new File(Kansiot.LIIKKEET);
-        penkkiTiedosto = new File(Kansiot.LIIKKEET + "/penkki.txt");
+        liikkeetKansio = new File(Vakiot.LIIKKEET);
+        penkkiTiedosto = new File(Vakiot.LIIKKEET + "/penkki.txt");
     }
 
     @After
     public void tearDown() {
         if (liikkeetKansio.exists()) {
             for (String liikeFilu : liikkeetKansio.list()) {
-                new File(Kansiot.LIIKKEET + "/" + liikeFilu).delete();
+                new File(Vakiot.LIIKKEET + "/" + liikeFilu).delete();
             }
             liikkeetKansio.delete();
         }

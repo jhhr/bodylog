@@ -1,5 +1,6 @@
 package bodauslogi.logiikka;
 
+import java.util.Date;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -7,37 +8,50 @@ import org.junit.Test;
 public class LiikeTest {
 
     Liike penkki;
-    Sarja sarja;
+    Sessio sessio;
 
     @Before
     public void SetUp() {
         penkki = new Liike("penkki");
-        sarja = new Sarja();
+        sessio = new Sessio(new Date());
     }
 
     @Test
     public void LiikkeenMuuttujaJoukkoAlussaTyhja() {
-        assertTrue(penkki.getMuuttujaJoukko().isEmpty());
+        assertEquals(0, penkki.muuttujatToArray().length);
     }
 
     @Test
-    public void LiikkeenSarjaListaAlussaTyhja() {
-        assertTrue(penkki.getSarjaLista().isEmpty());
+    public void LiikkeenSessioListaAlussaTyhja() {
+        assertTrue(penkki.getSessiot().isEmpty());
     }
 
     @Test
     public void MuuttujaJoukonKokoYksiKunLisattyYksiMuuttuja() {
         penkki.lisaaMuuttuja("paino");
-        assertEquals(1, penkki.getMuuttujaJoukko().size());
+        assertEquals(1, penkki.muuttujatToArray().length);
     }
 
     @Test
-    public void LaittomiaMerkkejaEiVoiKayttaaLiikkeenNimessä() {
-        boolean nimiLaitettu = false;
+    public void LaittomiaMerkkejaEiVoiKayttaaluodessaLiiketta() {
+        boolean liikeLuotu = false;
         for (char ch : Merkit.kielletyt) {
             try {
                 String nimi = "asd" + ch + "fjkl";
                 new Liike(nimi);
+                liikeLuotu = true;
+            } catch (IllegalArgumentException e) {
+            }
+        }
+        assertFalse(liikeLuotu);
+    }
+
+    @Test
+    public void LaittomiaMerkkejaEiVoiKayttaaVaihtaessaNimea() {
+        boolean nimiLaitettu = false;
+        for (char ch : Merkit.kielletyt) {
+            try {
+                String nimi = "asd" + ch + "fjkl";
                 penkki.setNimi(nimi);
                 nimiLaitettu = true;
             } catch (IllegalArgumentException e) {
@@ -60,19 +74,19 @@ public class LiikeTest {
     }
 
     @Test
-    public void LisattyTyhjaSarjaLoytyyOikeastaPaikasta() {
-        penkki.lisaaSarja(sarja);
-        assertEquals(sarja, penkki.getSarjaLista().get(0));
+    public void LisattyTyhjaSessioLoytyyOikeastaPaikasta() {
+        penkki.lisaaSessio(sessio);
+        assertEquals(sessio, penkki.getSessio(0));
     }
-    
+
     @Test(expected = NullPointerException.class)
-    public void EiVoiLisataNulliaSarjalistaan(){
-        penkki.lisaaSarja(null);
+    public void EiVoiLisataNulliaSessiolistaan() {
+        penkki.lisaaSessio(null);
     }
 
     @Test
     public void SarjaListanKokoYksiKunSarjojaYksi() {
-        penkki.lisaaSarja(sarja);
-        assertEquals(1, penkki.getSarjaLista().size());
+        penkki.lisaaSessio(sessio);
+        assertEquals(1, penkki.getSessiot().size());
     }
 }

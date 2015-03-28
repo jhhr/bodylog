@@ -1,57 +1,45 @@
 package bodauslogi.logiikka;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Set;
-import java.util.TreeMap;
 
 public class Sessio {
 
     private Date paivamaara;
-    private TreeMap<String, Liike> liikkeet;
+    private ArrayList<Sarja> sarjat;
 
     public Sessio(Date pvm) {
         this.paivamaara = pvm;
-        this.liikkeet = new TreeMap<>();
+        this.sarjat = new ArrayList<>();
     }
 
     public Date getPaivamaara() {
         return paivamaara;
     }
 
-    public Set<String> getLiikkeidenNimienJoukko() {
-        return liikkeet.keySet();
+    public ArrayList<Sarja> getSarjat() {
+        return sarjat;
     }
 
-    public Collection<Liike> getLiikkeidenJoukko() {
-        return liikkeet.values();
-    }
-
-    public Liike getLiike(String nimi) {
-        return liikkeet.get(nimi);
-    }
-
-    public boolean lisaaLiike(Liike liike) {
-        if (liike.getNimi().equals("") || liikkeet.containsKey(liike.getNimi())) {
-            return false;
-        } else {
-            liikkeet.put(liike.getNimi(), liike);
-            return true;
+    public int maxSarjaKoko() {
+        int koko = 0;
+        for (Sarja sarja : sarjat) {
+            int sarjanKoko = sarja.koko();
+            if (sarja.koko() > koko) {
+                koko = sarjanKoko;
+            }
         }
+        return koko;
     }
 
-    public void poistaLiike(String nimi) {
-        liikkeet.remove(nimi);
+    public Sarja getSarja(int indeksi) {
+        return sarjat.get(indeksi);
     }
 
-    public boolean lisaaSarjaLiikkeelle(String nimi, Sarja sarja) {
-        Liike liike = liikkeet.get(nimi);
-        if (liike == null || liike.getMuuttujaJoukko().isEmpty()
-                || liike.getMuuttujaJoukko().size() != sarja.getArvot().size()) {
-            return false;
+    public void lisaaSarja(Sarja sarja) {
+        if (sarja == null) {
+            throw new NullPointerException("yritetty lisata null session sarjalistaan");
         }
-        liikkeet.get(nimi).lisaaSarja(sarja);
-        return true;
+        sarjat.add(sarja);
     }
 }

@@ -15,9 +15,9 @@ public class TiedostostaLiikeTest {
 
     @Before
     public void setUp() throws Exception {
-        liikkeetKansio = new File(Kansiot.LIIKKEET);
+        liikkeetKansio = new File(Vakiot.LIIKKEET);
         liikkeetKansio.mkdir();
-        testiLiikeTiedosto = new File(Kansiot.LIIKKEET + "/testi.txt");
+        testiLiikeTiedosto = new File(Vakiot.LIIKKEET + "/testi.txt");
         FileWriter kirjoittaja = new FileWriter(testiLiikeTiedosto);
         kirjoittaja.write("kenkä\nkukka");
         kirjoittaja.close();
@@ -27,7 +27,7 @@ public class TiedostostaLiikeTest {
     public void tearDown() {
         if (liikkeetKansio.exists()) {
             for (String liikeFilu : liikkeetKansio.list()) {
-                new File(Kansiot.LIIKKEET + "/" + liikeFilu).delete();
+                new File(Vakiot.LIIKKEET + "/" + liikeFilu).delete();
             }
             liikkeetKansio.delete();
         }
@@ -42,7 +42,7 @@ public class TiedostostaLiikeTest {
     @Test
     public void luotuLiikeSisaltaaMuuttujatKenkaJaKukka() throws Exception {
         Liike liike = TiedostostaLiike.luo(testiLiikeTiedosto);
-        assertArrayEquals(new String[]{"kenkä", "kukka"}, liike.getMuuttujaJoukko().toArray(new String[0]));
+        assertArrayEquals(new String[]{"kenkä", "kukka"}, liike.muuttujatToArray());
     }
 
 }

@@ -1,10 +1,8 @@
 package bodauslogi.tiedostokasittely;
 
-public class Kansiot {
+public class Vakiot {
 
     public static final String DATA = "Tilastot";
     public static final String LIIKKEET = "Liikkeet";
-
-    private Kansiot() {
-    }
+    public static final String PAIVAFORMAATTI = "yyyy.MM.dd";
 }

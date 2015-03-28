@@ -13,8 +13,16 @@ public class Sarja {
         this.arvot = new ArrayList<>();
     }
 
-    public ArrayList<Double> getArvot() {
-        return arvot;
+    public Double[] toArray(int koko) {
+        return arvot.toArray(new Double[koko]);
+    }
+
+    public Double[] toArray() {
+        return arvot.toArray(new Double[0]);
+    }
+
+    public int koko() {
+        return arvot.size();
     }
 
     public void lisaaArvo(double arvo) {

@@ -1,17 +1,14 @@
 package bodauslogi.tiedostokasittely;
 
-import bodauslogi.tiedostokasittely.Kansiot;
-import bodauslogi.tiedostokasittely.TiedostostaTaulukko;
 import java.io.File;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
-import java.util.LinkedHashSet;
 import org.junit.After;
+import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-public class TiedostostaTaulukkoTest {
+public class TiedostostaSessioTest {
 
     private File dataKansio;
     private File liikeKansio;
@@ -21,17 +18,17 @@ public class TiedostostaTaulukkoTest {
 
     @Before
     public void setUp() throws Exception {
-        dataKansio = new File(Kansiot.DATA);
+        dataKansio = new File(Vakiot.DATA);
         dataKansio.mkdir();
-        liikeKansio = new File(Kansiot.DATA + "/lehdenluku");
+        liikeKansio = new File(Vakiot.DATA + "/lehdenluku");
         liikeKansio.mkdir();
-        sessioTiedosto = new File(Kansiot.DATA + "/lehdenluku/04.07.2014.txt");
+        sessioTiedosto = new File(Vakiot.DATA + "/lehdenluku/2014.04.07.txt");
         FileWriter sessioKirjoittaja = new FileWriter(sessioTiedosto);
         sessioKirjoittaja.write("{60.0,5.0}\n{40.0,null}");
         sessioKirjoittaja.close();
-        liikkeetKansio = new File(Kansiot.LIIKKEET);
+        liikkeetKansio = new File(Vakiot.LIIKKEET);
         liikkeetKansio.mkdir();
-        liikeTiedosto = new File(Kansiot.LIIKKEET + "/lehdenluku.txt");
+        liikeTiedosto = new File(Vakiot.LIIKKEET + "/lehdenluku.txt");
         FileWriter muuttujaKirjoittaja = new FileWriter(liikeTiedosto);
         muuttujaKirjoittaja.write("pisteitä\nankka");
         muuttujaKirjoittaja.close();
@@ -41,39 +38,28 @@ public class TiedostostaTaulukkoTest {
     public void tearDown() {
         if (liikeKansio.exists()) {
             for (String liikeFilu : liikeKansio.list()) {
-                new File(Kansiot.DATA + "/lehdenluku/" + liikeFilu).delete();
+                new File(Vakiot.DATA + "/lehdenluku/" + liikeFilu).delete();
             }
             liikeKansio.delete();
         }
         dataKansio.delete();
         if (liikkeetKansio.exists()) {
             for (String liikeFilu : liikkeetKansio.list()) {
-                new File(Kansiot.LIIKKEET + "/" + liikeFilu).delete();
+                new File(Vakiot.LIIKKEET + "/" + liikeFilu).delete();
             }
             liikkeetKansio.delete();
         }
     }
 
     @Test
-    public void luodunLiikkeenNimiOikein() throws Exception {
-        assertEquals("lehdenluku", TiedostostaTaulukko.luo(sessioTiedosto).getLiike().getNimi());
-    }
-
-    @Test
     public void luodunLiikkeenSarjatOikein() throws Exception {
         assertEquals("[{60.0,5.0}, {40.0,null}]",
-                TiedostostaTaulukko.luo(sessioTiedosto).getLiike().getSarjaLista().toString());
-    }
-
-    @Test
-    public void luodunLiikkeenMuuttujatOikein() throws Exception {
-        assertArrayEquals(new String[]{"pisteitä", "ankka"},
-                TiedostostaTaulukko.luo(sessioTiedosto).getLiike().getMuuttujaJoukko().toArray(new String[0]));
+                TiedostostaSessio.luo(sessioTiedosto).getSarjat().toString());
     }
 
     @Test
     public void luodunLiikkeenSessionPaivamaarOikein() throws Exception {
-        assertEquals(new SimpleDateFormat("dd.MM.yyyy").parse("04.07.2014"),
-                TiedostostaTaulukko.luo(sessioTiedosto).getPaivamaara());
+        assertEquals(new SimpleDateFormat(Vakiot.PAIVAFORMAATTI).parse("2014.04.07"),
+                TiedostostaSessio.luo(sessioTiedosto).getPaivamaara());
     }
 }

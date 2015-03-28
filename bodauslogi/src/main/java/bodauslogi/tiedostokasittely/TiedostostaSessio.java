@@ -1,23 +1,14 @@
 package bodauslogi.tiedostokasittely;
 
-import bodauslogi.logiikka.Liike;
-import bodauslogi.logiikka.Taulukko;
-import bodauslogi.logiikka.Sarja;
+import bodauslogi.logiikka.*;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-public class TiedostostaTaulukko {
+public class TiedostostaSessio {
 
-    private TiedostostaTaulukko() {
-    }
-
-    private static Liike luoLiike(File sessioTiedosto) throws Exception {
-        String nimi = sessioTiedosto.getParentFile().getName();
-        File liikeTiedosto = new File(Kansiot.LIIKKEET + "/" + nimi + ".txt");
-        Liike liike = TiedostostaLiike.luo(liikeTiedosto);
-        return liike;
+    private TiedostostaSessio() {
     }
 
     private static Sarja luoSarja(Scanner lukija) {
@@ -38,17 +29,16 @@ public class TiedostostaTaulukko {
     private static Date luoPaivamaara(File sessioTiedosto) throws Exception {
         String pvm = sessioTiedosto.getName();
         pvm = pvm.substring(0, pvm.length() - 4);
-        return new SimpleDateFormat("dd.MM.yyyy").parse(pvm);
+        return new SimpleDateFormat(Vakiot.PAIVAFORMAATTI).parse(pvm);
     }
 
-    public static Taulukko luo(File sessioTiedosto) throws Exception {
+    public static Sessio luo(File sessioTiedosto) throws Exception {
         Scanner lukija = new Scanner(sessioTiedosto);
-        Liike liike = luoLiike(sessioTiedosto);
+        Sessio sessio = new Sessio(luoPaivamaara(sessioTiedosto));
         while (lukija.hasNextLine()) {
-            liike.lisaaSarja(luoSarja(lukija));
+            sessio.lisaaSarja(luoSarja(lukija));
         }
         lukija.close();
-        return new Taulukko(liike, luoPaivamaara(sessioTiedosto));
+        return sessio;
     }
-
 }

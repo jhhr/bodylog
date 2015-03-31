@@ -41,7 +41,7 @@ public class SarjaTest {
     public void toStringMuotoOikeinKahdellaMuuttujalla() {
         sarja.lisaaArvo(60.0);
         sarja.lisaaArvo(15.0);
-        assertEquals("{60.0,15.0}", sarja.toString());
+        assertEquals("{60,15}", sarja.toString());
     }
 
     @Test

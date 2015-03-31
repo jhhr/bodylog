@@ -1,17 +1,17 @@
 package bodauslogi.tiedostokasittely;
 
-import bodauslogi.logiikka.Liike;
-import bodauslogi.logiikka.Sarja;
-import bodauslogi.logiikka.Sessio;
+import bodauslogi.util.Vakiot;
+import bodauslogi.logiikka.*;
 import java.io.File;
 import java.util.Date;
 import java.util.Scanner;
 import org.junit.After;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-public class SessiotTiedostoihinTest {
+public class TallennaTest {
 
     Sessio maveSessio;
     Sessio penkkiSessio;
@@ -25,6 +25,8 @@ public class SessiotTiedostoihinTest {
     File maveKansio;
     File maveSessioTiedosto;
     File penkkiSessioTiedosto;
+    File liikkeetKansio;
+    File penkkiLiikeTiedosto;
 
     @Before
     public void setUp() {
@@ -32,11 +34,13 @@ public class SessiotTiedostoihinTest {
         penkkiSessio = new Sessio(new Date(0));
         penkki = new Liike("penkki");
         mave = new Liike("mave");
-        dataKansio = new File(Vakiot.DATA);
-        maveKansio = new File(Vakiot.DATA + "/mave");
-        penkkiKansio = new File(Vakiot.DATA + "/penkki");
-        maveSessioTiedosto = new File(Vakiot.DATA + "/mave/1970.01.01.txt");
-        penkkiSessioTiedosto = new File(Vakiot.DATA + "/penkki/1970.01.01.txt");
+        dataKansio = new File(Vakiot.SESSIOT);
+        maveKansio = new File(Vakiot.SESSIOT + "/mave");
+        penkkiKansio = new File(Vakiot.SESSIOT + "/penkki");
+        maveSessioTiedosto = new File(Vakiot.SESSIOT + "/mave/1970.01.01" + Vakiot.SESSIOPAATE);
+        penkkiSessioTiedosto = new File(Vakiot.SESSIOT + "/penkki/1970.01.01" + Vakiot.SESSIOPAATE);
+        liikkeetKansio = new File(Vakiot.LIIKKEET);
+        penkkiLiikeTiedosto = new File(Vakiot.LIIKKEET + "/penkki" + Vakiot.LIIKEPAATE);
     }
 
     private void lisaaMaveSarjat() {
@@ -67,44 +71,51 @@ public class SessiotTiedostoihinTest {
     public void tearDown() {
         if (maveKansio.exists()) {
             for (String maveFilu : maveKansio.list()) {
-                new File(Vakiot.DATA + "/mave/" + maveFilu).delete();
+                new File(Vakiot.SESSIOT + "/mave/" + maveFilu).delete();
             }
             maveKansio.delete();
         }
         if (penkkiKansio.exists()) {
             for (String penkkiFilu : penkkiKansio.list()) {
-                new File(Vakiot.DATA + "/penkki/" + penkkiFilu).delete();
+                new File(Vakiot.SESSIOT + "/penkki/" + penkkiFilu).delete();
             }
             penkkiKansio.delete();
         }
         dataKansio.delete();
+
+        if (liikkeetKansio.exists()) {
+            for (String liikeFilu : liikkeetKansio.list()) {
+                new File(Vakiot.LIIKKEET + "/" + liikeFilu).delete();
+            }
+            liikkeetKansio.delete();
+        }
     }
 
     @Test
     public void KansioidenLuontiKahdelleLiikkeelle_KunEiOlemassa() throws Exception {
-        SessiotTiedostoihin.luoKansiot(mave);
-        SessiotTiedostoihin.luoKansiot(penkki);
+        Tallenna.luoDataKansiot(mave);
+        Tallenna.luoDataKansiot(penkki);
         assertTrue(maveKansio.exists() && penkkiKansio.exists());
     }
 
     @Test
-    public void KahdenLiikkeenSessioTiedostojenLuontiOnnistuu() throws Exception {
+    public void Sessiot_KahdenLiikkeenSessioTiedostojenLuontiOnnistuu() throws Exception {
         lisaaMaveSarjat();
         lisaaPenkkiSarjat();
         dataKansio.mkdir();
         maveKansio.mkdir();
         penkkiKansio.mkdir();
-        SessiotTiedostoihin.kirjoita(mave);
-        SessiotTiedostoihin.kirjoita(penkki);
+        Tallenna.sessiot(mave);
+        Tallenna.sessiot(penkki);
         assertTrue(maveSessioTiedosto.exists() && penkkiSessioTiedosto.exists());
     }
 
     @Test
-    public void YksisarjaisenLiikkeenSessioTiedostonSisaltoOikein() throws Exception {
+    public void Sessio_YksisarjaisenLiikkeenSessioTiedostonSisaltoOikein() throws Exception {
         lisaaMaveSarjat();
         dataKansio.mkdir();
         maveKansio.mkdir();
-        SessiotTiedostoihin.kirjoita(mave);
+        Tallenna.sessiot(mave);
         Scanner lukija = new Scanner(maveSessioTiedosto);
         lukija.useDelimiter("\\Z");
         String tiedostonSisalto = lukija.next();
@@ -113,15 +124,46 @@ public class SessiotTiedostoihinTest {
     }
 
     @Test
-    public void KaksisarjaisenLiikkeenSessioTiedostonSisaltoOikein() throws Exception {
+    public void Sessio_KaksisarjaisenLiikkeenSessioTiedostonSisaltoOikein() throws Exception {
         lisaaPenkkiSarjat();
         dataKansio.mkdir();
         penkkiKansio.mkdir();
-        SessiotTiedostoihin.kirjoita(penkki);
+        Tallenna.sessiot(penkki);
         Scanner lukija = new Scanner(penkkiSessioTiedosto);
         lukija.useDelimiter("\\Z");
         String tiedostonSisalto = lukija.next();
         lukija.close();
         assertEquals(sarja1 + "\n" + sarja2, tiedostonSisalto);
     }
+
+    @Test
+    public void Liike_KansionLuontiOnnistuu_KunEiAiemminOlemassa() throws Exception {
+        if (!liikkeetKansio.exists()) {
+            Tallenna.luoLiikkeetKansio();
+        }
+        assertTrue(liikkeetKansio.exists());
+    }
+
+    @Test
+    public void Liike_LiikeTiedostonLuontiOnnistuu() throws Exception {
+        liikkeetKansio.mkdir();
+        penkki.lisaaMuuttuja("paino");
+        Tallenna.liike(penkki);
+        assertTrue(penkkiLiikeTiedosto.exists());
+    }
+
+    @Test
+    public void Liike_LiikeTiedostonSisaltoOikein() throws Exception {
+        liikkeetKansio.mkdir();
+        penkki.lisaaMuuttuja("paino");
+        penkki.lisaaMuuttuja("toistot");
+        Tallenna.liike(penkki);
+        Scanner lukija = new Scanner(penkkiLiikeTiedosto);
+        lukija.useDelimiter("\\Z");
+        String tiedostonSisalto = "";
+        tiedostonSisalto = lukija.next();
+        lukija.close();
+        assertEquals("paino\ntoistot", tiedostonSisalto);
+    }
+
 }

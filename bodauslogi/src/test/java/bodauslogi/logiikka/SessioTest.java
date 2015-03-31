@@ -1,5 +1,7 @@
 package bodauslogi.logiikka;
 
+import bodauslogi.util.Vakiot;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -7,22 +9,29 @@ import org.junit.Test;
 
 public class SessioTest {
 
-    Date tanaan;
+    Date pvm;
+    String pvmString;
     Sessio sessio;
     Sarja sarja1;
     Sarja sarja2;
 
     @Before
-    public void SetUp() {
-        tanaan = new Date();
-        sessio = new Sessio(tanaan);
+    public void SetUp() throws Exception{
+        pvmString = "2010.05.04";
+        pvm = new SimpleDateFormat(Vakiot.PAIVAFORMAATTI).parse(pvmString);
+        sessio = new Sessio(pvm);
         sarja1 = new Sarja();
         sarja2 = new Sarja();
     }
 
     @Test
     public void PaivamaaraSamaKuinAnnettu() {
-        assertEquals(tanaan, sessio.getPaivamaara());
+        assertEquals(pvm, sessio.getPaivamaara());
+    }
+    
+    @Test
+    public void PaivamaaraStringMuodossaOikein(){
+        assertEquals(pvmString,sessio.getPaivamaaraString());
     }
 
     @Test
@@ -47,7 +56,7 @@ public class SessioTest {
         assertEquals(sarja1, sessio.getSarja(0));
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void EiVoiLisataNulliaSarjalistaan() {
         sessio.lisaaSarja(null);
     }

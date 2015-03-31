@@ -1,36 +1,23 @@
 package bodauslogi.kayttoliittyma;
 
-import bodauslogi.tiedostokasittely.TiedostoistaTaulukot;
-import bodauslogi.tiedostokasittely.Vakiot;
+import bodauslogi.logiikka.Liike;
+import bodauslogi.tiedostokasittely.Tiedostosta;
+import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.LayoutManager;
-import java.io.File;
 import java.util.HashMap;
-import javax.swing.BoxLayout;
-import javax.swing.JApplet;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayer;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.JTable;
-import javax.swing.JViewport;
-import javax.swing.JWindow;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.text.View;
-import sun.swing.JLightweightFrame;
 
-public class SplitPaneTaulukko extends JPanel
+public class LiikelistaJaTilastotSplitPane extends JPanel
         implements ListSelectionListener {
 
     private JPanel taulukkoPanel;
@@ -39,21 +26,20 @@ public class SplitPaneTaulukko extends JPanel
     private String[] liikeNimiLista;
     private HashMap<String, JPanel> taulukot;
 
-    public SplitPaneTaulukko() throws Exception {
-        String[] liikeLista = new File(Vakiot.LIIKKEET).list();
-        for (int i = 0; i < liikeLista.length; i++) {
-            String tiedostoNimi = liikeLista[i];
-            liikeLista[i] = tiedostoNimi.substring(0,tiedostoNimi.length()-4);
-        }        
+    public LiikelistaJaTilastotSplitPane() throws Exception {
+        
+        Liike[] liikeLista = Tiedostosta.kaikkiLiikkeetSessioineen();
 
+        liikeNimiLista = new String[liikeLista.length];
         taulukot = new HashMap<>();
-        for (String nimi : liikeLista) {
-            taulukot.put(nimi, TiedostoistaTaulukot.luo(nimi));
+
+        for (int i = 0; i < liikeLista.length; i++) {
+            Liike liike = liikeLista[i];
+            String nimi = liike.getNimi();
+            liikeNimiLista[i] = nimi;
+            taulukot.put(nimi, new LiikkeenTilastotJPanel(liike));
         }
 
-        //Create the list of images and put it in a scroll pane.
-        this.taulukot = taulukot;
-        this.liikeNimiLista = liikeLista;
         list = new JList(liikeNimiLista);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.setSelectedIndex(0);
@@ -71,34 +57,34 @@ public class SplitPaneTaulukko extends JPanel
         splitPane.setDividerLocation(100);
 
         //Provide minimum sizes for the two components in the split pane.
-        Dimension minimumSize = new Dimension(100, 50);
+        Dimension minimumSize = new Dimension(50, 50);
         listScrollPane.setMinimumSize(minimumSize);
         taulukkoScrollPane.setMinimumSize(minimumSize);
 
         //Provide a preferred size for the split pane.
         splitPane.setPreferredSize(new Dimension(400, 400));
-        updateLabel(liikeNimiLista[list.getSelectedIndex()]);
+        this.add(splitPane);
+
+        if (liikeLista.length == 0) {
+            taulukkoPanel.add(new JLabel("Ei löytynyt liikkeitä, mistä näyttää tilastoja"));
+        } else {
+            paivitaPanel(liikeNimiLista[list.getSelectedIndex()]);
+        }
     }
 
     //Listens to the list
     @Override
     public void valueChanged(ListSelectionEvent e) {
         JList list = (JList) e.getSource();
-        updateLabel(liikeNimiLista[list.getSelectedIndex()]);
+        paivitaPanel(liikeNimiLista[list.getSelectedIndex()]);
     }
 
-    //Renders the selected image
-    protected void updateLabel(String liikeNimi) {
+    protected void paivitaPanel(String liikeNimi) {
         for (Component vanhatTaulukot : taulukkoPanel.getComponents()) {
             taulukkoPanel.remove(vanhatTaulukot);
         }
         taulukkoPanel.add(taulukot.get(liikeNimi));
         taulukkoPanel.repaint();
-    }
-
-    //Used by SplitPaneDemo2
-    public JList getLiikeLista() {
-        return list;
     }
 
     public JSplitPane getSplitPane() {
@@ -109,13 +95,19 @@ public class SplitPaneTaulukko extends JPanel
      * Create the GUI and show it. For thread safety, this method should be
      * invoked from the event-dispatching thread.
      */
-    public static void createAndShowGUI() throws Exception {
+    public static void createAndShowGUI() {
 
         //Create and set up the window.
         JFrame frame = new JFrame("Taulukot liikkeistä");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        SplitPaneTaulukko splitPaneDemo = new SplitPaneTaulukko();
-        frame.getContentPane().add(splitPaneDemo.getSplitPane());
+        LiikelistaJaTilastotSplitPane splitPane;
+        try {
+            splitPane = new LiikelistaJaTilastotSplitPane();
+            frame.getContentPane().add(splitPane.getSplitPane());
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(frame, ex.getMessage() + ex.getCause(), "Error", JOptionPane.WARNING_MESSAGE);
+        } finally {
+        }
 
         //Display the window.
         frame.pack();

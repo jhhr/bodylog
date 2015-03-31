@@ -1,5 +1,6 @@
 package bodauslogi.logiikka;
 
+import bodauslogi.util.Merkit;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 

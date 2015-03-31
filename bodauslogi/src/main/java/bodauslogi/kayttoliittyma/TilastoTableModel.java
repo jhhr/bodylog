@@ -3,18 +3,15 @@ package bodauslogi.kayttoliittyma;
 import bodauslogi.logiikka.Liike;
 import bodauslogi.logiikka.Sarja;
 import bodauslogi.logiikka.Sessio;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.ListIterator;
 import javax.swing.table.AbstractTableModel;
 
-public class TaulukkoTableModel extends AbstractTableModel {
+public class TilastoTableModel extends AbstractTableModel {
 
     private final Object[][] riviData;
     private final String[] muuttujat;
 
-    public TaulukkoTableModel(Sessio sessio, Liike liike) {
+    public TilastoTableModel(Sessio sessio, Liike liike) {
         this.muuttujat = liike.muuttujatToArray();
         this.riviData = new Object[sessio.getSarjat().size()][muuttujat.length];
         for (ListIterator<Sarja> it = sessio.getSarjat().listIterator(); it.hasNext();) {

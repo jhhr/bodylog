@@ -1,4 +1,4 @@
-package bodauslogi.logiikka;
+package bodauslogi.util;
 
 public class Merkit {
 

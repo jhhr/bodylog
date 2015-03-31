@@ -1,5 +1,6 @@
 package bodauslogi.logiikka;
 
+import bodauslogi.util.Merkit;
 import java.util.Date;
 import static org.junit.Assert.*;
 import org.junit.Before;

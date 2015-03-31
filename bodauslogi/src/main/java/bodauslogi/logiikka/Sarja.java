@@ -1,9 +1,6 @@
 package bodauslogi.logiikka;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Set;
 
 public class Sarja {
 
@@ -37,11 +34,42 @@ public class Sarja {
         return arvot.get(indeksi);
     }
 
+    /**
+     * Muokkaa sarjan arvon String-muotoon. Sarjan toString-metodi käyttää tätä.
+     * Palauttaa "null" jos arvo on null. Jos arvo on Double niin metodi poistaa
+     * ylimääräiset nollat ja pisteen. Eli x.0-->x mutta x.y-->x.y
+     *
+     * @param arvo Sarjan yksi arvo
+     *
+     * @return arvon String-muodossa
+     */
+    private String arvoToString(Object arvo) {
+        if (arvo == null) {
+            return "null";
+        }
+        double arvoD = (Double) arvo;
+        if (arvoD == (long) arvoD) {
+            return String.format("%d", (long) arvoD);
+        } else {
+            return String.format("%s", arvoD);
+        }
+
+    }
+
+    /**
+     * Sarjan toString-metodi.
+     *
+     * Käsittelee sarjan arvot Object-olioina koska arvo saattaa olla null. 
+     * Kasittely Double-olioina johtaa NullPointerExceptioniin.
+     *
+     * @return Sarjan muodossa {arvo1, ... ,arvoN}
+     */
+
     @Override
     public String toString() {
         String str = "{";
         for (Object arvo : arvot) {
-            str += arvo + ",";
+            str += arvoToString(arvo) + ",";
         }
         str = str.substring(0, str.length() - 1) + "}";
         return str;

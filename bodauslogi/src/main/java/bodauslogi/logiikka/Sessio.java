@@ -1,5 +1,7 @@
 package bodauslogi.logiikka;
 
+import bodauslogi.util.Vakiot;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -15,6 +17,10 @@ public class Sessio {
 
     public Date getPaivamaara() {
         return paivamaara;
+    }
+    
+    public String getPaivamaaraString() {
+        return new SimpleDateFormat(Vakiot.PAIVAFORMAATTI).format(paivamaara);
     }
 
     public ArrayList<Sarja> getSarjat() {
@@ -38,7 +44,7 @@ public class Sessio {
 
     public void lisaaSarja(Sarja sarja) {
         if (sarja == null) {
-            throw new NullPointerException("yritetty lisata null session sarjalistaan");
+            throw new IllegalArgumentException("yritetty lisata null session sarjalistaan");
         }
         sarjat.add(sarja);
     }

@@ -1,51 +1,89 @@
-
 package bodauslogi.kayttoliittyma;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.MenuBar;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 
+public class Paaikkuna extends JFrame {
 
-public class Paaikkuna extends JPanel {
-    
-    public Paaikkuna() throws Exception{        
-        setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-//        setLayout(new GridLayout(1, 2));
+    private JTabbedPane tabit;
+    private JMenuBar menuPalkki;
+
+    public Paaikkuna(String otsikko) {
+        super(otsikko);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        JPanel datanLisays = new JPanel();
-        datanLisays.setMaximumSize(new Dimension(200, 500));
-        datanLisays.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));        
-        datanLisays.add(new JLabel("Ei mitään vielä"));
-        this.add(datanLisays);
+        menuPalkki = new JMenuBar();
+        tabit = new JTabbedPane();
+
+        JMenu menu = new JMenu("Tee jotain");
         
-        JScrollPane datanTarkastelu = new JScrollPane(new LiikelistaJaTilastotSplitPane());
-        this.add(datanTarkastelu);
+        JMenuItem lisays = new JMenuItem("lisää dataa");
+        lisays.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tabit.add("Datan lisäys", new JLabel("Datan lisäys"));
+                tabit.setTabComponentAt(tabit.getTabCount()-1, new ButtonTabComponent(tabit));
+            }
+        });
+        menu.add(lisays);
+
+        JMenuItem tilastot = new JMenuItem("Tarkastele dataa");
+        tilastot.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {                
+                try {
+                    tabit.add("Tilastot", new JScrollPane(new LiikelistaJaTilastotSplitPane()));
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(rootPane, ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(Paaikkuna.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                tabit.setTabComponentAt(tabit.getTabCount()-1, new ButtonTabComponent(tabit));                
+            }
+        });
+        menu.add(tilastot);
+        
+        JMenuItem apua = new JMenuItem("Apua");
+        apua.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tabit.add("Apua",new JLabel("apuapapua"));
+                tabit.setTabComponentAt(tabit.getTabCount()-1, new ButtonTabComponent(tabit));
+            }
+        });
+        menu.add(apua);
+        
+        menuPalkki.add(menu);
+        setJMenuBar(menuPalkki);
+        tabit.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
+        setContentPane(tabit);
+        setSize(new Dimension(400, 200));
+        setLocationRelativeTo(null);
+
+//        JScrollPane datanTarkastelu = new JScrollPane(new LiikelistaJaTilastotSplitPane());
     }
-    
-     public static void createAndShowGUI() {
-        //Create and set up the window.
-        JFrame frame = new JFrame("Bodauslogi");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        try {
-            //Add content to the window.
-            frame.add(new Paaikkuna());
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(frame, ex.getMessage() + ex.getCause(), "Error", JOptionPane.WARNING_MESSAGE);
-            Logger.getLogger(Paaikkuna.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public static void luoJaNaytaIkkuna() {
 
-        //Display the window.
-        frame.pack();
-        frame.setVisible(true);
+        JFrame ikkuna = new Paaikkuna("Bodauslogi");
+
+        ikkuna.setVisible(true);
     }
 
 }

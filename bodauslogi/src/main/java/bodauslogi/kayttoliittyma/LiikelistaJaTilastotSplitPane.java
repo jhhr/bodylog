@@ -2,7 +2,6 @@ package bodauslogi.kayttoliittyma;
 
 import bodauslogi.logiikka.Liike;
 import bodauslogi.tiedostokasittely.Tiedostosta;
-import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.util.HashMap;

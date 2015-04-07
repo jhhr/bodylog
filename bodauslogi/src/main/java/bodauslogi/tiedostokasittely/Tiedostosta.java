@@ -7,12 +7,13 @@ import bodauslogi.util.Vakiot;
 import bodauslogi.util.liikeFiltteri;
 import bodauslogi.util.sessioFiltteri;
 import java.io.File;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 import java.util.Scanner;
 
 public class Tiedostosta {
-
+    
     public static Liike liikeSessioton(File liikeTiedosto) throws Exception {
         Scanner lukija = new Scanner(liikeTiedosto);
         String nimi = liikeTiedosto.getName();
@@ -40,10 +41,10 @@ public class Tiedostosta {
         return sarja;
     }
 
-    private static Date paivamaaraSessiolle(File sessioTiedosto) throws Exception {
+    private static TemporalAccessor paivamaaraSessiolle(File sessioTiedosto) throws Exception {
         String pvm = sessioTiedosto.getName();
         pvm = pvm.substring(0, pvm.length() - 4);
-        return new SimpleDateFormat(Vakiot.PAIVAFORMAATTI).parse(pvm);
+        return Vakiot.TIEDOSTOPVM.parse(pvm);
     }
 
     public static Sessio sessio(File sessioTiedosto) throws Exception {
@@ -58,7 +59,7 @@ public class Tiedostosta {
 
     public static Liike liikeSessioineen(File liikeTiedosto) throws Exception {
         Liike liike = liikeSessioton(liikeTiedosto);
-        File liikeSessioKansio = new File(Vakiot.SESSIOT + "/" + liike.getNimi());
+        File liikeSessioKansio = new File(Vakiot.SESSIOT + "/" + liike);
         liikeSessioKansio.mkdir();
         for (File sessioFilu : liikeSessioKansio.listFiles(new sessioFiltteri())) {
             liike.lisaaSessio(sessio(sessioFilu));
@@ -67,13 +68,36 @@ public class Tiedostosta {
     }
 
     public static Liike[] kaikkiLiikkeetSessioineen() throws Exception {
-        File liikkeetKansio = new File(Vakiot.LIIKKEET);
-        liikkeetKansio.mkdir();
-        File[] liikeKansioLista = liikkeetKansio.listFiles(new liikeFiltteri());
+        File[] liikeKansioLista = liikeTiedostoLista();
         Liike[] liikeLista = new Liike[liikeKansioLista.length];
         for (int i = 0; i < liikeKansioLista.length; i++) {
             liikeLista[i] = liikeSessioineen(liikeKansioLista[i]);
         }
         return liikeLista;
+    }
+    
+    public static File[] liikeTiedostoLista() throws Exception {
+        File liikkeetKansio = new File(Vakiot.LIIKKEET);
+        liikkeetKansio.mkdir();
+        return liikkeetKansio.listFiles(new liikeFiltteri());
+    }
+    
+    public static Liike[] liikeLista() throws Exception{
+        File[] liikeTiedostoLista = liikeTiedostoLista();
+        Liike[] liikeLista = new Liike[liikeTiedostoLista.length];
+        for (int i = 0; i < liikeTiedostoLista.length; i++) {
+            liikeLista[i] = liikeSessioton(liikeTiedostoLista[i]);
+        }
+        return liikeLista;
+    }
+    
+    public static String[] liikeNimiLista() throws Exception{
+        File[] liikeTiedostoLista = liikeTiedostoLista();
+        String[] liikeNimiLista = new String[liikeTiedostoLista.length];
+        for (int i = 0; i < liikeTiedostoLista.length; i++) {
+            String tiedostoNimi = liikeTiedostoLista[i].getName();
+            liikeNimiLista[i] = tiedostoNimi.substring(0, tiedostoNimi.length()-4);
+        }
+        return liikeNimiLista;
     }
 }

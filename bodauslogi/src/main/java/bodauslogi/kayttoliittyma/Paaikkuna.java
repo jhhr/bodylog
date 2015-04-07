@@ -1,5 +1,7 @@
 package bodauslogi.kayttoliittyma;
 
+import bodauslogi.kayttoliittyma.datantarkastelu.TilastotIkkuna;
+import bodauslogi.kayttoliittyma.datanlisays.SessionLisaysIkkuna;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.MenuBar;
@@ -29,31 +31,36 @@ public class Paaikkuna extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
         menuPalkki = new JMenuBar();
-        tabit = new JTabbedPane();
+        tabit = new JTabbedPane(JTabbedPane.TOP,JTabbedPane.SCROLL_TAB_LAYOUT);        
 
-        JMenu menu = new JMenu("Tee jotain");
+        JMenu menu = new JMenu("Menu");
         
-        JMenuItem lisays = new JMenuItem("lisää dataa");
+        JMenuItem lisays = new JMenuItem("Tallenna sessioita");
         lisays.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                tabit.add("Datan lisäys", new JLabel("Datan lisäys"));
-                tabit.setTabComponentAt(tabit.getTabCount()-1, new ButtonTabComponent(tabit));
-            }
-        });
-        menu.add(lisays);
-
-        JMenuItem tilastot = new JMenuItem("Tarkastele dataa");
-        tilastot.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {                
                 try {
-                    tabit.add("Tilastot", new JScrollPane(new LiikelistaJaTilastotSplitPane()));
+                    tabit.add("Sessionlisäys", new SessionLisaysIkkuna());
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(rootPane, ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
                     Logger.getLogger(Paaikkuna.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                tabit.setTabComponentAt(tabit.getTabCount()-1, new ButtonTabComponent(tabit));                
+                tabit.setTabComponentAt(tabit.getTabCount()-1, new SuljettavaTabi(tabit));
+            }
+        });
+        menu.add(lisays);
+
+        JMenuItem tilastot = new JMenuItem("Katso tilastoja");
+        tilastot.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {                
+                try {
+                    tabit.add("Tilastot", new JScrollPane(new TilastotIkkuna()));
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(rootPane, ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+                    Logger.getLogger(Paaikkuna.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                tabit.setTabComponentAt(tabit.getTabCount()-1, new SuljettavaTabi(tabit));                
             }
         });
         menu.add(tilastot);
@@ -64,7 +71,7 @@ public class Paaikkuna extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 tabit.add("Apua",new JLabel("apuapapua"));
-                tabit.setTabComponentAt(tabit.getTabCount()-1, new ButtonTabComponent(tabit));
+                tabit.setTabComponentAt(tabit.getTabCount()-1, new SuljettavaTabi(tabit));
             }
         });
         menu.add(apua);
@@ -73,7 +80,7 @@ public class Paaikkuna extends JFrame {
         setJMenuBar(menuPalkki);
         tabit.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
         setContentPane(tabit);
-        setSize(new Dimension(400, 200));
+        setSize(new Dimension(600, 600));
         setLocationRelativeTo(null);
 
 //        JScrollPane datanTarkastelu = new JScrollPane(new LiikelistaJaTilastotSplitPane());

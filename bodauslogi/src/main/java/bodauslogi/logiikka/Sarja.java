@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Sarja {
 
-    private ArrayList<Double> arvot;
+    private ArrayList<Object> arvot;
 
     public Sarja() {
         this.arvot = new ArrayList<>();
@@ -22,7 +22,12 @@ public class Sarja {
         return arvot.size();
     }
 
-    public void lisaaArvo(double arvo) {
+    public void lisaaArvo(Object arvo, int indeksi) {
+        arvot.ensureCapacity(indeksi);
+        arvot.add(indeksi, arvo);
+    }
+
+    public void lisaaArvo(Object arvo) {
         arvot.add(arvo);
     }
 
@@ -30,8 +35,14 @@ public class Sarja {
         arvot.add(null);
     }
 
-    public double getArvo(int indeksi) {
-        return arvot.get(indeksi);
+    public Object getArvo(int indeksi) {
+        Object arvo;
+        try {
+            arvo = arvot.get(indeksi);
+        } catch (IndexOutOfBoundsException e) {
+            arvo = null;
+        }
+        return arvo;
     }
 
     /**
@@ -46,12 +57,15 @@ public class Sarja {
     private String arvoToString(Object arvo) {
         if (arvo == null) {
             return "null";
-        }
-        double arvoD = (Double) arvo;
-        if (arvoD == (long) arvoD) {
-            return String.format("%d", (long) arvoD);
+        } else if (arvo.equals(true) || arvo.equals(false) || arvo instanceof Integer) {
+            return arvo.toString();
         } else {
-            return String.format("%s", arvoD);
+            double arvoD = (Double) arvo;
+            if (arvoD == (long) arvoD) {
+                return String.format("%d", (long) arvoD);
+            } else {
+                return String.format("%s", arvoD);
+            }
         }
 
     }
@@ -59,12 +73,11 @@ public class Sarja {
     /**
      * Sarjan toString-metodi.
      *
-     * Käsittelee sarjan arvot Object-olioina koska arvo saattaa olla null. 
+     * Käsittelee sarjan arvot Object-olioina koska arvo saattaa olla null.
      * Kasittely Double-olioina johtaa NullPointerExceptioniin.
      *
      * @return Sarjan muodossa {arvo1, ... ,arvoN}
      */
-
     @Override
     public String toString() {
         String str = "{";

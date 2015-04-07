@@ -21,7 +21,7 @@ public class SarjaTest {
     @Test
     public void LisattyArvoLoytyy() {
         sarja.lisaaArvo(60.0);
-        assertEquals(60.0, sarja.getArvo(0), 0.001);
+        assertEquals(60.0, (Double) sarja.getArvo(0), 0.001);
     }
 
     @Test

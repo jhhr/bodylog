@@ -10,5 +10,8 @@
 - to 26.3 klo 14-15 aihemäärittelyn laajentamista ja tarkentamista
 - pe 27.3 klo 15-19 käyttöliittymän aloittelua
 - la 28.3 klo 11-22 perustaulukkosysteemin ekan version valmistelu
-- ma 30.3 klo 13-18 kayttoliittyman tekoa
-- ti 31.3 klo 12-18 kayttoliittyman tekoa
+- ma 30.3 klo 13-18 käyttöliittymän tekoa
+- ti 31.3 klo 12-18 käyttöliittymän tekoa
+- to 2.4 klo 22-01 käyttöliittymän teko, UI:n rakenne valittu
+- pe 3.4 klo 13-19 käyttöliittymän tekoa
+- ti 7.4 klo 13-01 käyttöliittymän tekoa, pientä twiikkailua logiikkaan

@@ -1,15 +1,15 @@
 package bodauslogi.logiikka;
 
 import bodauslogi.util.Vakiot;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAccessor;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
 public class SessioTest {
 
-    Date pvm;
+    TemporalAccessor pvm;
     String pvmString;
     Sessio sessio;
     Sarja sarja1;
@@ -17,8 +17,8 @@ public class SessioTest {
 
     @Before
     public void SetUp() throws Exception{
-        pvmString = "2010.05.04";
-        pvm = new SimpleDateFormat(Vakiot.PAIVAFORMAATTI).parse(pvmString);
+        pvmString = "4.5.2010";
+        pvm = Vakiot.UIPVM.parse(pvmString);
         sessio = new Sessio(pvm);
         sarja1 = new Sarja();
         sarja2 = new Sarja();
@@ -26,7 +26,7 @@ public class SessioTest {
 
     @Test
     public void PaivamaaraSamaKuinAnnettu() {
-        assertEquals(pvm, sessio.getPaivamaara());
+        assertEquals(LocalDate.from(Vakiot.UIPVM.parse(pvmString)), sessio.getPaivamaara());
     }
     
     @Test

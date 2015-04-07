@@ -5,7 +5,7 @@ import bodauslogi.util.Vakiot;
 import bodauslogi.logiikka.Liike;
 import java.io.File;
 import java.io.FileWriter;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -26,7 +26,7 @@ public class TiedostostaTest {
         dataKansio.mkdir();
         liikeKansio = new File(Vakiot.SESSIOT + "/lehdenluku");
         liikeKansio.mkdir();
-        sessioTiedosto = new File(Vakiot.SESSIOT + "/lehdenluku/2014.04.07" + Vakiot.SESSIOPAATE);
+        sessioTiedosto = new File(Vakiot.SESSIOT + "/lehdenluku/2014-04-07" + Vakiot.SESSIOPAATE);
         FileWriter sessioKirjoittaja = new FileWriter(sessioTiedosto);
         sessioKirjoittaja.write("{60,5}\n{40,null}");
         sessioKirjoittaja.close();
@@ -40,16 +40,20 @@ public class TiedostostaTest {
 
     @After
     public void tearDown() {
-        if (liikeKansio.exists()) {
-            for (String liikeFilu : liikeKansio.list()) {
-                new File(Vakiot.SESSIOT + "/lehdenluku/" + liikeFilu).delete();
+        if (dataKansio.exists()) {
+            for (File kansio : dataKansio.listFiles()) {
+                if (kansio.isDirectory()) {
+                    for (File sessioFilu : kansio.listFiles()) {
+                        sessioFilu.delete();
+                    }
+                }
+                kansio.delete();
             }
-            liikeKansio.delete();
+            dataKansio.delete();
         }
-        dataKansio.delete();
         if (liikkeetKansio.exists()) {
-            for (String liikeFilu : liikkeetKansio.list()) {
-                new File(Vakiot.LIIKKEET + "/" + liikeFilu).delete();
+            for (File liikeFilu : liikkeetKansio.listFiles()) {
+                liikeFilu.delete();
             }
             liikkeetKansio.delete();
         }
@@ -63,7 +67,7 @@ public class TiedostostaTest {
 
     @Test
     public void sessio_PaivamaaraOikein() throws Exception {
-        assertEquals(new SimpleDateFormat(Vakiot.PAIVAFORMAATTI).parse("2014.04.07"),
+        assertEquals(LocalDate.from(Vakiot.TIEDOSTOPVM.parse("2014-04-07")),
                 Tiedostosta.sessio(sessioTiedosto).getPaivamaara());
     }
     
@@ -72,7 +76,7 @@ public class TiedostostaTest {
     @Test
     public void like_NimiOikein() throws Exception {
         Liike liike = Tiedostosta.liikeSessioton(liikeTiedosto);
-        assertEquals("lehdenluku", liike.getNimi());
+        assertEquals("lehdenluku", liike.toString());
     }
 
     @Test

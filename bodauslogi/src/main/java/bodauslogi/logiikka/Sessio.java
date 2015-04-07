@@ -1,26 +1,35 @@
 package bodauslogi.logiikka;
 
 import bodauslogi.util.Vakiot;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Sessio {
 
-    private Date paivamaara;
+    private TemporalAccessor paivamaara;
     private ArrayList<Sarja> sarjat;
 
-    public Sessio(Date pvm) {
-        this.paivamaara = pvm;
+    public Sessio(TemporalAccessor pvm) {
+        this.paivamaara = LocalDate.from(pvm);
         this.sarjat = new ArrayList<>();
     }
+    
+    public Sessio(){
+        this.paivamaara = LocalDate.now();
+        this.sarjat = new ArrayList<>();
+    }
+    
+    public void setPaivamaara(TemporalAccessor pvm) {
+        this.paivamaara = LocalDate.from(pvm);
+    }
 
-    public Date getPaivamaara() {
+    public TemporalAccessor getPaivamaara() {
         return paivamaara;
     }
     
     public String getPaivamaaraString() {
-        return new SimpleDateFormat(Vakiot.PAIVAFORMAATTI).format(paivamaara);
+        return Vakiot.UIPVM.format(paivamaara);
     }
 
     public ArrayList<Sarja> getSarjat() {

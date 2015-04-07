@@ -3,6 +3,7 @@ package bodauslogi.tiedostokasittely;
 import bodauslogi.util.Vakiot;
 import bodauslogi.logiikka.*;
 import java.io.File;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Scanner;
 import org.junit.After;
@@ -30,15 +31,15 @@ public class TallennaTest {
 
     @Before
     public void setUp() {
-        maveSessio = new Sessio(new Date(0));
-        penkkiSessio = new Sessio(new Date(0));
+        maveSessio = new Sessio(LocalDate.of(1970, 1, 1));
+        penkkiSessio = new Sessio(LocalDate.of(1970, 1, 1));
         penkki = new Liike("penkki");
         mave = new Liike("mave");
         dataKansio = new File(Vakiot.SESSIOT);
         maveKansio = new File(Vakiot.SESSIOT + "/mave");
         penkkiKansio = new File(Vakiot.SESSIOT + "/penkki");
-        maveSessioTiedosto = new File(Vakiot.SESSIOT + "/mave/1970.01.01" + Vakiot.SESSIOPAATE);
-        penkkiSessioTiedosto = new File(Vakiot.SESSIOT + "/penkki/1970.01.01" + Vakiot.SESSIOPAATE);
+        maveSessioTiedosto = new File(Vakiot.SESSIOT + "/mave/1970-01-01" + Vakiot.SESSIOPAATE);
+        penkkiSessioTiedosto = new File(Vakiot.SESSIOT + "/penkki/1970-01-01" + Vakiot.SESSIOPAATE);
         liikkeetKansio = new File(Vakiot.LIIKKEET);
         penkkiLiikeTiedosto = new File(Vakiot.LIIKKEET + "/penkki" + Vakiot.LIIKEPAATE);
     }
@@ -69,19 +70,17 @@ public class TallennaTest {
 
     @After
     public void tearDown() {
-        if (maveKansio.exists()) {
-            for (String maveFilu : maveKansio.list()) {
-                new File(Vakiot.SESSIOT + "/mave/" + maveFilu).delete();
+        if (dataKansio.exists()) {
+            for (File kansio : dataKansio.listFiles()) {
+                if (kansio.isDirectory()) {
+                    for (File sessioFilu : kansio.listFiles()) {
+                        sessioFilu.delete();
+                    }
+                }
+                kansio.delete();
             }
-            maveKansio.delete();
+            dataKansio.delete();
         }
-        if (penkkiKansio.exists()) {
-            for (String penkkiFilu : penkkiKansio.list()) {
-                new File(Vakiot.SESSIOT + "/penkki/" + penkkiFilu).delete();
-            }
-            penkkiKansio.delete();
-        }
-        dataKansio.delete();
 
         if (liikkeetKansio.exists()) {
             for (String liikeFilu : liikkeetKansio.list()) {

@@ -1,7 +1,7 @@
 package bodauslogi.logiikka;
 
 import bodauslogi.util.Merkit;
-import java.util.Date;
+import java.time.LocalDate;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +14,7 @@ public class LiikeTest {
     @Before
     public void SetUp() {
         penkki = new Liike("penkki");
-        sessio = new Sessio(new Date());
+        sessio = new Sessio(LocalDate.now());
     }
 
     @Test

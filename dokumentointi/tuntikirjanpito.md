@@ -15,3 +15,4 @@
 - to 2.4 klo 22-01 käyttöliittymän teko, UI:n rakenne valittu
 - pe 3.4 klo 13-19 käyttöliittymän tekoa
 - ti 7.4 klo 13-01 käyttöliittymän tekoa, pientä twiikkailua logiikkaan
+- ke 8.4 klo 13-00:30 käyttöliittymän tekoa, kielen vaihto englantiin, vähän testien ja logiikan twiikkailua

@@ -36,8 +36,9 @@ import java.awt.*;
 import java.awt.event.*;
 
 /**
- * Component to be used as tabComponent; Contains a JLabel to show the text and
- * a JButton to close the tab it belongs to
+ * Custom tab button that contains a button which will close the tab.
+ * 
+ * Code from Oracle's <a href="https://docs.oracle.com/javase/tutorial/uiswing/examples/components/TabComponentsDemoProject/src/components/ButtonTabComponent.java">TabComponentsDemo</a>
  */
 public class CloseableTab extends JPanel {
 

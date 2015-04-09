@@ -3,12 +3,12 @@ package bodylog.files;
 import bodylog.logic.Set;
 import bodylog.logic.Move;
 import bodylog.logic.Session;
-import bodylog.util.Constant;
 import java.io.File;
 import java.time.LocalDate;
 import java.util.Scanner;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +22,8 @@ public class ToFileTest {
     String benchName = "bench";
     String DLName = "deadlift";
     String varWeight = "weight";
-    String varReps = "repe";
+    String varReps = "reps";
+    String varBool = "pumped";
     String dateStr = "1970-01-01";
     Set set1;
     Set set2;
@@ -54,21 +55,26 @@ public class ToFileTest {
         set3 = new Set();
         set3.addValue(125.0);
         set3.addValue(5);
+        set3.addValue(false);
         deadlift.addVariable(varWeight);
         deadlift.addVariable(varReps);
+        deadlift.addVariable(varBool);
         DLsession.addSet(set3);
         deadlift.addSession(DLsession);
     }
 
     private void addBenchSets() {
         set1 = new Set();
-        set1.addValue(65.0);
+        set1.addValue(65.5);
         set1.addValue(10);
+        set1.addValue(true);
         set2 = new Set();
         set2.addValue(55.0);
-        set2.addValue(8);
+        set2.addValue(0.00);
+        set2.addValue(null);
         bench.addVariable(varWeight);
         bench.addVariable(varReps);
+        bench.addVariable(varBool);
         benchSession.addSet(set1);
         benchSession.addSet(set2);
         bench.addSession(benchSession);
@@ -102,14 +108,14 @@ public class ToFileTest {
     }
 
     @Test
-    public void KansioidenLuontiKahdelleLiikkeelle_KunEiOlemassa() throws Exception {
+    public void CreatingFoldersWhenNotAlreadyExisting() throws Exception {
         ToFile.createDataFolder(deadlift);
         ToFile.createDataFolder(bench);
         assertTrue(DLFolder.exists() && benchFolder.exists());
     }
 
     @Test
-    public void Sessiot_KahdenLiikkeenSessioTiedostojenLuontiOnnistuu() throws Exception {
+    public void Sessions_CreatingMoveFiles_SessionFileCheckerReturnsTrue() throws Exception {
         addDLSets();
         addBenchSets();
         dataFolder.mkdir();
@@ -117,11 +123,22 @@ public class ToFileTest {
         benchFolder.mkdir();
         ToFile.sessions(deadlift);
         ToFile.sessions(bench);
-        assertTrue(DLSessionFile.exists() && benchSessionFile.exists());
+        assertTrue(DLSessionFile.exists() && ToFile.sessionFileExists(deadlift, dateStr));
+        assertTrue(benchSessionFile.exists() && ToFile.sessionFileExists(bench, dateStr));
     }
 
     @Test
-    public void Sessio_YksisarjaisenLiikkeenSessioTiedostonSisaltoOikein() throws Exception {
+    public void SessionFileCheckerReturnsFalseForNonexistentFile() {
+        assertFalse(ToFile.sessionFileExists(bench, dateStr));
+    }
+    
+    @Test
+    public void MoveFileCheckerReturnsFalseForNonexistentFile() {
+        assertFalse(ToFile.moveFileExists(bench));
+    }
+
+    @Test
+    public void Sessions_SessionFileContentsAsExpectedUsingMoveWithOneSetOfData() throws Exception {
         addDLSets();
         dataFolder.mkdir();
         DLFolder.mkdir();
@@ -134,20 +151,20 @@ public class ToFileTest {
     }
 
     @Test
-    public void Sessio_KaksisarjaisenLiikkeenSessioTiedostonSisaltoOikein() throws Exception {
+    public void Sessions_SessionFileContentsAsExpectedUsingMoveWithTwoSetsOfData() throws Exception {
         addBenchSets();
         dataFolder.mkdir();
         benchFolder.mkdir();
         ToFile.sessions(bench);
         Scanner lukija = new Scanner(benchSessionFile);
         lukija.useDelimiter("\\Z");
-        String tiedostonSisalto = lukija.next();
+        String fileContents = lukija.next();
         lukija.close();
-        assertEquals(set1 + "\n" + set2, tiedostonSisalto);
+        assertEquals(set1 + "\n" + set2, fileContents);
     }
 
     @Test
-    public void Liike_KansionLuontiOnnistuu_KunEiAiemminOlemassa() throws Exception {
+    public void Move_MoveFolderCreationWhenNotAlreadyExisting() throws Exception {
         if (!movesFolder.exists()) {
             ToFile.createMovesFolder();
         }
@@ -155,25 +172,26 @@ public class ToFileTest {
     }
 
     @Test
-    public void Liike_LiikeTiedostonLuontiOnnistuu() throws Exception {
+    public void Move_MoveFileCreation_MoveFileCheckerReturnsTrue() throws Exception {
         movesFolder.mkdir();
         bench.addVariable(varWeight);
         ToFile.move(bench);
-        assertTrue(benchMoveFile.exists());
+        assertTrue(benchMoveFile.exists() && ToFile.moveFileExists(bench));
     }
 
     @Test
-    public void Liike_LiikeTiedostonSisaltoOikein() throws Exception {
+    public void Move_MoveFileContentsAsExpected() throws Exception {
         movesFolder.mkdir();
         bench.addVariable(varWeight);
         bench.addVariable(varReps);
+        bench.addVariable(varBool);
         ToFile.move(bench);
         Scanner lukija = new Scanner(benchMoveFile);
         lukija.useDelimiter("\\Z");
-        String tiedostonSisalto = "";
-        tiedostonSisalto = lukija.next();
+        String fileContents = "";
+        fileContents = lukija.next();
         lukija.close();
-        assertEquals(varWeight + "\n" + varReps, tiedostonSisalto);
+        assertEquals(varWeight + "\n" + varReps + "\n" + varBool, fileContents);
     }
 
 }

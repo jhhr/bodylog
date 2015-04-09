@@ -1,6 +1,5 @@
 package bodylog.logic;
 
-import bodylog.logic.Set;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,10 +24,17 @@ public class SetTest {
         set.addValue(null);
         set.addValue(1);
         set.addValue(true);
-        assertEquals(60.0, (Double) set.getValue(0), 0.001);        
+        assertEquals(60.0, set.getValue(0));        
         assertEquals(null, set.getValue(1));        
         assertEquals(1, set.getValue(2));               
         assertEquals(true, set.getValue(3));
+    }    
+    
+    @Test
+    public void GetValueReturnsNullIfOutofBounds(){
+        assertEquals(null, set.getValue(0));
+        set.addValue(false);
+        assertEquals(null, set.getValue(1));
     }
 
     @Test
@@ -55,6 +61,15 @@ public class SetTest {
         assertEquals(4, set.size());        
         set.addValue(1,2);      
         assertEquals(4, set.size());
+    }
+    
+    @Test
+    public void ToArrayWithSizeReturnsArrayWithExpectedContents(){
+        set.addValue(2.1);
+        set.addValue(false);
+        assertArrayEquals(new Object[]{2.1, false}, set.toArray(2));        
+        assertArrayEquals(new Object[]{2.1}, set.toArray(1));
+        assertArrayEquals(new Object[]{2.1, false,null,null}, set.toArray(4));
     }
 
     @Test

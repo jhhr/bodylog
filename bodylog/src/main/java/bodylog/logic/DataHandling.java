@@ -1,10 +1,34 @@
 package bodylog.logic;
 
 /**
- * Static class for string manipulation required for writing Set data to session
- * files and creating Set objects from reading session files.
+ * Static class for string manipulation. Used for writing Set data to session
+ * files and creating Set objects from reading session files and checking names
+ * of moves and variables for characters used in parsing move file contents.
  */
 public class DataHandling {
+
+    private DataHandling() {
+    }
+
+    /**
+     * Characters not allowed as the name of Moves or in variables of Moves
+     * because they are used in parsing data from files.
+     */
+    public static final char[] BANNED_CHARS = new char[]{'{', '}', ',', '.'};
+
+    /**
+     * Checks if the given string contains any of the banned characters. Throws
+     * an IllegalArgumentException if so.
+     *
+     * @param name string to be checked
+     */
+    public static void nameIsAllowed(String name) {
+        for (char ch : BANNED_CHARS) {
+            if (name.contains("" + ch)) {
+                throw new IllegalArgumentException("the characters " + new String(BANNED_CHARS) + " are not allowed");
+            }
+        }
+    }
 
     /**
      * Converts given value into a String, suitable for writing into session
@@ -18,18 +42,19 @@ public class DataHandling {
      * @see bodylog.logic.Set
      */
     public static String setValueToString(Object value) {
-        if (value == null) {
-            return "null";
-        } else if (value.equals(true) || value.equals(false) || value instanceof Integer) {
-            return value.toString();
-        } else {
-            double valueD = (Double) value;
-            if (valueD == (long) valueD) {
-                return String.format("%d", (long) valueD);
+        if (value != null) {
+            if (value.equals(true) || value.equals(false) || value instanceof Integer) {
+                return value.toString();
             } else {
-                return String.format("%s", valueD);
+                double valueD = (Double) value;
+                if (valueD == (long) valueD) {
+                    return String.format("%d", (long) valueD);
+                } else {
+                    return String.format("%s", valueD);
+                }
             }
         }
+        return null;
     }
 
     /**

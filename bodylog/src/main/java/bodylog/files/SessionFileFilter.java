@@ -1,11 +1,11 @@
-package bodylog.util;
+package bodylog.files;
 
 import java.io.File;
 import java.io.FilenameFilter;
 
 /**
  * A FileNameFilter that accepts files ending in the ending for session data
- * files, specified in {@link bodylog.util.Constant Constant}.
+ * files, specified in {@link bodylog.files.Constant Constant}.
  *
  */
 public class SessionFileFilter implements FilenameFilter {

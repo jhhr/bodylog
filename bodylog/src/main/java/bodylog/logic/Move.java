@@ -1,6 +1,6 @@
 package bodylog.logic;
 
-import bodylog.util.Constant;
+import bodylog.files.Constant;
 import java.util.ArrayList;
 
 /**
@@ -27,7 +27,7 @@ public class Move {
      * @see bodylog.util.Constant#nameIsAllowed
      */
     public Move(String name) {
-        Constant.nameIsAllowed(name);
+        DataHandling.nameIsAllowed(name);
         this.name = name;
         this.variables = new ArrayList<>();
         this.sessionList = new ArrayList<>();
@@ -42,7 +42,7 @@ public class Move {
      * @see bodylog.util.Constant#nameIsAllowed
      */
     public void setName(String newName) {
-        Constant.nameIsAllowed(newName);
+        DataHandling.nameIsAllowed(newName);
         name = newName;
     }
 
@@ -102,7 +102,7 @@ public class Move {
      * @see bodylog.util.Constant#nameIsAllowed
      */
     public void addVariable(String name) {
-        Constant.nameIsAllowed(name);
+        DataHandling.nameIsAllowed(name);
         variables.add(name);
     }
 
@@ -136,9 +136,10 @@ public class Move {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj == null || obj.getClass() != getClass()) {
+        if (obj != null && obj.getClass() == getClass()) {
+            return obj.toString().equals(this.name);
+        } else {
             return false;
         }
-        return obj.toString().equals(this.name);
     }
 }

@@ -1,34 +1,15 @@
-package bodylog.util;
+package bodylog.files;
 
+import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
 /**
- * Static class for storing important constanst, mostly String values relating
- * to file handling.
+ * Static class for storing String values relating and DateTimeFormatters.
  *
  */
 public class Constant {
 
-    /**
-     * Characters not allowed as the name of Moves or in variables of Moves
-     * because they are used in parsing data from files.
-     */
-    public static final char[] BANNED_CHARS = new char[]{'{', '}', ','};
-
-    /**
-     * Checks if the given string contains any of the banned characters. Throws
-     * an IllegalArgumentException if so.
-     *
-     * @param name string to be checked
-     */
-    public static void nameIsAllowed(String name) {
-        for (char ch : BANNED_CHARS) {
-            if (name.contains("" + ch)) {
-                throw new IllegalArgumentException("the characters {}:, are not allowed");
-            }
-        }
-    }
 
     /**
      * Name for the folder that will contain the individual data folders for

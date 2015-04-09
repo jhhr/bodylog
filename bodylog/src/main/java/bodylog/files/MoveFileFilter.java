@@ -1,4 +1,4 @@
-package bodylog.util;
+package bodylog.files;
 
 import java.io.File;
 import java.io.FilenameFilter;

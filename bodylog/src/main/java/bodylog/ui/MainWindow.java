@@ -3,153 +3,187 @@ package bodylog.ui;
 import bodylog.ui.dataediting.MoveEditorWindow;
 import bodylog.ui.dataviewing.StatWindow;
 import bodylog.ui.dataediting.SessionEditorWindow;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
-public class MainWindow extends JFrame {
+/**
+ * Main UI window containing a menu bar from which tabs are opened.
+ */
+public class MainWindow extends JFrame implements ActionListener {
 
-    private JTabbedPane tabs;
-    private JMenuBar menuBar;
-    private JLabel info = new JLabel("Instructions");
-    private static final String SESSION_EDITOR_TABTITLE = "Session Editor";
-    private static final String MOVE_EDITOR_TABTITLE = "Move Editor";
-    private static final String STATISTIC_VIEWER_TABTITLE = "Statistics";
-    private static final String INFO_TABTITLE = "Help";
+    private final JTabbedPane tabs;
+    private final JMenuBar menuBar;
+    private final JLabel info = new JLabel("Instructions");
+    private static final String SESSION_EDITOR = "Session Editor";
+    private static final String MOVE_EDITOR = "Move Editor";
+    private static final String STATISTICS = "Statistics";
+    private static final String INFO = "Help";
 
-    public MainWindow(String title) {
-        super(title);
+    public MainWindow() {
+        super("Bodylog");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         menuBar = new JMenuBar();
+        menuBar.add(mainMenu());
+        menuBar.add(helpMenu());
+        setJMenuBar(menuBar);
+
         tabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
-
-        JMenu menu = new JMenu("Menu");
-
-        JMenuItem sessionMenu = new JMenuItem("Add session(s)");
-        sessionMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (tabs.getComponentCount() > 0) {
-                    for (int i = 0; i < tabs.getTabCount(); i++) {
-                        if (tabs.getTitleAt(i).equals(SESSION_EDITOR_TABTITLE)) {
-                            tabs.setSelectedIndex(i);
-                            return;
-                        }
-                    }
-                }
-                try {
-                    SessionEditorWindow sesEdit = new SessionEditorWindow();
-                    tabs.add(SESSION_EDITOR_TABTITLE, sesEdit);
-                    tabs.setSelectedComponent(sesEdit);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                tabs.setTabComponentAt(tabs.getTabCount() - 1, new CloseableTab(tabs));
-            }
-        });
-        menu.add(sessionMenu);
-
-        JMenuItem statMenu = new JMenuItem("View statistics");
-        statMenu.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (tabs.getComponentCount() > 0) {
-                    for (int i = 0; i < tabs.getTabCount(); i++) {
-                        if (tabs.getTitleAt(i).equals(STATISTIC_VIEWER_TABTITLE)) {
-                            tabs.setSelectedIndex(i);
-                            return;
-                        }
-                    }
-                }
-                try {
-                    JScrollPane statView = new JScrollPane(new StatWindow());
-                    tabs.add(STATISTIC_VIEWER_TABTITLE, statView);
-                    tabs.setSelectedComponent(statView);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                tabs.setTabComponentAt(tabs.getTabCount() - 1, new CloseableTab(tabs));
-            }
-        });
-        menu.add(statMenu);
-
-        JMenuItem moveMenu = new JMenuItem("Add/edit movements");
-        moveMenu.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (tabs.getComponentCount() > 0) {
-                    for (int i = 0; i < tabs.getTabCount(); i++) {
-                        if (tabs.getTitleAt(i).equals(MOVE_EDITOR_TABTITLE)) {
-                            tabs.setSelectedIndex(i);
-                            return;
-                        }
-                    }
-                }
-
-                try {
-                    MoveEditorWindow liikkeet = new MoveEditorWindow();
-                    tabs.add(MOVE_EDITOR_TABTITLE, liikkeet);
-                    tabs.setSelectedComponent(liikkeet);
-                } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-                    Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                }
-
-                tabs.setTabComponentAt(tabs.getTabCount() - 1, new CloseableTab(tabs));
-            }
-        });
-        menu.add(moveMenu);
-
-        JMenuItem infoMenu = new JMenuItem("Help");
-        infoMenu.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (tabs.getComponentCount() > 0) {
-                    for (int i = 0; i < tabs.getTabCount(); i++) {
-                        if (tabs.getTitleAt(i).equals(INFO_TABTITLE)) {
-                            tabs.setSelectedIndex(i);
-                            return;
-                        }
-                    }
-                }
-                tabs.add(INFO_TABTITLE, info);
-                tabs.setSelectedComponent(info);
-                tabs.setTabComponentAt(tabs.getTabCount() - 1, new CloseableTab(tabs));
-            }
-        });
-        menu.add(infoMenu);
-
-        tabs.add("Ohjeet", info);
+        tabs.add(INFO, info);
         tabs.setSelectedComponent(info);
         tabs.setTabComponentAt(tabs.getTabCount() - 1, new CloseableTab(tabs));
 
-        menuBar.add(menu);
-        setJMenuBar(menuBar);
         tabs.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
+
         setContentPane(tabs);
         setSize(new Dimension(600, 600));
+
         setLocationRelativeTo(null);
     }
 
-    public static void createAndShowWindow() {
+    private JMenu mainMenu() {
+        JMenu mainMenu = new JMenu("Menu");
 
-        JFrame frame = new MainWindow("Bodauslogi");
+        mainMenu.add(sessionEditMenuItem());
+        mainMenu.add(statisticsMenuItem());
+        mainMenu.add(moveEditMenuItem());
 
+        return mainMenu;
+    }
+
+    private JMenu helpMenu() {
+        JMenu helpMenu = new JMenu("Help");
+        helpMenu.add(infoMenuItem());
+
+        return helpMenu;
+    }
+
+    private JMenuItem sessionEditMenuItem() {
+        JMenuItem sessionMenu = new JMenuItem("Add session(s)");
+        sessionMenu.setActionCommand(SESSION_EDITOR);
+        sessionMenu.addActionListener(this);
+        return sessionMenu;
+    }
+
+    private JMenuItem statisticsMenuItem() {
+        JMenuItem statMenu = new JMenuItem("View statistics");
+        statMenu.setActionCommand(STATISTICS);
+        statMenu.addActionListener(this);
+        return statMenu;
+    }
+
+    private JMenuItem moveEditMenuItem() {
+        JMenuItem moveMenu = new JMenuItem("Add/edit movements");
+        moveMenu.setActionCommand(MOVE_EDITOR);
+        moveMenu.addActionListener(this);
+        return moveMenu;
+    }
+
+    private JMenuItem infoMenuItem() {
+        JMenuItem infoMenu = new JMenuItem("Help");
+        infoMenu.setActionCommand(INFO);
+        infoMenu.addActionListener(this);
+        return infoMenu;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JMenuItem menuItem = (JMenuItem) e.getSource();
+        String itemTitle = menuItem.getActionCommand();
+
+        if (isTabOpen(itemTitle)) {
+            return;
+        }
+
+        try {
+            addTab(itemTitle);
+        } catch (Exception ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private boolean isTabOpen(String tabTitle) {
+        if (tabs.getComponentCount() > 0) {
+            for (int i = 0; i < tabs.getTabCount(); i++) {
+                if (tabs.getTitleAt(i).equals(tabTitle)) {
+                    tabs.setSelectedIndex(i);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void addTab(String tabTitle) throws Exception {
+        Component comp = null;
+        switch (tabTitle) {
+            case MOVE_EDITOR:
+                comp = new MoveEditorWindow();
+                break;
+            case SESSION_EDITOR:
+                comp = new SessionEditorWindow();
+                break;
+            case STATISTICS:
+                comp = new StatWindow();
+                break;
+            case INFO:
+                comp = info;
+                break;
+        }
+        tabs.add(tabTitle, comp);
+        tabs.setSelectedComponent(comp);
+        tabs.setTabComponentAt(tabs.getTabCount() - 1, new CloseableTab(tabs));
+    }
+
+    public static void createAndShow() {
+
+        final JFrame frame = new MainWindow();
+
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                Logger logger = Logger.getLogger("Uncaught Exception logger");
+                FileHandler fileHandler;
+
+                try {
+
+                    // This block configure the logger with handler and formatter  
+                    fileHandler = new FileHandler("ERROR.log");
+                    logger.addHandler(fileHandler);
+                    SimpleFormatter formatter = new SimpleFormatter();
+                    fileHandler.setFormatter(formatter);
+
+                    // Set to false to not print stacktrace to console
+                    logger.setUseParentHandlers(true);
+
+                    logger.info("Logger created.");
+
+                } catch (SecurityException | IOException ex) {
+                    logger.info("Exception encountered while adding file handler to logger.");
+                }
+
+                JOptionPane.showMessageDialog(null,
+                        "An unexpected error occurred.\nProgram will close.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                logger.log(Level.SEVERE, null, e);
+                frame.dispose();
+            }
+        });
         frame.setVisible(true);
     }
 

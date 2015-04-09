@@ -1,6 +1,6 @@
 package bodylog.logic;
 
-import bodylog.util.Constant;
+import bodylog.files.Constant;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAccessor;
 import static org.junit.Assert.*;

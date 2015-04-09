@@ -1,8 +1,8 @@
 package bodylog.files;
 
 import bodylog.files.FromFile;
-import bodylog.util.Constant;
 import bodylog.logic.Move;
+import bodylog.logic.Session;
 import java.io.File;
 import java.io.FileWriter;
 import java.time.LocalDate;
@@ -14,27 +14,95 @@ import org.junit.Test;
 public class FromFileTest {
 
     private File dataFolder;
-    private File moveFolder;
     private File movesFolder;
-    private File sessionFile;
-    private File moveFile;
+    
+    private final String dateStr1 = "2014-04-07";
+    private final String dateStr2 = "2014-04-08";
+    
+    private File readFolder;
+    private File readSessionFile;
+    private File readMoveFile;    
+    private String readSessionfileContents;
+    private String readMoveFileContents; 
+    private final String readingName = "readingMensFitness";
+    private final String[] readingSessionData = {"{60.6,5,true}", "{40,null,false}"};
+    private final String[] readingVarData = {"pages", "looks in the mirror", "body dysmorphia"};
+    
+    
+    private File skipFolder;
+    private File skipSessionONEFile;
+    private File skipSessionTWOFile;
+    private File skipMoveFile;    
+    private String skipSessionONEFileContents;
+    private String skipSessionTWOFileContents;
+    private String skipMoveFileContents;
+    private final String skipName = "skipping legs";
+    private final String[] skipSessionONEData = {"{4,12.1}", "{5,12}"};    
+    private final String[] skipSessionTWOData = {"{99,11.9,true}", "{0,null,false}"};
+    private final String[] skipVarData = {"days skipped", "leg size", "can walk"};
 
     @Before
     public void setUp() throws Exception {
         dataFolder = new File(Constant.SESSION_DIR);
         dataFolder.mkdir();
-        moveFolder = new File(Constant.SESSION_DIR + "/readingMensFitness");
-        moveFolder.mkdir();
-        sessionFile = new File(Constant.SESSION_DIR + "/readingMensFitness/2014-04-07" + Constant.SESSION_END);
-        FileWriter sessioKirjoittaja = new FileWriter(sessionFile);
-        sessioKirjoittaja.write("{60,5}\n{40,null}");
-        sessioKirjoittaja.close();
         movesFolder = new File(Constant.MOVE_DIR);
         movesFolder.mkdir();
-        moveFile = new File(Constant.MOVE_DIR + "/readingMensFitness" + Constant.MOVE_END);
-        FileWriter muuttujaKirjoittaja = new FileWriter(moveFile);
-        muuttujaKirjoittaja.write("pages\nlooks in the mirror");
-        muuttujaKirjoittaja.close();
+    }
+    
+    private void useReadingMove() throws Exception{        
+        readFolder = new File(Constant.SESSION_DIR + "/" + readingName);
+        readFolder.mkdir();
+        
+        readSessionFile = new File(Constant.SESSION_DIR + "/" + readingName + "/" + dateStr1 + Constant.SESSION_END);
+        FileWriter sessionWriter = new FileWriter(readSessionFile);
+        readSessionfileContents = "";
+        for (String str : readingSessionData) {
+            readSessionfileContents += str + "\n";
+        }
+        sessionWriter.write(readSessionfileContents);
+        sessionWriter.close();
+        
+        readMoveFile = new File(Constant.MOVE_DIR + "/" + readingName + Constant.MOVE_END);
+        FileWriter variableWriter = new FileWriter(readMoveFile);
+        readMoveFileContents = "";
+        for (String str : readingVarData) {
+            readMoveFileContents += str + "\n";
+        }
+        variableWriter.write(readMoveFileContents);
+        variableWriter.close();
+    }
+    
+    private void useSkipLegsMove() throws Exception{        
+        skipFolder = new File(Constant.SESSION_DIR + "/" + skipName);
+        skipFolder.mkdir();
+        
+        skipSessionONEFile = new File(Constant.SESSION_DIR + "/" + skipName + "/" + dateStr1 + Constant.SESSION_END);        
+        FileWriter sessionWriter = new FileWriter(skipSessionONEFile);
+        skipSessionONEFileContents = "";
+        for (String str : skipSessionONEData) {
+            skipSessionONEFileContents += str + "\n";
+        }
+        sessionWriter.write(skipSessionONEFileContents);
+        sessionWriter.close();
+        
+        
+        skipSessionTWOFile = new File(Constant.SESSION_DIR + "/" + skipName + "/" + dateStr2 + Constant.SESSION_END); 
+        sessionWriter = new FileWriter(skipSessionTWOFile);
+        skipSessionTWOFileContents = "";
+        for (String str : skipSessionTWOData) {
+            skipSessionTWOFileContents += str + "\n";
+        }
+        sessionWriter.write(skipSessionTWOFileContents);
+        sessionWriter.close();
+        
+        skipMoveFile = new File(Constant.MOVE_DIR + "/" + skipName + Constant.MOVE_END);
+        FileWriter variableWriter = new FileWriter(skipMoveFile);
+        skipMoveFileContents = "";
+        for (String str : skipVarData) {
+            skipMoveFileContents += str + "\n";
+        }
+        variableWriter.write(skipMoveFileContents);
+        variableWriter.close();
     }
 
     /**
@@ -62,29 +130,150 @@ public class FromFileTest {
             movesFolder.delete();
         }
     }
-
-    @Test
-    public void Session_SetsContainTheValuesContainedInTheFile() throws Exception {
-        assertEquals("[{60,5}, {40,null}]",
-                FromFile.session(sessionFile).getSets().toString());
+    
+    private void compareSetDataInSession(String[] setData, Session session){        
+        String listContents = "[";
+        for (String str : setData) {
+            listContents += str + ", ";
+        }
+        listContents = listContents.substring(0, listContents.length() - 2) + "]";
+        
+        assertEquals(listContents, session.getSets().toString());
+    }
+    
+    private void compareDateInSession(String dateStr, Session session){        
+        assertEquals(LocalDate.from(Constant.FILE_DATE_FORMATTER.parse(dateStr)),
+                session.getDate());
+    }
+    
+    private void compareMoveName(String name, Move move){
+        assertEquals(name, move.toString());
+    }
+    
+    private void compareVariableData(String[] varData, Move move){
+        assertArrayEquals(varData, move.variablesToArray());
     }
 
     @Test
-    public void Session_DateOfSessionIsSameAsDateParsedFromFile() throws Exception {
-        assertEquals(LocalDate.from(Constant.FILE_DATE_FORMATTER.parse("2014-04-07")),
-                FromFile.session(sessionFile).getDate());
+    public void Session_SetDataSameAsInFile() throws Exception {
+        useReadingMove();
+        compareSetDataInSession(readingSessionData, FromFile.session(readSessionFile));
     }
 
     @Test
-    public void Move_NameOfMoveSameAsOnFile() throws Exception {
-        Move liike = FromFile.moveWithoutSessions(moveFile);
-        assertEquals("readingMensFitness", liike.toString());
+    public void Session_SessionDateSameAsOnFile() throws Exception {
+        useReadingMove();
+        compareDateInSession(dateStr1,FromFile.session(readSessionFile));
     }
 
     @Test
-    public void Move_MoveContainsSameVariablesAsInFile() throws Exception {
-        Move liike = FromFile.moveWithoutSessions(moveFile);
-        assertArrayEquals(new String[]{"pages", "looks in the mirror"}, liike.variablesToArray());
+    public void MoveWithoutSessions_MoveNameSameAsOnFile() throws Exception {
+        useReadingMove();;
+        compareMoveName(readingName, FromFile.moveWithoutSessions(readMoveFile));
     }
+
+    @Test
+    public void MoveWithoutSessions_MoveVariablesSameAsInFile() throws Exception {
+        useReadingMove();
+        compareVariableData(readingVarData, FromFile.moveWithoutSessions(readMoveFile));
+    }
+    
+    @Test
+    public void MoveWithSessions_MoveNameAndVariablesSameAsFile() throws Exception {
+        useSkipLegsMove();
+        Move skipLegs = FromFile.moveWithSessions(skipMoveFile);
+        compareMoveName(skipName, skipLegs);
+        compareVariableData(skipVarData, skipLegs);
+    }
+    
+    @Test
+    public void MoveWithSessions_SessionsDatesSameAsOnFiles() throws Exception {
+        useSkipLegsMove();
+        Move skipLegs = FromFile.moveWithSessions(skipMoveFile);
+        
+        compareDateInSession(dateStr1, skipLegs.getSession(0));
+        compareDateInSession(dateStr2, skipLegs.getSession(1));
+    }
+    
+    @Test
+    public void MoveWithSessions_SetDataSameAsOnFiles() throws Exception {
+        useSkipLegsMove();
+        Move skipLegs = FromFile.moveWithSessions(skipMoveFile);
+        
+        compareSetDataInSession(skipSessionONEData, skipLegs.getSession(0));
+        compareSetDataInSession(skipSessionTWOData, skipLegs.getSession(1));
+    }
+    
+    @Test
+    public void AllMovesWithSessions_MoveNamesAndVariablesSameAsOnFiles() throws Exception{
+        useReadingMove();
+        useSkipLegsMove();
+        
+        Move[] moves = FromFile.allMovesWithSessions();
+        
+        compareMoveName(readingName, moves[0]);
+        compareMoveName(skipName, moves[1]);
+        compareVariableData(readingVarData, moves[0]);
+        compareVariableData(skipVarData, moves[1]);
+    }
+    
+    @Test
+    public void AllMovesWithSessions_SessionsDatesSameAsOnFiles() throws Exception{
+        useReadingMove();
+        useSkipLegsMove();
+        
+        Move[] moves = FromFile.allMovesWithSessions();
+        
+        compareDateInSession(dateStr1, moves[0].getSession(0));
+        compareDateInSession(dateStr1, moves[1].getSession(0));
+        compareDateInSession(dateStr2, moves[1].getSession(1));
+    }
+    
+    @Test
+    public void AllMovesWithSessions_SetDataSameAsOnFiles() throws Exception{
+        useReadingMove();
+        useSkipLegsMove();
+        
+        Move[] moves = FromFile.allMovesWithSessions();
+        
+        compareSetDataInSession(readingSessionData, moves[0].getSession(0));
+        compareSetDataInSession(skipSessionONEData, moves[1].getSession(0));
+        compareSetDataInSession(skipSessionTWOData, moves[1].getSession(1));        
+    }
+    
+    @Test
+    public void AllMovesWithoutSessions_MoveNamesAndVariablesSameAsOnFiles() throws Exception {
+        useReadingMove();
+        useSkipLegsMove();
+        
+        Move[] moves = FromFile.allMovesWithoutSessions();
+        
+        compareMoveName(readingName, moves[0]);
+        compareMoveName(skipName, moves[1]);
+        compareVariableData(readingVarData, moves[0]);
+        compareVariableData(skipVarData, moves[1]);
+    }
+    
+    @Test
+    public void AllMoveNames_NamesSameAsOnFiles() throws Exception{
+        useReadingMove();
+        useSkipLegsMove();
+        
+        String[] names = FromFile.allMoveNames();
+        assertArrayEquals(new String[]{readingName,skipName}, names);
+    }
+    
+    @Test
+    public void moveFileList_FileListAsExpected() throws Exception{
+        useReadingMove();
+        useSkipLegsMove();
+        
+        File[] files = FromFile.moveFileList();
+        
+        assertArrayEquals(new File[]{readMoveFile,skipMoveFile}, files);
+                
+    }
+    
+    
 
 }

@@ -12,21 +12,23 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 /**
- * Class used to contain the session tables of each movement.
+ * The UI component responsible for displaying the data contained in the session
+ * files. Contained in a StatWindow, as one half of the SplitPane. Contains
+ * JTables that contain the data using StatTable as the TableModel.
  *
+ * @see StatWindow
+ * @see StatTable
  */
 public class MoveTables extends JPanel {
 
     /**
      * Creates the tables for the given Move. The Move is supposed to contain
-     * all the Sessions from which the the Sets will be displayed in table form.
-     * Each table consists of the data of one Session. Uses
-     * {@link bogylog.ui.tables.StatTable StatTable} as the TableModel.
+     * all the Sessions from which the tables are made. Each table consists of
+     * the data of one Session.
      *
      * @param move the Move for which to display statistics
      */
     public MoveTables(Move move) {
-        super();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         ArrayList<Session> sessions = move.getSessions();

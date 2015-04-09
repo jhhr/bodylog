@@ -1,14 +1,13 @@
 package bodylog.logic;
 
-import bodylog.util.Constant;
+import bodylog.files.Constant;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 
 /**
- * The second component in the logical hierarchy. The main class holding the
- * actual training data the user adds and is displayed in statistics. Contains a
- * date and a list of Sets. The date is written to and read from session files.
+ * The second component in the logical hierarchy. Contains a date and a list of
+ * Sets. The date is written to and read from session files.
  *
  * @see bodylog.logic.Set
  */
@@ -27,14 +26,6 @@ public class Session {
     public Session(TemporalAccessor date) {
         this.date = LocalDate.from(date);
         this.sets = new ArrayList<>();
-    }
-
-    /**
-     * Constructs a new empty Session with the current date acquired by
-     * LocalDate.now()
-     */
-    public Session() {
-        this(LocalDate.now());
     }
 
     /**
@@ -87,10 +78,7 @@ public class Session {
     public int maxSetSize() {
         int size = 0;
         for (Set set : sets) {
-            int setSize = set.size();
-            if (set.size() > size) {
-                size = setSize;
-            }
+            size = Math.max(size, set.size());
         }
         return size;
     }

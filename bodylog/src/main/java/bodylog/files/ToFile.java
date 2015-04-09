@@ -3,7 +3,6 @@ package bodylog.files;
 import bodylog.logic.Move;
 import bodylog.logic.Set;
 import bodylog.logic.Session;
-import bodylog.util.Constant;
 import java.io.File;
 import java.io.FileWriter;
 
@@ -35,11 +34,11 @@ public class ToFile {
         writer.close();
     }
 
-    public static void sessions(Move liike) throws Exception {
+    public static void sessions(Move move) throws Exception {
 
-        for (Session sessio : liike.getSessions()) {
+        for (Session sessio : move.getSessions()) {
             String pvmteksti = Constant.FILE_DATE_FORMATTER.format(sessio.getDate());
-            File sessioTiedosto = new File(Constant.SESSION_DIR + "/" + liike + "/" + pvmteksti + Constant.SESSION_END);
+            File sessioTiedosto = new File(Constant.SESSION_DIR + "/" + move + "/" + pvmteksti + Constant.SESSION_END);
             FileWriter kirjoittaja = new FileWriter(sessioTiedosto);
             for (Set sarja : sessio.getSets()) {
                 kirjoittaja.write(sarja.toString() + "\n");

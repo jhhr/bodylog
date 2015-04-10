@@ -77,7 +77,7 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
     /**
      * Checks if there's an existing Editor created from the specified Move. If
      * so, displays a pop-up window informing the user. Move is acquired from
-     * the MoveChooser. Meant to be used in the <code>updateAllowed</code>
+     * the MoveChooser. Meant to be used in the <code>addEditorAllowed</code>
      * method that must be implemented by classes extending
      * WindowWithMoveChooser.
      *
@@ -88,8 +88,8 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
      * <code>editor.getMove().equals(move)</code> is true is found, false
      * otherwise
      * @see MoveChooser
-     * @see SessionEditorWindow#updateAllowed
-     * @see MoveEditorWindow#updateAllowed
+     * @see SessionEditorWindow#addEditorAllowed
+     * @see MoveEditorWindow#addEditorAllowed
      */
     protected boolean moveHasOpenEditor(Move move, String editorType) {
         Component[] editors = editorPanel.getComponents();
@@ -124,35 +124,39 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
     }
 
     /**
-     * Adds en editor if allowed. Called by the MoveChooser. If
-     * allowed, will add an Editor with the given the Move.
+     * Adds an Editor for the specified Move if allowed. Called by the
+     * MoveChooser when the user selects a Move.
      *
      * @param move move to be used in adding the new Editor
+     *
+     * @see MoveChooser#actionPerformed
      * @see SessionEditorWindow#addEditor
      * @see MoveEditorWindow#addEditor
      */
-    public void updateWindow(Move move) {
+    public void addNewEditor(Move move) {
         editorPanel.remove(noEditorsOpen);
 
-        if (updateAllowed(move)) {
+        if (addEditorAllowed(move)) {
             return;
         }
         addEditor(move);
     }
 
     /**
-     * Checks whether the update is should happen or not. Used in
-     * <code>updateWindow</code>.
+     * Checks whether adding an editor for the Move should happen or not. Used
+     * in <code>addNewEditor</code>.
      *
-     * @param move Move used in checking if the update is allowed
+     * @param move Move used in checking if adding and Editor for the Move is
+     * allowed
      * @return true if allowed, false otherwise
-     * @see SessionEditorWindow#updateAllowed
-     * @see MoveEditorWindow#updateAllowed
+     * @see SessionEditorWindow#addEditorAllowed
+     * @see MoveEditorWindow#addEditorAllowed
      */
-    protected abstract boolean updateAllowed(Move move);
+    protected abstract boolean addEditorAllowed(Move move);
 
     /**
-     * Adds an editor to this window. Used in <code>updateWindow</code>.
+     * Actually adds an editor to this window. Used in
+     * <code>addNewEditor</code>.
      *
      * @param move move used in adding the Editor
      * @see SessionEditorWindow#addEditor

@@ -59,7 +59,7 @@ public class Set {
         try {
             values[index] = value;
         } catch (IndexOutOfBoundsException e) {
-            values = Arrays.copyOf(values, index+1);
+            values = Arrays.copyOf(values, index + 1);
             values[index] = value;
         }
     }
@@ -70,8 +70,8 @@ public class Set {
      * @param value value to be added
      */
     public void addValue(Object value) {
-        values = Arrays.copyOf(values, values.length+1);
-        values[values.length-1] = value;
+        values = Arrays.copyOf(values, values.length + 1);
+        values[values.length - 1] = value;
     }
 
     /**

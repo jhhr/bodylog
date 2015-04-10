@@ -6,7 +6,6 @@ import bodylog.logic.Set;
 import bodylog.logic.Session;
 import bodylog.files.ToFile;
 import bodylog.files.Constant;
-import bodylog.ui.tables.StatTable;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -26,7 +25,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  * The UI component used in creating actual training data and writing it into
@@ -35,6 +33,9 @@ import javax.swing.table.TableModel;
  * its TableModel. Has buttons for adding and removing sets and setting the date
  * for the session. adding and removing rows from the table.
  *
+ * @see Move
+ * @see Session
+ * @see Set
  * @see SessionEditorWindow
  * @see Editor
  * @see EditorTable
@@ -256,6 +257,6 @@ public class SessionEditor extends Editor {
      */
     @Override
     protected boolean fileExists() {
-        return ToFile.sessionFileExists(move, Constant.UIDateToFileDate(dateStr));
+        return ToFile.sessionFileExists(move, Constant.uiDateToFileDate(dateStr));
     }
 }

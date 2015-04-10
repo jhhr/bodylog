@@ -33,7 +33,7 @@ public class MoveTables extends JPanel {
 
         ArrayList<Session> sessions = move.getSessions();
         if (sessions.isEmpty()) {
-            this.add(new JLabel("Could not data to display for this movement"));
+            this.add(new JLabel("Could not find any data to display for this movement"));
         } else {
             for (Session session : move.getSessions()) {
                 JTable table = new JTable(new StatTable(session, move));

@@ -1,5 +1,8 @@
 package bodylog.logic;
 
+import bodylog.files.FromFile;
+import bodylog.ui.tables.EditorTable;
+
 /**
  * Static class for string manipulation. Used for writing Set data to session
  * files and creating Set objects from reading session files and checking names
@@ -18,9 +21,10 @@ public class DataHandling {
 
     /**
      * Checks if the given string contains any of the banned characters. Throws
-     * an IllegalArgumentException if so.
+     * an IllegalArgumentException if so. Used in Move.
      *
      * @param name string to be checked
+     * @see Move
      */
     public static void nameIsAllowed(String name) {
         for (char ch : BANNED_CHARS) {
@@ -39,7 +43,7 @@ public class DataHandling {
      * @return "null" if value is null, "true"/"false" if value is boolean,
      * "integers are returned as is, trailing zeroes are removed from doubles;
      * that is x.0 becomes "x" but x.y becomes "x.y"
-     * @see bodylog.logic.Set
+     * @see Set
      */
     public static String setValueToString(Object value) {
         if (value != null) {
@@ -65,8 +69,8 @@ public class DataHandling {
      * @param str String to be manipulated
      * @return null if given "null false/true if given "false"/"true" double if
      * successfully parsed as double
-     * @see bodylog.files.FromFile
-     * @see bodylog.ui.tables.EditorTable
+     * @see FromFile#setForSession
+     * @see EditorTable#setValueAt
      */
     public static Object stringToSetValue(String str) {
         switch (str) {

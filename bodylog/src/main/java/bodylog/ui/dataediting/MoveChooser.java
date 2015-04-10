@@ -40,18 +40,17 @@ public class MoveChooser extends JPanel implements ActionListener {
     }
 
     /**
-     * Calls <code>updateWindow</code> of the parent window
+     * Calls <code>addNewEditor</code> of the parent window
      *
      * @param e User clicks on a move in the ComboBox
-     * @see WindowWithMoveChooser#updateWindow
+     * @see WindowWithMoveChooser#addNewEditor
      */
-
     @Override
     public void actionPerformed(ActionEvent e) {
         JComboBox cb = (JComboBox) e.getSource();
         Move move = (Move) cb.getSelectedItem();
         try {
-            window.updateWindow(move);
+            window.addNewEditor(move);
         } catch (Exception ex) {
             throw ex;
         }

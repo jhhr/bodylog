@@ -26,15 +26,15 @@ public class SessionEditorWindow extends WindowWithMoveChooser {
 
     /**
      * Checks if the given move has no variables or if there's an existing
-     * SessionEditor for the move. If so for either case, the update is not
-     * allowed. Used in <code>updateWindow</code>.
+     * SessionEditor for the move. If so for either case, adding an editor for
+     * the Move is not allowed. Used in <code>addNewEditor</code>.
      *
-     * @param move Move used in checking if the update is allowed
+     * @param move Move used in checking if adding an Editor is allowed
      * @return true if allowed, false otherwise
-     * @see SessionEditorWindow#updateAllowed
+     * @see SessionEditorWindow#addEditorAllowed
      */
     @Override
-    protected boolean updateAllowed(Move move) {
+    protected boolean addEditorAllowed(Move move) {
         return (moveHasNoVariables(move) || moveHasOpenEditor(move, "session adder"));
     }
 

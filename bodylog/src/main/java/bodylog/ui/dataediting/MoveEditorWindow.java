@@ -8,6 +8,7 @@ import javax.swing.JButton;
  * WindowWithMoveChooser. This is the container for the UI components
  * responsible for creating new Moves and editing existing ones, MoveEditors.
  *
+ * @see Move
  * @see WindowWithMoveChooser
  * @see MoveEditor
  */
@@ -36,8 +37,8 @@ public class MoveEditorWindow extends WindowWithMoveChooser {
     }
 
     @Override
-    protected boolean updateAllowed(Move liike) {
-        return moveHasOpenEditor(liike, "editor");
+    protected boolean addEditorAllowed(Move move) {
+        return moveHasOpenEditor(move, "editor");
     }
 
 }

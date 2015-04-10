@@ -100,7 +100,7 @@ public abstract class Editor extends JPanel implements ActionListener {
 
     /**
      * Saves the data put in by the user into this editor into a file.
-     * 
+     *
      * @see SessionEditor#saveToFile
      * @see MoveEditor#saveToFile
      */

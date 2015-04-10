@@ -13,7 +13,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -21,18 +20,27 @@ import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
 /**
- * Main UI window containing a menu bar from which tabs are opened.
+ * Main UI window containing a menu from which tabs are opened. Tabs are
+ * closeable. Selecting to open a tab that is already open will not open another
+ * one but make that tab be selected as active. Opens instances of
+ * <code>MoveEditorWindow</code>, <code>SessionEditorWindow</code>, and
+ * <code>StatWindow</code> and help windows (to be implemented).
  */
 public class MainWindow extends JFrame implements ActionListener {
 
     private final JTabbedPane tabs;
     private final JMenuBar menuBar;
-    private final JLabel info = new JLabel("Instructions");
     private static final String SESSION_EDITOR = "Session Editor";
     private static final String MOVE_EDITOR = "Move Editor";
     private static final String STATISTICS = "Statistics";
     private static final String INFO = "Help";
 
+    /**
+     * Creates a new MainWindow. Adds the menuBar, two menus and the TabbedPane
+     * which displays the other UI windows in tabs. Opens the help window in a
+     * tab in the beginning so it is the first thing shown to the user. Tabs use
+     * a custom tab button containing a button that closes the tab.
+     */
     public MainWindow() {
         super("Bodylog");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -43,8 +51,10 @@ public class MainWindow extends JFrame implements ActionListener {
         setJMenuBar(menuBar);
 
         tabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
+        HelpWindow info = new HelpWindow();
         tabs.add(INFO, info);
         tabs.setSelectedComponent(info);
+        // sets the tab button as the custom closeable button
         tabs.setTabComponentAt(tabs.getTabCount() - 1, new CloseableTab(tabs));
 
         tabs.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
@@ -100,6 +110,13 @@ public class MainWindow extends JFrame implements ActionListener {
         return infoMenu;
     }
 
+    /**
+     * When the user clicks on a menu button a window of the corresponding kind
+     * is opened unless that window has already been opened in which case is
+     * simply made selected.
+     *
+     * @param e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         JMenuItem menuItem = (JMenuItem) e.getSource();
@@ -142,49 +159,15 @@ public class MainWindow extends JFrame implements ActionListener {
                 comp = new StatWindow();
                 break;
             case INFO:
-                comp = info;
+                comp = new HelpWindow();
                 break;
         }
+        // adds a new tab
         tabs.add(tabTitle, comp);
+        // sets the added as selected (changes active tab to this one)
         tabs.setSelectedComponent(comp);
+        // sets the tab button as the custom closeable button
         tabs.setTabComponentAt(tabs.getTabCount() - 1, new CloseableTab(tabs));
-    }
-
-    public static void createAndShow() {
-
-        final JFrame frame = new MainWindow();
-
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread t, Throwable e) {
-                Logger logger = Logger.getLogger("Uncaught Exception logger");
-                FileHandler fileHandler;
-
-                try {
-
-                    // This block configure the logger with handler and formatter  
-                    fileHandler = new FileHandler("ERROR.log");
-                    logger.addHandler(fileHandler);
-                    SimpleFormatter formatter = new SimpleFormatter();
-                    fileHandler.setFormatter(formatter);
-
-                    // Set to false to not print stacktrace to console
-                    logger.setUseParentHandlers(true);
-
-                    logger.info("Logger created.");
-
-                } catch (SecurityException | IOException ex) {
-                    logger.info("Exception encountered while adding file handler to logger.");
-                }
-
-                JOptionPane.showMessageDialog(null,
-                        "An unexpected error occurred.\nProgram will close.",
-                        "Error", JOptionPane.ERROR_MESSAGE);
-                logger.log(Level.SEVERE, null, e);
-                frame.dispose();
-            }
-        });
-        frame.setVisible(true);
     }
 
 }

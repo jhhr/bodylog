@@ -9,8 +9,8 @@ import java.util.ArrayList;
  * Sessions. The name is used as the date directory name and the move defining
  * file name, from which it is also read.
  *
- * @see bodylog.logic.Session
- * @see bodylog.logic.Set
+ * @see Session
+ * @see Set
  */
 public class Move {
 
@@ -24,7 +24,7 @@ public class Move {
      *
      * @param name Name given to move
      * @throws IllegalArgumentException when name is not allowed
-     * @see bodylog.util.Constant#nameIsAllowed
+     * @see Constant#nameIsAllowed
      */
     public Move(String name) {
         DataHandling.nameIsAllowed(name);
@@ -39,7 +39,7 @@ public class Move {
      *
      * @param newName new name for move
      * @throws IllegalArgumentException when name is not allowed
-     * @see bodylog.util.Constant#nameIsAllowed
+     * @see Constant#nameIsAllowed
      */
     public void setName(String newName) {
         DataHandling.nameIsAllowed(newName);
@@ -47,16 +47,15 @@ public class Move {
     }
 
     /**
-     * Converts variables to an array. Used in tables in the UI.
+     * Converts the variable list to an array.
      *
-     * @return a string array containing this move's variables
+     * @return a string array containing this Move's variables
      */
     public String[] variablesToArray() {
         return variables.toArray(new String[0]);
     }
 
     /**
-     *
      * @return the ArrayList of Sessions contained in this move
      */
     public ArrayList<Session> getSessions() {

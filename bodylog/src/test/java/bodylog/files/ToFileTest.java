@@ -11,6 +11,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class ToFileTest {
@@ -28,27 +29,29 @@ public class ToFileTest {
     Set set1;
     Set set2;
     Set set3;
-    File dataFolder;
     File benchFolder;
     File DLFolder;
     File DLSessionFile;
     File benchSessionFile;
-    File movesFolder;
     File benchMoveFile;
 
+    @BeforeClass
+    public static void oneTimeSetUp(){        
+        // Delete files first in case some files are leftover from manual testing.
+        Util.deleteFiles();
+    }
     @Before
     public void setUp() {
+        
         DLsession = new Session(LocalDate.of(1970, 1, 1));
         benchSession = new Session(LocalDate.of(1970, 1, 1));
         bench = new Move(benchName);
         deadlift = new Move(DLName);
-        dataFolder = new File(Constant.SESSION_DIR);
-        DLFolder = new File(Constant.SESSION_DIR + "/" + DLName);
-        benchFolder = new File(Constant.SESSION_DIR + "/" + benchName);
-        DLSessionFile = new File(Constant.SESSION_DIR + "/" + DLName + "/" + dateStr + Constant.SESSION_END);
-        benchSessionFile = new File(Constant.SESSION_DIR + "/" + benchName + "/" + dateStr + Constant.SESSION_END);
-        movesFolder = new File(Constant.MOVE_DIR);
-        benchMoveFile = new File(Constant.MOVE_DIR + "/" + benchName + Constant.MOVE_END);
+        DLFolder = new File(Constant.DATA_DIR_NAME + "/" + DLName);
+        benchFolder = new File(Constant.DATA_DIR_NAME + "/" + benchName);
+        DLSessionFile = new File(Constant.DATA_DIR_NAME + "/" + DLName + "/" + dateStr + Constant.SESSION_END);
+        benchSessionFile = new File(Constant.DATA_DIR_NAME + "/" + benchName + "/" + dateStr + Constant.SESSION_END);
+        benchMoveFile = new File(Constant.MOVES_DIR_NAME + "/" + benchName + Constant.MOVE_END);
     }
 
     private void addDLSets() {
@@ -79,32 +82,10 @@ public class ToFileTest {
         benchSession.addSet(set2);
         bench.addSession(benchSession);
     }
-
-    /**
-     * Deletes all files in folders that are in the data folder, deletes those
-     * folders and the data folder. Deletes all files in the move folder and
-     * deletes the move folder.
-     */
+    
     @After
-    public void tearDown() {
-        if (dataFolder.exists()) {
-            for (File folder : dataFolder.listFiles()) {
-                if (folder.isDirectory()) {
-                    for (File file : folder.listFiles()) {
-                        file.delete();
-                    }
-                }
-                folder.delete();
-            }
-            dataFolder.delete();
-        }
-
-        if (movesFolder.exists()) {
-            for (File file : movesFolder.listFiles()) {
-                file.delete();
-            }
-            movesFolder.delete();
-        }
+    public void tearDown(){
+        Util.deleteFiles();
     }
 
     @Test
@@ -118,7 +99,7 @@ public class ToFileTest {
     public void Sessions_CreatingMoveFiles_SessionFileCheckerReturnsTrue() throws Exception {
         addDLSets();
         addBenchSets();
-        dataFolder.mkdir();
+        Constant.DATA_DIR.mkdir();
         DLFolder.mkdir();
         benchFolder.mkdir();
         ToFile.sessions(deadlift);
@@ -131,7 +112,7 @@ public class ToFileTest {
     public void SessionFileCheckerReturnsFalseForNonexistentFile() {
         assertFalse(ToFile.sessionFileExists(bench, dateStr));
     }
-    
+
     @Test
     public void MoveFileCheckerReturnsFalseForNonexistentFile() {
         assertFalse(ToFile.moveFileExists(bench));
@@ -140,7 +121,7 @@ public class ToFileTest {
     @Test
     public void Sessions_SessionFileContentsAsExpectedUsingMoveWithOneSetOfData() throws Exception {
         addDLSets();
-        dataFolder.mkdir();
+        Constant.DATA_DIR.mkdir();
         DLFolder.mkdir();
         ToFile.sessions(deadlift);
         Scanner lukija = new Scanner(DLSessionFile);
@@ -153,7 +134,7 @@ public class ToFileTest {
     @Test
     public void Sessions_SessionFileContentsAsExpectedUsingMoveWithTwoSetsOfData() throws Exception {
         addBenchSets();
-        dataFolder.mkdir();
+        Constant.DATA_DIR.mkdir();
         benchFolder.mkdir();
         ToFile.sessions(bench);
         Scanner lukija = new Scanner(benchSessionFile);
@@ -165,15 +146,15 @@ public class ToFileTest {
 
     @Test
     public void Move_MoveFolderCreationWhenNotAlreadyExisting() throws Exception {
-        if (!movesFolder.exists()) {
+        if (!Constant.MOVES_DIR.exists()) {
             ToFile.createMovesFolder();
         }
-        assertTrue(movesFolder.exists());
+        assertTrue(Constant.MOVES_DIR.exists());
     }
 
     @Test
     public void Move_MoveFileCreation_MoveFileCheckerReturnsTrue() throws Exception {
-        movesFolder.mkdir();
+        Constant.MOVES_DIR.mkdir();
         bench.addVariable(varWeight);
         ToFile.move(bench);
         assertTrue(benchMoveFile.exists() && ToFile.moveFileExists(bench));
@@ -181,7 +162,7 @@ public class ToFileTest {
 
     @Test
     public void Move_MoveFileContentsAsExpected() throws Exception {
-        movesFolder.mkdir();
+        Constant.MOVES_DIR.mkdir();
         bench.addVariable(varWeight);
         bench.addVariable(varReps);
         bench.addVariable(varBool);

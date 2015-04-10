@@ -37,8 +37,9 @@ import java.awt.event.*;
 
 /**
  * Custom tab button that contains a button which will close the tab.
- * 
- * Code from Oracle's <a href="https://docs.oracle.com/javase/tutorial/uiswing/examples/components/TabComponentsDemoProject/src/components/ButtonTabComponent.java">TabComponentsDemo</a>
+ *
+ * Code from Oracle's
+ * <a href="https://docs.oracle.com/javase/tutorial/uiswing/examples/components/TabComponentsDemoProject/src/components/ButtonTabComponent.java">TabComponentsDemo</a>
  */
 public class CloseableTab extends JPanel {
 

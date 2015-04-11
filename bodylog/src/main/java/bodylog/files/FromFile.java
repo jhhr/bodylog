@@ -4,8 +4,6 @@ import bodylog.logic.DataHandling;
 import bodylog.logic.Move;
 import bodylog.logic.Set;
 import bodylog.logic.Session;
-import bodylog.ui.dataediting.MoveChooser;
-import bodylog.ui.dataviewing.StatWindow;
 import java.io.File;
 import java.time.temporal.TemporalAccessor;
 import java.util.Scanner;
@@ -24,7 +22,7 @@ public class FromFile {
      * @param moveFile file to be read
      * @return a Move without sessions.
      * @throws Exception when something goes wrong with the file
-     * @see Move
+     * @see bodylog.logic.Move
      */
     public static Move moveWithoutSessions(File moveFile) throws Exception {
         Scanner scanner = new Scanner(moveFile);
@@ -41,13 +39,13 @@ public class FromFile {
     /**
      * Creates a Set from a line in a session file given in a Scanner. Private
      * method used by <code>session</code>. Uses
-     * t<code>DataHandling.stringToSetValue</code> to parse the strings into
+     * <code>DataHandling.stringToSetValue</code> to parse the strings into
      * appropriate values for the Set.
      *
      * @param scanner Scanner that holds the file, given by the calling method
      * @return a Set with the values read from the line in the file
-     * @see DataHandling#stringToSetValue(String)
-     * @see Set
+     * @see bodylog.logic.DataHandling#stringToSetValue(String)
+     * @see bodylog.logic.Set
      */
     private static Set setForSession(Scanner scanner) {
         Set set = new Set();
@@ -67,8 +65,8 @@ public class FromFile {
      *
      * @param sessionFile file to be read
      * @return a TemporalAccessor used in the constructor of a Session
-     * @see Session
-     * @see Constant#FILE_DATE_FORMATTER
+     * @see bodylog.logic.Session
+     * @see bodylog.files.Constant#FILE_DATE_FORMATTER
      */
     private static TemporalAccessor dateForSession(File sessionFile) {
         String dateStr = sessionFile.getName();
@@ -78,15 +76,17 @@ public class FromFile {
 
     /**
      * Creates a new Session from a file. Session date is acquired from the file
-     * name. Sets are created from the contents, one line to one Set.
+     * name and a DateTimeFormatter is used to parse the string into a
+     * TemporalAccessor. Sets are created from the contents, one line to one Set
+     * using <code>DataHandling.stringToSetValue</code> to parse the strings
+     * into appropriate values.
      *
      * @param sessionFile file to be read
      * @return A new Session populated with Sets, unless the file was empty
      * @throws Exception when something goes wrong with the file
-     * @see FromFile#dateForSession
-     * @see FromFile#setForSession
-     * @see Session
-     * @see Set
+     * @see bodylog.logic.Session
+     * @see bodylog.logic.Set
+     * @see bodylog.files.Constant#FILE_DATE_FORMATTER
      */
     public static Session session(File sessionFile) throws Exception {
         Scanner scanner = new Scanner(sessionFile);
@@ -109,12 +109,12 @@ public class FromFile {
      * @return A Move with Sessions added, populated with Sets when the session
      * file contained set data.
      * @throws Exception when something goes reading any of the files
-     * @see FromFile#session
-     * @see FromFile#moveWithoutSessions
-     * @see SessionFileFilter
-     * @see Move
-     * @see Session
-     * @see Set
+     * @see bodylog.files.FromFile#session
+     * @see bodylog.files.FromFile#moveWithoutSessions
+     * @see bodylog.files.SessionFileFilter
+     * @see bodylog.logic.Move
+     * @see bodylog.logic.Session
+     * @see bodylog.logic.Set
      */
     public static Move moveWithSessions(File moveFile) throws Exception {
         Move move = moveWithoutSessions(moveFile);
@@ -135,12 +135,12 @@ public class FromFile {
      * session files are found. The Sessions contain Sets when the session file
      * contains set data.
      * @throws Exception when something goes wrong reading any of the files
-     * @see FromFile#moveFileList
-     * @see FromFile#moveWithSessions
-     * @see StatWindow
-     * @see Move
-     * @see Session
-     * @see Set
+     * @see bodylog.files.FromFile#moveFileList
+     * @see bodylog.files.FromFile#moveWithSessions
+     * @see bodylog.ui.dataviewing.StatWindow
+     * @see bodylog.logic.Move
+     * @see bodylog.logic.Session
+     * @see bodylog.logic.Set
      */
     public static Move[] allMovesWithSessions() throws Exception {
         File[] moveFileList = moveFileList();
@@ -158,7 +158,7 @@ public class FromFile {
      * folder. Identifies the right kinds of files through the file ending using
      * a MoveFileFilter.
      * @throws Exception when something goes wrong reading any of the file
-     * @see MoveFileFilter
+     * @see bodylog.files.MoveFileFilter
      */
     public static File[] moveFileList() throws Exception {
         File movesFolder = new File(Constant.MOVES_DIR_NAME);
@@ -176,10 +176,10 @@ public class FromFile {
      * session files are found. The Sessions contain Sets when the session file
      * contains set data.
      * @throws Exception when something goes wrong reading any of the files
-     * @see FromFile#moveFileList
-     * @see FromFile#moveWithoutSessions
-     * @see FromFile#allMovesWithSessions
-     * @see MoveChooser
+     * @see bodylog.files.FromFile#moveFileList
+     * @see bodylog.files.FromFile#moveWithoutSessions
+     * @see bodylog.files.FromFile#allMovesWithSessions
+     * @see bodylog.ui.dataediting.MoveChooser
      */
     public static Move[] allMovesWithoutSessions() throws Exception {
         File[] moveFileList = moveFileList();

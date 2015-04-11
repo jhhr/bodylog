@@ -7,8 +7,8 @@ import java.io.FilenameFilter;
  * A FileNameFilter that accepts files ending in the ending for session data
  * files. Used in the file handling class FromFile.
  *
- * @see Constant#SESSION_END
- * @see FromFile#moveWithSessions
+ * @see bodylog.files.Constant#SESSION_END
+ * @see bodylog.files.FromFile#moveWithSessions
  */
 public class SessionFileFilter implements FilenameFilter {
 
@@ -20,6 +20,7 @@ public class SessionFileFilter implements FilenameFilter {
      * @param name the name of the file.
      * @return  <code>true</code> if and only if the name ends in the session
      * file ending; <code>false</code> otherwise.
+     * @see bodylog.files.Constant#SESSION_END
      */
     @Override
     public boolean accept(File dir, String name) {

@@ -1,17 +1,13 @@
 package bodylog.ui.tables;
 
-import bodylog.logic.DataHandling;
 import bodylog.logic.Move;
 import bodylog.logic.Session;
-import bodylog.logic.Set;
-import bodylog.ui.dataviewing.MoveTables;
-import java.util.Vector;
 import javax.swing.table.AbstractTableModel;
 
 /**
  * TableModel for viewing statistics. Used in MoveTables.
  *
- * @see MoveTables
+ * @see bodylog.ui.dataviewing.MoveTables
  */
 public class StatTable extends AbstractTableModel {
 
@@ -23,8 +19,8 @@ public class StatTable extends AbstractTableModel {
      *
      * @param session Session whose Sets displayed in the table
      * @param move Move used in this table
-     * @see Move
-     * @see Session
+     * @see bodylog.logic.Move
+     * @see bodylog.logic.Session
      */
     public StatTable(Session session, Move move) {
         this.move = move;
@@ -36,7 +32,7 @@ public class StatTable extends AbstractTableModel {
      *
      * @param colummn index to get variable
      * @return the variable
-     * @see Move#getVariable(int)
+     * @see bodylog.logic.Move#getVariable(int)
      */
     @Override
     public String getColumnName(int colummn) {
@@ -48,7 +44,7 @@ public class StatTable extends AbstractTableModel {
      * displayed by this table.
      *
      * @return number of sets
-     * @see Session#getSets
+     * @see bodylog.logic.Session#getSets
      */
     @Override
     public int getRowCount() {
@@ -59,7 +55,7 @@ public class StatTable extends AbstractTableModel {
      * Returns column count which is the number of variables in the Move.
      *
      * @return the number of variables
-     * @see Move#variableCount
+     * @see bodylog.logic.Move#variableCount
      */
     @Override
     public int getColumnCount() {
@@ -73,8 +69,8 @@ public class StatTable extends AbstractTableModel {
      * @param row the Set from which to get the value
      * @param column the index for the value in the Set
      * @return the value at the index
-     * @see Session#getSet(int)
-     * @see Set#getValue(int)
+     * @see bodylog.logic.Session#getSet(int)
+     * @see bodylog.logic.Set#getValue(int)
      */
     @Override
     public Object getValueAt(int row, int column) {

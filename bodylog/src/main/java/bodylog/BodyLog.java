@@ -12,16 +12,17 @@ import javax.swing.SwingUtilities;
 
 /**
  * Main class.
+ *
+ * Creates an instance of MainWindow and sets it visible. Also sets an
+ * UncaughtExceptionHandler to catch any uncaught exceptions and write the stack
+ * trace to a file instead of the console. In such case a pop-up window will be
+ * displayed saying there's an error. The program will close after closing the
+ * pop-up.
+ *
+ * @see bodylog.ui.MainWindow
  */
 public class BodyLog {
 
-    /**
-     * Creates an instance of MainWindow and sets it visible. Also sets an
-     * UncaughtExceptionHandler to catch any uncaught exceptions and write the
-     * stack trace to a file instead of the console. In such case a pop-up
-     * window will be displayed saying there's an error. The program will close
-     * after closing the pop-up.
-     */
     private static void createAndShowFrame() {
 
         final JFrame frame = new MainWindow();

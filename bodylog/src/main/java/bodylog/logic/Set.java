@@ -7,6 +7,8 @@ import java.util.Arrays;
  * be boolean, numerical or null. Contained in a Session. The values are written
  * to and read from session files.
  *
+ * @see bodylog.logic.Move
+ * @see bodylog.logic.Set
  */
 public class Set {
 
@@ -79,7 +81,7 @@ public class Set {
      * bounds and returns null if so.
      *
      * @param index index from which to get the value
-     * @return
+     * @return the value
      */
     public Object getValue(int index) {
         Object value;
@@ -93,10 +95,10 @@ public class Set {
 
     /**
      * Converts this Set object into a string. Uses the values of this Set. Each
-     * value is converted to a string by
-     * {@link bodylog.logic.DataHandling#setValueToString(java.lang.Object) DataHandling.setValueToString}.
+     * value is converted to a string by <code>DataHandling#setValueToString</code>.
      *
      * @return the Set in the format {value1, ... ,valueN}
+     * @see bodylog.logic.DataHandling#setValueToString
      */
     @Override
     public String toString() {

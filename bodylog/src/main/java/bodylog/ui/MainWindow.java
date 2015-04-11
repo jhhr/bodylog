@@ -7,16 +7,12 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 
 /**
@@ -24,7 +20,12 @@ import javax.swing.JTabbedPane;
  * closeable. Selecting to open a tab that is already open will not open another
  * one but make that tab be selected as active. Opens instances of
  * <code>MoveEditorWindow</code>, <code>SessionEditorWindow</code>, and
- * <code>StatWindow</code> and help windows (to be implemented).
+ * <code>StatWindow</code> and <code>HelpWindow</code>.
+ *
+ * @see bodylog.ui.dataediting.MoveEditorWindow
+ * @see bodylog.ui.dataediting.SessionEditorWindow
+ * @see bodylog.ui.dataviewing.StatWindow
+ * @see bodylog.ui.HelpWindow
  */
 public class MainWindow extends JFrame implements ActionListener {
 
@@ -36,10 +37,14 @@ public class MainWindow extends JFrame implements ActionListener {
     private static final String INFO = "Help";
 
     /**
-     * Creates a new MainWindow. Adds the menuBar, two menus and the TabbedPane
-     * which displays the other UI windows in tabs. Opens the help window in a
-     * tab in the beginning so it is the first thing shown to the user. Tabs use
-     * a custom tab button containing a button that closes the tab.
+     * Creates a new MainWindow. Adds the menuBar, two menus and the
+     * <code>JTabbedPane</code> which displays the other UI windows in tabs.
+     * Opens the help window in a tab in the beginning so it is the first thing
+     * shown to the user. Tabs use a custom tab button containing a button that
+     * closes the tab.
+     *
+     * @see javax.swing.JTabbedPane
+     * @see bodylog.ui.CloseableTab
      */
     public MainWindow() {
         super("Bodylog");
@@ -115,7 +120,7 @@ public class MainWindow extends JFrame implements ActionListener {
      * is opened unless that window has already been opened in which case is
      * simply made selected.
      *
-     * @param e
+     * @param e click event
      */
     @Override
     public void actionPerformed(ActionEvent e) {

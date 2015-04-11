@@ -1,4 +1,4 @@
-package bodylog.ui.dataediting;
+package bodylog.ui.dataediting.abstracts;
 
 import bodylog.logic.Move;
 import java.awt.event.ActionEvent;
@@ -10,14 +10,14 @@ import javax.swing.JPanel;
 
 /**
  * Abstract class implemented by SessionEditor and MoveEditor. Contains a Move
- * given by a MoveChooser from a WindowWithMoveChooser. Is contained in a
- * WindowWithMoveChooser. Has implemented methods for creating some buttons and
- * setting the border.
+ * given by a MoveChooser from a <code>WindowWithMoveChooser</code>. Is
+ * contained in a WindowWithMoveChooser. Has implemented methods for creating
+ * some buttons and setting the border.
  *
- * @see SessionEditor
- * @see MoveEditor
- * @see WindowWithMoveChooser
- * @see MoveChooser
+ * @see bodylog.ui.dataediting.SessionEditor
+ * @see bodylog.ui.dataediting.MoveEditor
+ * @see bodylog.ui.dataediting.abstracts.WindowWithMoveChooser
+ * @see bodylog.ui.dataediting.MoveChooser
  */
 public abstract class Editor extends JPanel implements ActionListener {
 
@@ -78,9 +78,9 @@ public abstract class Editor extends JPanel implements ActionListener {
      * @param addition used in <code>userConfirmsSaveToFile</code> which is used
      * the ActionListener given to this button
      * @return JButton with a listener added
-     * @see Editor#userConfirmsSaveToFile
-     * @see SessionEditor#saveToFile
-     * @see MoveEditor#saveToFile
+     * @see bodylog.ui.dataediting.Editor#userConfirmsSaveToFile
+     * @see bodylog.ui.dataediting.SessionEditor#saveToFile
+     * @see bodylog.ui.dataediting.MoveEditor#saveToFile
      */
     protected JButton saveButton(final String addition) {
         JButton tallennusNappi = new JButton("save to file");
@@ -101,8 +101,8 @@ public abstract class Editor extends JPanel implements ActionListener {
     /**
      * Saves the data put in by the user into this editor into a file.
      *
-     * @see SessionEditor#saveToFile
-     * @see MoveEditor#saveToFile
+     * @see bodylog.ui.dataediting.SessionEditor#saveToFile
+     * @see bodylog.ui.dataediting.MoveEditor#saveToFile
      */
     protected abstract void saveToFile();
 
@@ -111,7 +111,7 @@ public abstract class Editor extends JPanel implements ActionListener {
      * Used in <code>userConfirmsSaveToFile</code>.
      *
      * @return should return true if file exists, false otherwise
-     * @see Editor#userConfirmsSaveToFile
+     * @see bodylog.ui.dataediting.Editor#userConfirmsSaveToFile
      */
     protected abstract boolean fileExists();
 
@@ -125,11 +125,11 @@ public abstract class Editor extends JPanel implements ActionListener {
      * @param addition An optional addition to the the message given in the
      * option window shown to the user.
      * @return true if the user does want to overwrite, false otherwise
-     * @see Editor#saveButton
+     * @see bodylog.ui.dataediting.Editor#saveButton
      */
     protected boolean userConfirmsSaveToFile(String addition) {
         if (fileExists()) {
-            String message = "Move: " + move + addition + "\n"
+            String message = "Movement: " + move + addition + "\n"
                     + "A file for the above already exists.\n"
                     + "Do you want to overwrite it?\n";
             Object[] options = {"Yes", "No"};

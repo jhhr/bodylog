@@ -1,6 +1,7 @@
-package bodylog.ui.dataediting;
+package bodylog.ui.dataediting.abstracts;
 
 import bodylog.logic.Move;
+import bodylog.ui.dataediting.MoveChooser;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -18,14 +19,14 @@ import javax.swing.JSeparator;
  * component contains a MoveChooser that adds components to the bottom part
  * based on the Move chosen by the user.
  *
- * @see Editor
- * @see MoveChooser
- * @see SessionEditorWindow
- * @see MoveEditorWindow
+ * @see bodylog.ui.dataediting.abstracts.Editor
+ * @see bodylog.ui.dataediting.MoveChooser
+ * @see bodylog.ui.dataediting.SessionEditorWindow
+ * @see bodylog.ui.dataediting.MoveEditorWindow
  */
 public abstract class WindowWithMoveChooser extends JScrollPane {
 
-    protected final JPanel chooserPanel;
+    protected final MoveChooser moveChooser;
     protected final JPanel editorPanel;
     protected final JLabel noEditorsOpen;
 
@@ -40,7 +41,7 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
 
-        chooserPanel = new MoveChooser(this);
+        moveChooser = new MoveChooser(this);
         editorPanel = new JPanel();
         noEditorsOpen = new JLabel("No movements selected");
 
@@ -53,7 +54,7 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
         c.insets = new Insets(5, 5, 5, 5);
         c.gridx = 0;
         c.gridy = 0;
-        panel.add(chooserPanel, c);
+        panel.add(moveChooser, c);
 
         c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -87,9 +88,9 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
      * @return true when an Editor for which
      * <code>editor.getMove().equals(move)</code> is true is found, false
      * otherwise
-     * @see MoveChooser
-     * @see SessionEditorWindow#addEditorAllowed
-     * @see MoveEditorWindow#addEditorAllowed
+     * @see bodylog.ui.dataediting.MoveChooser
+     * @see bodylog.ui.dataediting.SessionEditorWindow#addEditorAllowed
+     * @see bodylog.ui.dataediting.MoveEditorWindow#addEditorAllowed
      */
     protected boolean moveHasOpenEditor(Move move, String editorType) {
         Component[] editors = editorPanel.getComponents();
@@ -97,7 +98,7 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
             Editor editor = (Editor) comp;
             if (editor.getMove().equals(move)) {
                 JOptionPane.showMessageDialog(this,
-                        "There's an open " + editorType + "for this move already",
+                        "There's an open " + editorType + "for that already",
                         "Not allowed", JOptionPane.INFORMATION_MESSAGE);
                 return true;
             }
@@ -106,13 +107,24 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
     }
 
     /**
+     * Returns the <code>moveChooser</code> contained in this window. Used when
+     * the move list needs to be updated.
+     *
+     * @return the MoveChooser of this window
+     * @see bodylog.ui.dataediting.MoveEditor#saveToFile
+     */
+    public MoveChooser getMoveChooser() {
+        return moveChooser;
+    }
+
+    /**
      * Removes the specified Editor from the editor panel. Checks after removing
      * whether no Editors are open. If so, adds the JLabel titled "No movements
      * selected" to the panel. Called by the Editor itself.
      *
      * @param editor Editor to be removed
-     * @see Editor#closeButton
-     * @see Editor#actionPerformed
+     * @see bodylog.ui.dataediting.Editor#closeButton
+     * @see bodylog.ui.dataediting.Editor#actionPerformed
      */
     public void removeEditorComponent(Editor editor) {
         editorPanel.remove(editor);
@@ -129,9 +141,9 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
      *
      * @param move move to be used in adding the new Editor
      *
-     * @see MoveChooser#actionPerformed
-     * @see SessionEditorWindow#addEditor
-     * @see MoveEditorWindow#addEditor
+     * @see bodylog.ui.dataediting.MoveChooser#actionPerformed
+     * @see bodylog.ui.dataediting.SessionEditorWindow#addEditor
+     * @see bodylog.ui.dataediting.MoveEditorWindow#addEditor
      */
     public void addNewEditor(Move move) {
         editorPanel.remove(noEditorsOpen);
@@ -149,8 +161,8 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
      * @param move Move used in checking if adding and Editor for the Move is
      * allowed
      * @return true if allowed, false otherwise
-     * @see SessionEditorWindow#addEditorAllowed
-     * @see MoveEditorWindow#addEditorAllowed
+     * @see bodylog.ui.dataediting.SessionEditorWindow#addEditorAllowed
+     * @see bodylog.ui.dataediting.MoveEditorWindow#addEditorAllowed
      */
     protected abstract boolean addEditorAllowed(Move move);
 
@@ -159,8 +171,8 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
      * <code>addNewEditor</code>.
      *
      * @param move move used in adding the Editor
-     * @see SessionEditorWindow#addEditor
-     * @see MoveEditorWindow#addEditor
+     * @see bodylog.ui.dataediting.SessionEditorWindow#addEditor
+     * @see bodylog.ui.dataediting.MoveEditorWindow#addEditor
      */
     protected abstract void addEditor(Move move);
 }

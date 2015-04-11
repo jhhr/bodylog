@@ -9,8 +9,8 @@ import java.util.ArrayList;
  * Sessions. The name is used as the date directory name and the move defining
  * file name, from which it is also read.
  *
- * @see Session
- * @see Set
+ * @see bodylog.logic.Session
+ * @see bodylog.logic.Set
  */
 public class Move {
 
@@ -19,18 +19,26 @@ public class Move {
     private final ArrayList<Session> sessionList;
 
     /**
-     * Constructs a new move with given name, checks whether the name is
+     * Constructs a new Move with a blank name, no Sessions and no variables.
+     */
+    public Move() {
+        this.name = "";
+        this.variables = new ArrayList<>();
+        this.sessionList = new ArrayList<>();
+    }
+
+    /**
+     * Constructs a new Move with given name, checks whether the name is
      * allowed. Throws an exception it isn't.
      *
      * @param name Name given to move
      * @throws IllegalArgumentException when name is not allowed
-     * @see Constant#nameIsAllowed
+     * @see bodylog.logic.DataHandling#nameIsAllowed
      */
-    public Move(String name) {
+    public Move(String name) throws IllegalArgumentException{
+        this();
         DataHandling.nameIsAllowed(name);
-        this.name = name;
-        this.variables = new ArrayList<>();
-        this.sessionList = new ArrayList<>();
+        setName(name);
     }
 
     /**
@@ -39,11 +47,10 @@ public class Move {
      *
      * @param newName new name for move
      * @throws IllegalArgumentException when name is not allowed
-     * @see Constant#nameIsAllowed
+     * @see bodylog.logic.DataHandling#nameIsAllowed
      */
-    public void setName(String newName) {
-        DataHandling.nameIsAllowed(newName);
-        name = newName;
+    public void setName(String newName) throws IllegalArgumentException {
+        name = DataHandling.nameIsAllowed(newName);
     }
 
     /**
@@ -98,10 +105,10 @@ public class Move {
      *
      * @param name name of the variable to be added
      * @throws IllegalArgumentException when name is not allowed
-     * @see bodylog.util.Constant#nameIsAllowed
+     * @see bodylog.logic.DataHandling#variableIsAllowed
      */
     public void addVariable(String name) {
-        DataHandling.nameIsAllowed(name);
+        DataHandling.variableIsAllowed(name);
         variables.add(name);
     }
 
@@ -119,13 +126,18 @@ public class Move {
         sessionList.add(session);
     }
 
+    public String getName() {
+        return name;
+    }
+
     /**
+     * String form of a Move is simply its name.
      *
      * @return the name of this move
      */
     @Override
     public String toString() {
-        return name;
+        return getName();
     }
 
     /**

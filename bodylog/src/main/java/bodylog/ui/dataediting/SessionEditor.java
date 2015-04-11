@@ -1,5 +1,6 @@
 package bodylog.ui.dataediting;
 
+import bodylog.ui.dataediting.abstracts.Editor;
 import bodylog.ui.tables.EditorTable;
 import bodylog.logic.Move;
 import bodylog.logic.Set;
@@ -33,16 +34,16 @@ import javax.swing.table.DefaultTableModel;
  * its TableModel. Has buttons for adding and removing sets and setting the date
  * for the session. adding and removing rows from the table.
  *
- * @see Move
- * @see Session
- * @see Set
- * @see SessionEditorWindow
- * @see Editor
- * @see EditorTable
+ * @see bodylog.logic.Move
+ * @see bodylog.logic.Session
+ * @see bodylog.logic.Set
+ * @see bodylog.ui.dataediting.SessionEditorWindow
+ * @see bodylog.ui.dataediting.Editor
+ * @see bodylog.ui.tables.EditorTable
  */
 public class SessionEditor extends Editor {
 
-    private final DefaultTableModel tableModel;
+    private final EditorTable tableModel;
     private final JScrollPane tablePane;
     private final JTable table;
     private final JPanel buttonsUpper;
@@ -57,7 +58,7 @@ public class SessionEditor extends Editor {
      *
      * @param move Move to be added session data into
      * @param editorWindow Parent container of this SessionEditor
-     * @see Editor#setEditorBorder
+     * @see bodylog.ui.dataediting.Editor#setEditorBorder
      */
     public SessionEditor(Move move, SessionEditorWindow editorWindow) {
         super(move, editorWindow);
@@ -110,7 +111,7 @@ public class SessionEditor extends Editor {
         buttonsLeft.add(setRemoverButton());
 
         buttonsUpper.setLayout(new GridLayout(1, 3));
-        buttonsUpper.add(setDateButton());
+        buttonsUpper.add(setDateField());
         buttonsUpper.add(saveButton(", " + dateStr));
         buttonsUpper.add(closeButton("close session"));
     }
@@ -118,9 +119,6 @@ public class SessionEditor extends Editor {
     /**
      * Creates a button for adding rows into the Table. After adding the
      * container of the table is resized.
-     *
-     * @return JButton with ActionListener added
-     * @see SessionEditor#resizeAndUpdate
      */
     private JButton setAdderButton() {
         JButton setAdderButton = new JButton("add set");
@@ -138,9 +136,6 @@ public class SessionEditor extends Editor {
     /**
      * Creates button for removing rows from the table. Does nothing if only one
      * row remains. After removing container of the table is resized.
-     *
-     * @return JButton with ActionListener added
-     * @see SessionEditor#resizeAndUpdate
      */
     private JButton setRemoverButton() {
         JButton setRemoverButton = new JButton("remove set");
@@ -161,9 +156,6 @@ public class SessionEditor extends Editor {
      * Resizes the container holding the JTable when a row is added or
      * subtracted. There should be a better to do this than the current
      * implementation.
-     *
-     * @see SessionEditor#setAdderButton
-     * @see SessionEditor#setRemoverButton
      */
     private void resizeAndUpdate() {
         Dimension d = table.getPreferredSize();
@@ -175,23 +167,26 @@ public class SessionEditor extends Editor {
     /**
      * Creates an input field for setting the date. When the user types into the
      * field it is parsed with a <code>DateTimeFormatter</code>. If the parsing
-     * fails the date of the session data is not changed, though the input will
+     * fails the date of this Editor is not changed, though the input will
      * remain in the field until changed by the user. When the date is changed
-     * the change
-     *
-     * @return JPanel containing a JLabel and JTextField with added
-     * ActionListener
-     * @see Constant#UI_DATE_FORMAT
+     * the border displaying the date is redrawn.
      */
-    private JPanel setDateButton() {
+    private JPanel setDateField() {
         JPanel setDateContainer = new JPanel();
 
-        JTextField tekstiAlue = new JTextField(dateStr);
-        tekstiAlue.setToolTipText("Date must be in form 'dd.mm.yyyy'.");
-        tekstiAlue.addActionListener(new ActionListener() {
+        JTextField tekstiField = new JTextField(dateStr);
+        tekstiField.setToolTipText("Date must be in form 'dd.mm.yyyy'.");
+        tekstiField.addActionListener(new DateFieldListener());
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        setDateContainer.add(new JLabel("Set date:"));
+        setDateContainer.add(tekstiField);
+        return setDateContainer;
+    }
+    
+    private class DateFieldListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
                 JTextField textField = (JTextField) e.getSource();
                 String text = textField.getText();
                 try {
@@ -201,12 +196,8 @@ public class SessionEditor extends Editor {
                 }
                 dateStr = text;
                 setEditorBorder(" " + dateStr);
-            }
-        });
-
-        setDateContainer.add(new JLabel("Set date:"));
-        setDateContainer.add(tekstiAlue);
-        return setDateContainer;
+        }
+        
     }
 
     /**
@@ -216,8 +207,8 @@ public class SessionEditor extends Editor {
      * gives these to the Move of this SessionEditor.The attempt may throw an
      * exception which is handled by showing a pup-up message.
      *
-     * @see ToFile#sessions
-     * @see SessionEditor#addSessionsToMove
+     * @see bodylog.files.ToFile#sessions
+     * @see bodylog.ui.dataediting.SessionEditor#addSessionsToMove
      */
     @Override
     protected void saveToFile() {
@@ -253,7 +244,7 @@ public class SessionEditor extends Editor {
      * already exists using <code>ToFile.sessionFileExists</code>.
      *
      * @return true if the file exists, false otherwise
-     * @see ToFile#sessionFileExists
+     * @see bodylog.files.ToFile#sessionFileExists
      */
     @Override
     protected boolean fileExists() {

@@ -16,8 +16,8 @@ import javax.swing.JTable;
  * files. Contained in a StatWindow, as one half of the SplitPane. Contains
  * JTables that contain the data using StatTable as the TableModel.
  *
- * @see StatWindow
- * @see StatTable
+ * @see bodylog.ui.dataviewing.StatWindow
+ * @see bodylog.ui.tables.StatTable
  */
 public class MoveTables extends JPanel {
 

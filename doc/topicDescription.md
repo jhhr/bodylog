@@ -19,4 +19,4 @@ Tallennetua dataa on tarkoitus tarkastella vähintäänkin taulukoiden ja mahdol
 
  Taulukkomuoto yhden liikkeen yhden session datan näyttämiselle olisi sessioon liitetyt johdannaiset ensimmäisellä rivillä, jonka jälkeen olisi yksi sarja per rivi, jossa muuttujien arvot (mukaanlukien johdannaiset) yksi per sarake. Usean session sisältävä taulukko olisi session päivämäärä rivin ensimmäisessä sarakkeessa, jonka jälkeen olisi sen session sarjat ja seuraavan session ensimmäinen rivi seuraisi edellisen viimeistä. Tämä voi olla melko iso taulukko jos sessioita on kymmeniä ja sarjoja aina muutama, joten yhdestä voisi näkyä vain yksi rivi, joka sisältää tiedot session johdannaisarvoista ja jonka voisi sitten avata näyttämään tiedot jokaisesta sarjasta.
 
-### Kayttoliittyma
+### Kayttoliittymas

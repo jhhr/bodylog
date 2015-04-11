@@ -17,7 +17,7 @@ public class ToFile {
      * Creates the movements folder that holds the Move defining move files.
      *
      * @throws Exception if creation fails somehow
-     * @see Constant#MOVES_DIR_NAME
+     * @see bodylog.files.Constant#MOVES_DIR_NAME
      */
     public static void createMovesFolder() throws Exception {
         new File(Constant.MOVES_DIR_NAME).mkdir();
@@ -29,7 +29,7 @@ public class ToFile {
      *
      * @param move Move for which a session data folder will be created
      * @throws Exception when creating either folder fails
-     * @see Constant#DATA_DIR_NAME
+     * @see bodylog.files.Constant#DATA_DIR_NAME
      */
     public static void createDataFolder(Move move) throws Exception {
         new File(Constant.DATA_DIR_NAME).mkdir();
@@ -44,9 +44,9 @@ public class ToFile {
      * @param move Move used for identifying a single move file whose existence
      * will be checked
      * @return true if the file exists, false otherwise
-     * @see MoveEditor
-     * @see Constant#MOVES_DIR_NAME
-     * @see Constant#MOVE_END
+     * @see bodylog.ui.dataediting.MoveEditor
+     * @see bodylog.files.Constant#MOVES_DIR_NAME
+     * @see bodylog.files.Constant#MOVE_END
      */
     public static boolean moveFileExists(Move move) {
         return new File(Constant.MOVES_DIR_NAME + "/" + move + Constant.MOVE_END).exists();
@@ -62,9 +62,9 @@ public class ToFile {
      * @param dateStr date string used to identify a single session file whose
      * existence will be checked
      * @return true if the file exists, false otherwise
-     * @see SessionEditor
-     * @see Constant#DATA_DIR_NAME
-     * @see Constant#SESSION_END
+     * @see bodylog.ui.dataediting.SessionEditor
+     * @see bodylog.files.Constant#DATA_DIR_NAME
+     * @see bodylog.files.Constant#SESSION_END
      */
     public static boolean sessionFileExists(Move move, String dateStr) {
         return new File(Constant.DATA_DIR_NAME + "/" + move + "/" + dateStr + Constant.SESSION_END).exists();
@@ -79,10 +79,10 @@ public class ToFile {
      *
      * @param move Move whose defining data will be saved
      * @throws Exception when writing or creating the file
-     * @see Move
-     * @see MoveEditor
-     * @see Constant#MOVES_DIR_NAME
-     * @see Constant#MOVE_END
+     * @see bodylog.logic.Move
+     * @see bodylog.ui.dataediting.MoveEditor
+     * @see bodylog.files.Constant#MOVES_DIR_NAME
+     * @see bodylog.files.Constant#MOVE_END
      */
     public static void move(Move move) throws Exception {
         File moveFile = new File(Constant.MOVES_DIR_NAME + "/" + move + Constant.MOVE_END);
@@ -105,13 +105,13 @@ public class ToFile {
      *
      * @param move Move whose Sessions will be written to files
      * @throws Exception when failing in writing or creating files
-     * @see Move
-     * @see Session
-     * @see Set
-     * @see SessionEditor
-     * @see Constant#FILE_DATE_FORMATTER
-     * @see Constant#DATA_DIR_NAME
-     * @see Constant#SESSION_END
+     * @see bodylog.logic.Move
+     * @see bodylog.logic.Session
+     * @see bodylog.logic.Set
+     * @see bodylog.ui.dataediting.SessionEditor
+     * @see bodylog.files.Constant#FILE_DATE_FORMATTER
+     * @see bodylog.files.Constant#DATA_DIR_NAME
+     * @see bodylog.files.Constant#SESSION_END
      */
     public static void sessions(Move move) throws Exception {
 

@@ -36,7 +36,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.HashMap;
-import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -54,7 +53,8 @@ import javax.swing.event.ListSelectionListener;
  * Code from Oracle's
  * <a href="https://docs.oracle.com/javase/tutorial/uiswing/examples/components/SplitPaneDemoProject/src/components/SplitPaneDemo.java">SplitPaneDemo</a>
  *
- * @see MoveTables
+ * @see bodylog.ui.dataviewing.MoveTables
+ * @see javax.swing.JSplitPane
  */
 public class StatWindow extends JPanel implements ListSelectionListener {
 

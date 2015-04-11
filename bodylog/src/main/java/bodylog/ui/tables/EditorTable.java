@@ -9,10 +9,10 @@ import javax.swing.table.DefaultTableModel;
 /**
  * TableModel for creating session data. Used in SessionEditor. Extends
  * DefaultTableModel which already contains the functionality for receiving user
- * input. This causes it to use the obsolete collection Vector. Should create a
+ * input but uses the obsolete collection Vector. Should create a
  * custom TableModel with editing capability.
  *
- * @see SessionEditor
+ * @see bodylog.ui.dataediting.SessionEditor
  */
 public class EditorTable extends DefaultTableModel {
 
@@ -20,6 +20,11 @@ public class EditorTable extends DefaultTableModel {
 
     public EditorTable(Object[] columns, int rowCount, Container panel) {
         super(columns, rowCount);
+        this.panel = panel;
+    }
+    
+    public EditorTable(Object[][] data, Object[] columnNames, Container panel) {
+        super(data,columnNames);
         this.panel = panel;
     }
 
@@ -34,7 +39,7 @@ public class EditorTable extends DefaultTableModel {
      * @param row row
      * @param column column
      *
-     * @see DataHandling#stringToSetValue
+     * @see bodylog.logic.DataHandling#stringToSetValue
      */
     @Override
     public void setValueAt(Object value, int row, int column) {

@@ -7,8 +7,8 @@ import java.io.FilenameFilter;
  * A FileNameFilter that accepts files ending in the ending for move defining
  * files. Used in the file handling class FromFile.
  *
- * @see Constant#MOVE_END
- * @see FromFile#moveFileList
+ * @see bodylog.files.Constant#MOVE_END
+ * @see bodylog.files.FromFile#moveFileList
  */
 public class MoveFileFilter implements FilenameFilter {
 
@@ -20,8 +20,8 @@ public class MoveFileFilter implements FilenameFilter {
      * @return  <code>true</code> if the name ends in the move
      * file ending and is in the correct folder; <code>false</code> otherwise.
      * 
-     * @see Constant#MOVE_END
-     * @see Constant#MOVES_DIR
+     * @see bodylog.files.Constant#MOVE_END
+     * @see bodylog.files.Constant#MOVES_DIR
      */
     @Override
     public boolean accept(File dir, String name) {

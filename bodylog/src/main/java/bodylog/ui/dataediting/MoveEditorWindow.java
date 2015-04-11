@@ -1,6 +1,9 @@
 package bodylog.ui.dataediting;
 
+import bodylog.ui.dataediting.abstracts.WindowWithMoveChooser;
 import bodylog.logic.Move;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 /**
@@ -8,9 +11,9 @@ import javax.swing.JButton;
  * WindowWithMoveChooser. This is the container for the UI components
  * responsible for creating new Moves and editing existing ones, MoveEditors.
  *
- * @see Move
- * @see WindowWithMoveChooser
- * @see MoveEditor
+ * @see bodylog.logic.Move
+ * @see bodylog.ui.dataediting.WindowWithMoveChooser
+ * @see bodylog.ui.dataediting.MoveEditor
  */
 public class MoveEditorWindow extends WindowWithMoveChooser {
 
@@ -20,13 +23,24 @@ public class MoveEditorWindow extends WindowWithMoveChooser {
      *
      * @throws Exception see constructor for
      * {@link bodylog.ui.dataediting.WindowWithMoveChooser#WindowWithMoveChooser() WindowWithMoveChooser}
-     * @see WindowWithMoveChooser#WindowWithMoveChooser
+     * @see bodylog.ui.dataediting.WindowWithMoveChooser#WindowWithMoveChooser
      */
     public MoveEditorWindow() throws Exception {
         super();
 
+        moveChooser.add(newMoveButton());
+    }
+    
+    private JButton newMoveButton(){
         JButton newMoveButton = new JButton("new movement");
-        chooserPanel.add(newMoveButton);
+        newMoveButton.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                addNewEditor(new Move());
+            }
+        });
+        return newMoveButton;
     }
 
     @Override

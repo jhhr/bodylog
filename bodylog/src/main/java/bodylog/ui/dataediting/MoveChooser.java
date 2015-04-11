@@ -1,5 +1,6 @@
 package bodylog.ui.dataediting;
 
+import bodylog.ui.dataediting.abstracts.WindowWithMoveChooser;
 import bodylog.logic.Move;
 import bodylog.files.FromFile;
 import java.awt.event.ActionEvent;
@@ -11,12 +12,16 @@ import javax.swing.JPanel;
 
 /**
  * Container for a ComboBox containing a list of Moves acquired form move files.
- * Contained in a WindowWithMoveChooser. When a move is clicked by the user this
- * asks its parent container to add an Editor.
+ * Contained in a <code>WindowWithMoveChooser</code>. When a move is clicked by
+ * the user this asks its parent container to add an Editor. The list is
+ * contained in a <code>JComboBox</code>, of really in its
+ * <code>DefaultComboBoxModel</code> which uses the obsolete collection
+ * <code>Vector</code> in its as the data model.
  */
-public class MoveChooser extends JPanel implements ActionListener {
+public final class MoveChooser extends JPanel implements ActionListener {
 
-    WindowWithMoveChooser window;
+    private WindowWithMoveChooser window;
+    private JComboBox moveList;
 
     /**
      * Creates a new MoveChooser for the specified WindowWithMoveChooser. The
@@ -25,7 +30,7 @@ public class MoveChooser extends JPanel implements ActionListener {
      *
      * @param window the WindowWithMoveChooser that contains this
      * @throws Exception if something happens in reading the move files
-     * @see FromFile#allMovesWithoutSessions
+     * @see bodylog.files.FromFile#allMovesWithoutSessions
      */
     public MoveChooser(WindowWithMoveChooser window) throws Exception {
         this.window = window;
@@ -34,16 +39,25 @@ public class MoveChooser extends JPanel implements ActionListener {
 
         add(new JLabel("Choose movement:"));
 
-        JComboBox moveChooser = new JComboBox(FromFile.allMovesWithoutSessions());
-        moveChooser.addActionListener(this);
-        add(moveChooser);
+        loadMoveList();
+        add(moveList);
+    }
+
+    /**
+     * Loads or reloads the list. Used when changes are made to move files.
+     * 
+     * @throws Exception when file reading fails
+     */
+    public void loadMoveList() throws Exception {
+        moveList = new JComboBox(FromFile.allMovesWithoutSessions());
+        moveList.addActionListener(this);
     }
 
     /**
      * Calls <code>addNewEditor</code> of the parent window
      *
      * @param e User clicks on a move in the ComboBox
-     * @see WindowWithMoveChooser#addNewEditor
+     * @see bodylog.ui.dataediting.WindowWithMoveChooser#addNewEditor
      */
     @Override
     public void actionPerformed(ActionEvent e) {

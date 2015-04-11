@@ -1,6 +1,6 @@
 package bodylog.logic;
 
-import bodylog.files.Constant;
+import bodylog.logic.Move;
 import java.time.LocalDate;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -21,13 +21,23 @@ public class MoveTest {
     }
 
     @Test
-    public void NoVariablesInNewMove() {
-        assertEquals(0, bench.variableCount());
+    public void Constructor_BlankNameNoVarsNoSessionsInNewMove() {
+        Move blank = new Move();
+
+        assertEquals("", blank.toString());
+        assertEquals(0, blank.variableCount());
+        assertTrue(blank.getSessions().isEmpty());
     }
 
     @Test
-    public void NoSessionsInNewMove() {
-        assertTrue(bench.getSessions().isEmpty());
+    public void Constructor_WithName() {
+        assertEquals(benchName, bench.toString());
+    }
+
+    @Test
+    public void Constructor_WithNameWhiteSpaceRemoved() {
+        Move withSpaces = new Move(" spaces  \n");
+        assertEquals("spaces", withSpaces.toString());
     }
 
     @Test
@@ -39,7 +49,7 @@ public class MoveTest {
     @Test
     public void CantUseBannedCharsWhenCreatingMove() {
         boolean moveCreated = false;
-        for (char ch : DataHandling.BANNED_CHARS) {
+        for (char ch : DataHandling.BANNED_CHARS_MOVE_NAME) {
             try {
                 String name = "asd" + ch + "fjkl";
                 new Move(name);
@@ -53,7 +63,7 @@ public class MoveTest {
     @Test
     public void CantUseBannedCharsWhenChangingName() {
         boolean nameSet = false;
-        for (char ch : DataHandling.BANNED_CHARS) {
+        for (char ch : DataHandling.BANNED_CHARS_MOVE_NAME) {
             try {
                 String name = "asd" + ch + "fjkl";
                 bench.setName(name);
@@ -67,7 +77,7 @@ public class MoveTest {
     @Test
     public void CantUseBannedCharsInVariable() {
         boolean variableAdded = false;
-        for (char ch : DataHandling.BANNED_CHARS) {
+        for (char ch : DataHandling.BANNED_CHARS_MOVE_NAME) {
             try {
                 bench.addVariable("asd" + ch + "fjkl");
                 variableAdded = true;
@@ -76,9 +86,9 @@ public class MoveTest {
         }
         assertFalse(variableAdded);
     }
-    
+
     @Test
-    public void AddedVariableFoundAtExpectedIndex(){
+    public void AddedVariableFoundAtExpectedIndex() {
         bench.addVariable(varWeight);
         assertEquals(varWeight, bench.getVariable(0));
         bench.addVariable(varReps);
@@ -104,9 +114,9 @@ public class MoveTest {
         bench.addSession(session);
         assertEquals(1, bench.getSessions().size());
     }
-    
+
     @Test
-    public void EqualsComparisonTrueIfMovesHaveSameNameFalseOtherwise(){
+    public void EqualsComparisonTrueIfMovesHaveSameNameFalseOtherwise() {
         Move bench2 = new Move(benchName);
         assertTrue(bench.equals(bench2));
         Move dl = new Move("deadlift");

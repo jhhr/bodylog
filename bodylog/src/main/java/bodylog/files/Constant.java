@@ -10,8 +10,8 @@ import java.time.format.FormatStyle;
  * Static class for storing String values relating to file handling and
  * DateTimeFormatters. Used by the file handling classes ToFile and FromFile.
  *
- * @see FromFile
- * @see ToFile
+ * @see bodylog.files.FromFile
+ * @see bodylog.files.ToFile
  */
 public class Constant {
 
@@ -65,7 +65,7 @@ public class Constant {
      * @param dateString date string to be converted
      * @return a date string in the format yyyy-mm-dd throws
      * DateTimeParseException when failing to parse the given string
-     * @see SessionEditor
+     * @see bodylog.ui.dataediting.SessionEditor
      */
     public static String uiDateToFileDate(String dateString) {
         return FILE_DATE_FORMATTER.format(UI_DATE_FORMAT.parse(dateString));

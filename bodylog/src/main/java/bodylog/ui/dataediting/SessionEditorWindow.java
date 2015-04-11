@@ -1,5 +1,6 @@
 package bodylog.ui.dataediting;
 
+import bodylog.ui.dataediting.abstracts.WindowWithMoveChooser;
 import bodylog.logic.Move;
 import javax.swing.JOptionPane;
 
@@ -8,8 +9,8 @@ import javax.swing.JOptionPane;
  * WindowWithMoveChooser. This is the container for the UI components
  * responsible for creating session data, SessionEditors.
  *
- * @see WindowWithMoveChooser
- * @see SessionEditor
+ * @see bodylog.ui.dataediting.WindowWithMoveChooser
+ * @see bodylog.ui.dataediting.SessionEditor
  */
 public class SessionEditorWindow extends WindowWithMoveChooser {
 
@@ -31,7 +32,7 @@ public class SessionEditorWindow extends WindowWithMoveChooser {
      *
      * @param move Move used in checking if adding an Editor is allowed
      * @return true if allowed, false otherwise
-     * @see SessionEditorWindow#addEditorAllowed
+     * @see bodylog.ui.dataediting.SessionEditorWindow#addEditorAllowed
      */
     @Override
     protected boolean addEditorAllowed(Move move) {

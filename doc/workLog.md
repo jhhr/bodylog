@@ -18,3 +18,4 @@
 - ke 8.4 klo 13-00:30 käyttöliittymän tekoa, kielen vaihto englantiin, vähän testien ja logiikan twiikkailua, javadocia aloiteltu
 - to 9.4 klo 11-00:30 vähän testejä lisätty, enimmäkseen javadocia kirjoitettu
 - pe 10.4 klo 17-23 javadoc viimeistelty, vähän testejä lisää, kaavion päivitys
+- la 11.4 klo 10-18 javadocia korjailtu, käyttöliittymää viimeistä osaa tehty, kaaviota korjattu

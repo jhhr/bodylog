@@ -1,5 +1,7 @@
-package bodylog.files;
+package bodylog.files.filters;
 
+import bodylog.files.Constant;
+import bodylog.files.filters.MoveFileFilter;
 import org.junit.After;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

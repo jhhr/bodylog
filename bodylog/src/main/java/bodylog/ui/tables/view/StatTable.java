@@ -1,4 +1,4 @@
-package bodylog.ui.tables;
+package bodylog.ui.tables.view;
 
 import bodylog.logic.Move;
 import bodylog.logic.Session;

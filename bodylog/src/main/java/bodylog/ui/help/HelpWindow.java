@@ -1,4 +1,4 @@
-package bodylog.ui;
+package bodylog.ui.help;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;

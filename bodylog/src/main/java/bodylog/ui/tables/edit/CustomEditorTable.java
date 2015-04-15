@@ -1,9 +1,10 @@
-package bodylog.ui.tables;
+package bodylog.ui.tables.edit;
 
 import bodylog.logic.DataHandling;
 import bodylog.logic.Move;
 import bodylog.logic.Session;
 import bodylog.logic.Set;
+import bodylog.ui.tables.view.StatTable;
 import java.io.Serializable;
 
 /**

@@ -2,6 +2,7 @@ package bodylog.logic;
 
 import bodylog.files.Constant;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The first component in the logical hierarchy. Container for session data and
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 public class Move {
 
     private String name;
-    private final ArrayList<String> variables;
+    private String[] variables;
     private final ArrayList<Session> sessionList;
 
     /**
@@ -23,7 +24,7 @@ public class Move {
      */
     public Move() {
         this.name = "";
-        this.variables = new ArrayList<>();
+        this.variables = new String[]{};
         this.sessionList = new ArrayList<>();
     }
 
@@ -37,7 +38,6 @@ public class Move {
      */
     public Move(String name) throws IllegalArgumentException{
         this();
-        DataHandling.nameIsAllowed(name);
         setName(name);
     }
 
@@ -50,7 +50,7 @@ public class Move {
      * @see bodylog.logic.DataHandling#nameIsAllowed
      */
     public void setName(String newName) throws IllegalArgumentException {
-        name = DataHandling.nameIsAllowed(newName);
+        name = DataHandling.nameIsAllowed(newName, DataHandling.Illegal.MOVE_NAME);
     }
 
     /**
@@ -58,8 +58,8 @@ public class Move {
      *
      * @return a string array containing this Move's variables
      */
-    public String[] variablesToArray() {
-        return variables.toArray(new String[0]);
+    public String[] getVariables() {
+        return variables;
     }
 
     /**
@@ -85,7 +85,7 @@ public class Move {
      * @return the number of variables in this move
      */
     public int variableCount() {
-        return variables.size();
+        return variables.length;
     }
 
     /**
@@ -96,21 +96,42 @@ public class Move {
      * @return a variable
      */
     public String getVariable(int index) {
-        return variables.get(index);
+        return variables[index];
     }
 
     /**
      * Adds a variable to the move. Checks if the name of the variable is
      * allowed. Throws an IllegalArgumentException if it isn't.
      *
-     * @param name name of the variable to be added
+     * @param var name of the variable to be added
      * @throws IllegalArgumentException when name is not allowed
      * @see bodylog.logic.DataHandling#variableIsAllowed
      */
-    public void addVariable(String name) {
-        DataHandling.variableIsAllowed(name);
-        variables.add(name);
+    public void addVariable(String var) {
+        String newVar = DataHandling.nameIsAllowed(var, DataHandling.Illegal.VARIABLE);
+        variables = Arrays.copyOf(variables, variables.length + 1);
+        variables[variables.length - 1] = newVar;
     }
+    
+    /**
+     * Adds a variable to the specified index. Checks if the name of the variable is
+     * allowed. Throws an IllegalArgumentException if it isn't.
+     *
+     * @param var name of the variable to be added
+     * @param index index to be added to
+     * @throws IllegalArgumentException when name is not allowed
+     * @see bodylog.logic.DataHandling#variableIsAllowed
+     */
+    public void addVariable(String var, int index) throws IllegalArgumentException{
+        String newVar = DataHandling.nameIsAllowed(var, DataHandling.Illegal.VARIABLE);        
+        try {
+            variables[index] = newVar;
+        } catch (IndexOutOfBoundsException e) {
+            variables = Arrays.copyOf(variables, index + 1);
+            variables[index] = newVar;
+        }
+    }
+    
 
     /**
      * Adds a session to the move. Checks if the parameter is null and throws a

@@ -1,8 +1,12 @@
 package bodylog.files;
 
+import bodylog.logic.Move;
+import bodylog.logic.Session;
+import bodylog.logic.Set;
 import java.io.File;
 
 public class Util {
+
 
     /**
      * Deletes all files in folders that are in the data folder, deletes those

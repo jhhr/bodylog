@@ -1,10 +1,14 @@
-package bodylog.files;
+package bodylog.files.edit;
 
+import bodylog.files.Constant;
+import bodylog.files.Util;
+import bodylog.files.edit.SessionSaver;
 import bodylog.logic.Set;
 import bodylog.logic.Move;
 import bodylog.logic.Session;
 import java.io.File;
 import java.time.LocalDate;
+import java.time.temporal.TemporalAccessor;
 import java.util.Scanner;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
@@ -14,7 +18,18 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class ToFileTest {
+public class SessionSaverTest {
+
+    @BeforeClass
+    public static void oneTimeSetUp() {
+        // Delete files first in case some files are leftover from manual testing.
+        Util.deleteFiles();
+    }
+
+    @After
+    public void tearDown() {
+        Util.deleteFiles();
+    }
 
     Session DLsession;
     Session benchSession;
@@ -26,6 +41,7 @@ public class ToFileTest {
     String varReps = "reps";
     String varBool = "pumped";
     String dateStr = "1970-01-01";
+    TemporalAccessor date = LocalDate.of(1970, 1, 1);
     Set set1;
     Set set2;
     Set set3;
@@ -34,24 +50,23 @@ public class ToFileTest {
     File DLSessionFile;
     File benchSessionFile;
     File benchMoveFile;
+    SessionSaver benchSaver;
+    SessionSaver dlSaver;
 
-    @BeforeClass
-    public static void oneTimeSetUp(){        
-        // Delete files first in case some files are leftover from manual testing.
-        Util.deleteFiles();
-    }
     @Before
     public void setUp() {
-        
-        DLsession = new Session(LocalDate.of(1970, 1, 1));
-        benchSession = new Session(LocalDate.of(1970, 1, 1));
+
+        DLsession = new Session(date);
+        benchSession = new Session(date);
         bench = new Move(benchName);
         deadlift = new Move(DLName);
-        DLFolder = new File(Constant.DATA_DIR_NAME + "/" + DLName);
-        benchFolder = new File(Constant.DATA_DIR_NAME + "/" + benchName);
-        DLSessionFile = new File(Constant.DATA_DIR_NAME + "/" + DLName + "/" + dateStr + Constant.SESSION_END);
-        benchSessionFile = new File(Constant.DATA_DIR_NAME + "/" + benchName + "/" + dateStr + Constant.SESSION_END);
-        benchMoveFile = new File(Constant.MOVES_DIR_NAME + "/" + benchName + Constant.MOVE_END);
+        DLFolder = new File(Constant.DATA_DIR, DLName);
+        benchFolder = new File(Constant.DATA_DIR, benchName);
+        DLSessionFile = new File(DLFolder, dateStr + Constant.SESSION_END);
+        benchSessionFile = new File(benchFolder, dateStr + Constant.SESSION_END);
+        benchMoveFile = new File(Constant.MOVES_DIR, benchName + Constant.MOVE_END);
+        benchSaver = new SessionSaver(bench);
+        dlSaver = new SessionSaver(deadlift);
     }
 
     private void addDLSets() {
@@ -82,18 +97,6 @@ public class ToFileTest {
         benchSession.addSet(set2);
         bench.addSession(benchSession);
     }
-    
-    @After
-    public void tearDown(){
-        Util.deleteFiles();
-    }
-
-    @Test
-    public void CreatingFoldersWhenNotAlreadyExisting() throws Exception {
-        ToFile.createDataFolder(deadlift);
-        ToFile.createDataFolder(bench);
-        assertTrue(DLFolder.exists() && benchFolder.exists());
-    }
 
     @Test
     public void Sessions_CreatingMoveFiles_SessionFileCheckerReturnsTrue() throws Exception {
@@ -102,20 +105,15 @@ public class ToFileTest {
         Constant.DATA_DIR.mkdir();
         DLFolder.mkdir();
         benchFolder.mkdir();
-        ToFile.sessions(deadlift);
-        ToFile.sessions(bench);
-        assertTrue(DLSessionFile.exists() && ToFile.sessionFileExists(deadlift, dateStr));
-        assertTrue(benchSessionFile.exists() && ToFile.sessionFileExists(bench, dateStr));
+        dlSaver.saveToFile();
+        benchSaver.saveToFile();
+        assertTrue(DLSessionFile.exists() && dlSaver.fileExists());
+        assertTrue(benchSessionFile.exists() && benchSaver.fileExists());
     }
 
     @Test
     public void SessionFileCheckerReturnsFalseForNonexistentFile() {
-        assertFalse(ToFile.sessionFileExists(bench, dateStr));
-    }
-
-    @Test
-    public void MoveFileCheckerReturnsFalseForNonexistentFile() {
-        assertFalse(ToFile.moveFileExists(bench));
+        assertFalse(benchSaver.fileExists());
     }
 
     @Test
@@ -123,7 +121,7 @@ public class ToFileTest {
         addDLSets();
         Constant.DATA_DIR.mkdir();
         DLFolder.mkdir();
-        ToFile.sessions(deadlift);
+        dlSaver.saveToFile();
         Scanner lukija = new Scanner(DLSessionFile);
         lukija.useDelimiter("\\Z");
         String tiedostonSisalto = lukija.next();
@@ -136,43 +134,12 @@ public class ToFileTest {
         addBenchSets();
         Constant.DATA_DIR.mkdir();
         benchFolder.mkdir();
-        ToFile.sessions(bench);
+        benchSaver.saveToFile();
         Scanner lukija = new Scanner(benchSessionFile);
         lukija.useDelimiter("\\Z");
         String fileContents = lukija.next();
         lukija.close();
         assertEquals(set1 + "\n" + set2, fileContents);
-    }
-
-    @Test
-    public void Move_MoveFolderCreationWhenNotAlreadyExisting() throws Exception {
-        if (!Constant.MOVES_DIR.exists()) {
-            ToFile.createMovesFolder();
-        }
-        assertTrue(Constant.MOVES_DIR.exists());
-    }
-
-    @Test
-    public void Move_MoveFileCreation_MoveFileCheckerReturnsTrue() throws Exception {
-        Constant.MOVES_DIR.mkdir();
-        bench.addVariable(varWeight);
-        ToFile.move(bench);
-        assertTrue(benchMoveFile.exists() && ToFile.moveFileExists(bench));
-    }
-
-    @Test
-    public void Move_MoveFileContentsAsExpected() throws Exception {
-        Constant.MOVES_DIR.mkdir();
-        bench.addVariable(varWeight);
-        bench.addVariable(varReps);
-        bench.addVariable(varBool);
-        ToFile.move(bench);
-        Scanner lukija = new Scanner(benchMoveFile);
-        lukija.useDelimiter("\\Z");
-        String fileContents = "";
-        fileContents = lukija.next();
-        lukija.close();
-        assertEquals(varWeight + "\n" + varReps + "\n" + varBool, fileContents);
     }
 
 }

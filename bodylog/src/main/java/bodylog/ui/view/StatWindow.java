@@ -28,13 +28,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package bodylog.ui.dataviewing;
+package bodylog.ui.view;
 
 import bodylog.logic.Move;
 import bodylog.files.FromFile;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -53,7 +54,7 @@ import javax.swing.event.ListSelectionListener;
  * Code from Oracle's
  * <a href="https://docs.oracle.com/javase/tutorial/uiswing/examples/components/SplitPaneDemoProject/src/components/SplitPaneDemo.java">SplitPaneDemo</a>
  *
- * @see bodylog.ui.dataviewing.MoveTables
+ * @see bodylog.ui.view.MoveTables
  * @see javax.swing.JSplitPane
  */
 public class StatWindow extends JPanel implements ListSelectionListener {
@@ -70,9 +71,10 @@ public class StatWindow extends JPanel implements ListSelectionListener {
      * and a MoveTables is created from that. Each move name is linked to its
      * respective MoveTables in a HashMap.
      *
-     * @throws Exception when things go wrong reading from file
+     * @throws FileNotFoundException if any file cannot be found
+     * @throws SecurityException if any file cannot be accessed
      */
-    public StatWindow() throws Exception {
+    public StatWindow() throws FileNotFoundException, SecurityException{
         setLayout(new GridLayout(1, 1));
 
         Move[] moveArray = FromFile.allMovesWithSessions();
@@ -113,7 +115,7 @@ public class StatWindow extends JPanel implements ListSelectionListener {
         add(splitPane);
 
         if (moveArray.length == 0) {
-            tablePanel.add(new JLabel("Could not find any movements from"
+            tablePanel.add(new JLabel("Could not find any movements from "
                     + "which to display statistics"));
         } else {
             updateTables(moveNameList[list.getSelectedIndex()]);

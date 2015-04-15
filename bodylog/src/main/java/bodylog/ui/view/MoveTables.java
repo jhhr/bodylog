@@ -1,6 +1,6 @@
-package bodylog.ui.dataviewing;
+package bodylog.ui.view;
 
-import bodylog.ui.tables.StatTable;
+import bodylog.ui.tables.view.StatTable;
 import bodylog.logic.Move;
 import bodylog.logic.Session;
 import java.util.ArrayList;
@@ -16,8 +16,8 @@ import javax.swing.JTable;
  * files. Contained in a StatWindow, as one half of the SplitPane. Contains
  * JTables that contain the data using StatTable as the TableModel.
  *
- * @see bodylog.ui.dataviewing.StatWindow
- * @see bodylog.ui.tables.StatTable
+ * @see bodylog.ui.view.StatWindow
+ * @see bodylog.ui.tables.view.StatTable
  */
 public class MoveTables extends JPanel {
 
@@ -33,7 +33,7 @@ public class MoveTables extends JPanel {
 
         ArrayList<Session> sessions = move.getSessions();
         if (sessions.isEmpty()) {
-            this.add(new JLabel("Could not find any data to display for this movement"));
+            add(new JLabel("Could not find any data to display for this movement"));
         } else {
             for (Session session : move.getSessions()) {
                 JTable table = new JTable(new StatTable(session, move));
@@ -49,7 +49,7 @@ public class MoveTables extends JPanel {
                                 BorderFactory.createTitledBorder(dateStr),
                                 BorderFactory.createEmptyBorder(5, 5, 5, 5))
                 );
-                this.add(pane);
+                add(pane);
             }
         }
     }

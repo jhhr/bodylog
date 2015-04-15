@@ -1,5 +1,6 @@
-package bodylog.files;
+package bodylog.files.filters;
 
+import bodylog.files.Constant;
 import java.io.File;
 import java.io.FilenameFilter;
 

@@ -47,23 +47,9 @@ public class MoveTest {
     }
 
     @Test
-    public void CantUseBannedCharsWhenCreatingMove() {
-        boolean moveCreated = false;
-        for (char ch : DataHandling.BANNED_CHARS_MOVE_NAME) {
-            try {
-                String name = "asd" + ch + "fjkl";
-                new Move(name);
-                moveCreated = true;
-            } catch (IllegalArgumentException e) {
-            }
-        }
-        assertFalse(moveCreated);
-    }
-
-    @Test
-    public void CantUseBannedCharsWhenChangingName() {
+    public void CantUseBannedCharsWhenSettingName() {
         boolean nameSet = false;
-        for (char ch : DataHandling.BANNED_CHARS_MOVE_NAME) {
+        for (char ch : DataHandling.Illegal.MOVE_NAME.getChars()) {
             try {
                 String name = "asd" + ch + "fjkl";
                 bench.setName(name);
@@ -77,7 +63,7 @@ public class MoveTest {
     @Test
     public void CantUseBannedCharsInVariable() {
         boolean variableAdded = false;
-        for (char ch : DataHandling.BANNED_CHARS_MOVE_NAME) {
+        for (char ch : DataHandling.Illegal.VARIABLE.getChars()) {
             try {
                 bench.addVariable("asd" + ch + "fjkl");
                 variableAdded = true;

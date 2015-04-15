@@ -1,14 +1,19 @@
 package bodylog.ui;
 
-import bodylog.ui.dataediting.MoveEditorWindow;
-import bodylog.ui.dataviewing.StatWindow;
-import bodylog.ui.dataediting.SessionEditorWindow;
+import bodylog.ui.edit.MoveChooserUpdater;
+import bodylog.ui.help.HelpWindow;
+import bodylog.files.FromFile;
+import bodylog.ui.edit.move.MoveEditorWindow;
+import bodylog.ui.view.StatWindow;
+import bodylog.ui.edit.session.SessionEditorWindow;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -22,15 +27,16 @@ import javax.swing.JTabbedPane;
  * <code>MoveEditorWindow</code>, <code>SessionEditorWindow</code>, and
  * <code>StatWindow</code> and <code>HelpWindow</code>.
  *
- * @see bodylog.ui.dataediting.MoveEditorWindow
- * @see bodylog.ui.dataediting.SessionEditorWindow
- * @see bodylog.ui.dataviewing.StatWindow
+ * @see bodylog.ui.edit.move.MoveEditorWindow
+ * @see bodylog.ui.edit.session.SessionEditorWindow
+ * @see bodylog.ui.view.StatWindow
  * @see bodylog.ui.HelpWindow
  */
 public class MainWindow extends JFrame implements ActionListener {
 
     private final JTabbedPane tabs;
     private final JMenuBar menuBar;
+    private MoveChooserUpdater updater;
     private static final String SESSION_EDITOR = "Session Editor";
     private static final String MOVE_EDITOR = "Move Editor";
     private static final String STATISTICS = "Statistics";
@@ -50,17 +56,15 @@ public class MainWindow extends JFrame implements ActionListener {
         super("Bodylog");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        this.updater = new MoveChooserUpdater();
+
         menuBar = new JMenuBar();
         menuBar.add(mainMenu());
         menuBar.add(helpMenu());
         setJMenuBar(menuBar);
 
         tabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
-        HelpWindow info = new HelpWindow();
-        tabs.add(INFO, info);
-        tabs.setSelectedComponent(info);
-        // sets the tab button as the custom closeable button
-        tabs.setTabComponentAt(tabs.getTabCount() - 1, new CloseableTab(tabs));
+        addTab(INFO);
 
         tabs.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
 
@@ -68,6 +72,7 @@ public class MainWindow extends JFrame implements ActionListener {
         setSize(new Dimension(600, 600));
 
         setLocationRelativeTo(null);
+
     }
 
     private JMenu mainMenu() {
@@ -131,11 +136,7 @@ public class MainWindow extends JFrame implements ActionListener {
             return;
         }
 
-        try {
-            addTab(itemTitle);
-        } catch (Exception ex) {
-            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        addTab(itemTitle);
 
     }
 
@@ -151,27 +152,31 @@ public class MainWindow extends JFrame implements ActionListener {
         return false;
     }
 
-    private void addTab(String tabTitle) throws Exception {
+    private void addTab(String tabTitle) {
         Component comp = null;
-        switch (tabTitle) {
-            case MOVE_EDITOR:
-                comp = new MoveEditorWindow();
-                break;
-            case SESSION_EDITOR:
-                comp = new SessionEditorWindow();
-                break;
-            case STATISTICS:
-                comp = new StatWindow();
-                break;
-            case INFO:
-                comp = new HelpWindow();
-                break;
+        try {
+            switch (tabTitle) {
+                case MOVE_EDITOR:
+                    comp = new MoveEditorWindow(updater);
+                    break;
+                case SESSION_EDITOR:
+                    comp = new SessionEditorWindow(updater);
+                    break;
+                case STATISTICS:
+                    comp = new StatWindow();
+                    break;
+                case INFO:
+                    comp = new HelpWindow();
+                    break;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
-        // adds a new tab
+        // adds a new tab for the new component
         tabs.add(tabTitle, comp);
-        // sets the added as selected (changes active tab to this one)
+        // sets the added tab as selected (changes active view to this component)
         tabs.setSelectedComponent(comp);
-        // sets the tab button as the custom closeable button
+        // replace the tab with the custom tab that has a close button
         tabs.setTabComponentAt(tabs.getTabCount() - 1, new CloseableTab(tabs));
     }
 

@@ -30,13 +30,17 @@
  */
 package bodylog.ui;
 
+import bodylog.ui.edit.abstracts.WindowWithMoveChooser;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
 import java.awt.event.*;
 
 /**
- * Custom tab button that contains a button which will close the tab.
+ * Custom tab component that contains a button which will remove the Component
+ associated with this tab from its containing JTabbedPane and, if the
+ Component being removed is a WindowWithMoveChooser, remove the associated
+ MoveChooser from the MoveChooserUpdater's list of choosers.
  *
  * Code from Oracle's
  * <a href="https://docs.oracle.com/javase/tutorial/uiswing/examples/components/TabComponentsDemoProject/src/components/ButtonTabComponent.java">TabComponentsDemo</a>
@@ -45,6 +49,12 @@ public class CloseableTab extends JPanel {
 
     private final JTabbedPane pane;
 
+    /**
+     * Creates a new a tab. Acquires title from the default tab this is
+     * replacing.
+     *
+     * @param pane The JTabbedPane this component is contained in
+     */
     public CloseableTab(final JTabbedPane pane) {
         //unset default FlowLayout' gaps
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -102,6 +112,11 @@ public class CloseableTab extends JPanel {
         public void actionPerformed(ActionEvent e) {
             int i = pane.indexOfTabComponent(CloseableTab.this);
             if (i != -1) {
+                Component comp = pane.getComponent(i);
+                if (comp instanceof WindowWithMoveChooser) {
+                    WindowWithMoveChooser win = (WindowWithMoveChooser) comp;
+                    win.getUpdater().removeChooser(win.getMoveChooser());
+                }
                 pane.remove(i);
             }
         }
@@ -137,19 +152,19 @@ public class CloseableTab extends JPanel {
     private final static MouseListener buttonMouseListener = new MouseAdapter() {
         @Override
         public void mouseEntered(MouseEvent e) {
-            Component component = e.getComponent();
-            if (component instanceof AbstractButton) {
-                AbstractButton button = (AbstractButton) component;
-                button.setBorderPainted(true);
-            }
+            paintButtonBorder(e, true);
         }
 
         @Override
         public void mouseExited(MouseEvent e) {
+            paintButtonBorder(e, false);
+        }
+
+        private void paintButtonBorder(MouseEvent e, Boolean b) {
             Component component = e.getComponent();
             if (component instanceof AbstractButton) {
                 AbstractButton button = (AbstractButton) component;
-                button.setBorderPainted(false);
+                button.setBorderPainted(b);
             }
         }
     };

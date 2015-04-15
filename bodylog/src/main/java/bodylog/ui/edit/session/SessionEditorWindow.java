@@ -1,7 +1,9 @@
-package bodylog.ui.dataediting;
+package bodylog.ui.edit.session;
 
-import bodylog.ui.dataediting.abstracts.WindowWithMoveChooser;
+import bodylog.files.edit.SessionSaver;
+import bodylog.ui.edit.abstracts.WindowWithMoveChooser;
 import bodylog.logic.Move;
+import bodylog.ui.edit.MoveChooserUpdater;
 import javax.swing.JOptionPane;
 
 /**
@@ -10,17 +12,17 @@ import javax.swing.JOptionPane;
  * responsible for creating session data, SessionEditors.
  *
  * @see bodylog.ui.dataediting.WindowWithMoveChooser
- * @see bodylog.ui.dataediting.SessionEditor
+ * @see bodylog.ui.edit.session.SessionEditor
  */
 public class SessionEditorWindow extends WindowWithMoveChooser {
 
-    public SessionEditorWindow() throws Exception {
-        super();
+    public SessionEditorWindow(MoveChooserUpdater updater) throws Exception {
+        super(updater);
     }
 
     @Override
     protected void addEditor(Move move) {
-        editorPanel.add(new SessionEditor(move, this));
+        editorPanel.add(new SessionEditor(move, new SessionSaver(move), this));
         validate();
         repaint();
     }

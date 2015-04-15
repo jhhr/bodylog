@@ -1,5 +1,6 @@
 package bodylog.files;
 
+import bodylog.files.filters.SessionFileFilter;
 import org.junit.After;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

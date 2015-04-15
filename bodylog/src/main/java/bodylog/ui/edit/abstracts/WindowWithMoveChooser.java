@@ -1,11 +1,13 @@
-package bodylog.ui.dataediting.abstracts;
+package bodylog.ui.edit.abstracts;
 
+import bodylog.ui.edit.MoveChooser;
 import bodylog.logic.Move;
-import bodylog.ui.dataediting.MoveChooser;
+import bodylog.ui.edit.MoveChooserUpdater;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.FileNotFoundException;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,29 +21,35 @@ import javax.swing.JSeparator;
  * component contains a MoveChooser that adds components to the bottom part
  * based on the Move chosen by the user.
  *
- * @see bodylog.ui.dataediting.abstracts.Editor
- * @see bodylog.ui.dataediting.MoveChooser
- * @see bodylog.ui.dataediting.SessionEditorWindow
- * @see bodylog.ui.dataediting.MoveEditorWindow
+ * @see bodylog.ui.edit.abstracts.Editor
+ * @see bodylog.ui.dataediting.BodyFileChooser
+ * @see bodylog.ui.edit.session.SessionEditorWindow
+ * @see bodylog.ui.edit.move.MoveEditorWindow
  */
 public abstract class WindowWithMoveChooser extends JScrollPane {
 
-    protected final MoveChooser moveChooser;
+    protected MoveChooser moveChooser;
     protected final JPanel editorPanel;
     protected final JLabel noEditorsOpen;
+    protected final MoveChooserUpdater updater;
 
     /**
-     * Creates a new window with the MoveChooser at the top and a JLabel titled
+     * Creates a new updater with the MoveChooser at the top and a JLabel titled
      * "No movements selected" as the component contained in the bottom part.
      *
-     * @throws Exception May throw an exception when creating the MoveChooser as
-     * it reads move files.
+     * @param updater MoveChooserUpdater to which is given the MoveChooser of this
+ window
+     * @throws FileNotFoundException when creating the MoveChooser as it reads
+     * move files a file may not be founds
      */
-    public WindowWithMoveChooser() throws Exception {
+    public WindowWithMoveChooser(MoveChooserUpdater updater) 
+            throws FileNotFoundException {
+        this.updater = updater;
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
 
-        moveChooser = new MoveChooser(this);
+        this.moveChooser = new MoveChooser(this, updater.newModel());
+        updater.addChooser(this.moveChooser);
         editorPanel = new JPanel();
         noEditorsOpen = new JLabel("No movements selected");
 
@@ -54,7 +62,7 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
         c.insets = new Insets(5, 5, 5, 5);
         c.gridx = 0;
         c.gridy = 0;
-        panel.add(moveChooser, c);
+        panel.add(this.moveChooser, c);
 
         c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -77,18 +85,18 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
 
     /**
      * Checks if there's an existing Editor created from the specified Move. If
-     * so, displays a pop-up window informing the user. Move is acquired from
+     * so, displays a pop-up updater informing the user. Move is acquired from
      * the MoveChooser. Meant to be used in the <code>addEditorAllowed</code>
      * method that must be implemented by classes extending
      * WindowWithMoveChooser.
      *
      * @param move The move used for checking
-     * @param editorType added to the message in the pop-up window signifying
+     * @param editorType added to the message in the pop-up updater signifying
      * what type of Editor is already open
      * @return true when an Editor for which
      * <code>editor.getMove().equals(move)</code> is true is found, false
      * otherwise
-     * @see bodylog.ui.dataediting.MoveChooser
+     * @see bodylog.ui.dataediting.BodyFileChooser
      * @see bodylog.ui.dataediting.SessionEditorWindow#addEditorAllowed
      * @see bodylog.ui.dataediting.MoveEditorWindow#addEditorAllowed
      */
@@ -98,7 +106,7 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
             Editor editor = (Editor) comp;
             if (editor.getMove().equals(move)) {
                 JOptionPane.showMessageDialog(this,
-                        "There's an open " + editorType + "for that already",
+                        "There's an open " + editorType + " for that already",
                         "Not allowed", JOptionPane.INFORMATION_MESSAGE);
                 return true;
             }
@@ -107,7 +115,7 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
     }
 
     /**
-     * Returns the <code>moveChooser</code> contained in this window. Used when
+     * Returns the <code>MoveChooser</code> contained in this Editor. Used when
      * the move list needs to be updated.
      *
      * @return the MoveChooser of this window
@@ -115,6 +123,10 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
      */
     public MoveChooser getMoveChooser() {
         return moveChooser;
+    }
+    
+    public MoveChooserUpdater getUpdater(){
+        return updater;
     }
 
     /**
@@ -167,7 +179,7 @@ public abstract class WindowWithMoveChooser extends JScrollPane {
     protected abstract boolean addEditorAllowed(Move move);
 
     /**
-     * Actually adds an editor to this window. Used in
+     * Actually adds an editor to this updater. Used in
      * <code>addNewEditor</code>.
      *
      * @param move move used in adding the Editor

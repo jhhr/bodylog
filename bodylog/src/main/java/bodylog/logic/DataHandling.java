@@ -1,8 +1,5 @@
 package bodylog.logic;
 
-import bodylog.files.FromFile;
-import bodylog.ui.tables.EditorTable;
-
 /**
  * Static class for string manipulation. Used for writing Set data to session
  * files and creating Set objects from reading session files and checking names
@@ -14,61 +11,71 @@ public class DataHandling {
     }
 
     /**
-     * Characters not allowed in the names of Moves as they are used as
-     * filenames for the session data folders and move files.
+     * Lists of characters not allowed in certain places.
+     *
+     * Names of Moves are used as filenames for the session data folders and
+     * move files, so some characters would cause errors.
+     *
+     * Certain characters are used in parsing data from files into Set values so
+     * they are not allowed in variables of Moves.
      */
-    public static final char[] BANNED_CHARS_MOVE_NAME
-            = new char[]{'/', ':', '\\', '*', '?', '"', '<', '>', '|'};
+    public static enum Illegal {
+
+        MOVE_NAME(new char[]{'/', '\\', ':', '*', '?', '"', '<', '>', '|'}),
+        VARIABLE(new char[]{'{', '}', ','});
+
+        private final char[] charList;
+
+        Illegal(char[] charList) {
+            this.charList = charList;
+        }
+
+        public char[] getChars() {
+            return charList;
+        }
+    }
 
     /**
-     * Characters not allowed in variables as they are used parsing data from
-     * files into Set values.
+     * Returns a string of the specified set of illegal characters with a space
+     * added between each one for better readability.
+     *
+     * @param charSet Enumerator <code>Illegal</code> containing the character
+     * list
+     * @return String constructed from the char list
      */
-    public static final char[] BANNED_CHARS_VARIABLE = new char[]{'{', '}', ','};
-
-    public static String bannedCharsWithSpaces(enum) {
+    public static String IllegalCharsWithSpaces(Illegal charSet) {
         String chars = "";
-        for (char c : BANNED_CHARS_VARIABLE) {
+        for (char c : charSet.getChars()) {
             chars += c + " ";
         }
         return chars.substring(0, chars.length() - 1);
     }
 
     /**
-     * Checks if the given string contains any of the banned characters for move
-     * names. if so, throws an IllegalArgumentException. If not, removes
-     * extraneous whitespace and returns the modified name. Used in setting the
-     * name for a Move.
+     * Checks if the given string contains any of the banned characters from the
+     * specified character set. If so, throws an IllegalArgumentException. If
+     * not, removes extraneous whitespace and returns the modified name. Used in
+     * setting the name and variables for a Move.
+     *
+     * Use <code>Illegal.MOVE_NAME</code> for move name checking and
+     * <code>Illegal.VARIABLE</code> for variable checking.
      *
      * @param name string to be checked
      * @return name with leading and trailing whitespace removed
      * @throws IllegalArgumentException when the name is found to contain
      * illegal characters
      * @see bodylog.logic.Move
+     * @see bodylog.logic.DataHandling
      */
-    public static String nameIsAllowed(String name) throws IllegalArgumentException {
-        for (char ch : BANNED_CHARS_MOVE_NAME) {
+    public static String nameIsAllowed(String name, Illegal charSet)
+            throws IllegalArgumentException {
+        for (char ch : charSet.getChars()) {
             if (name.contains("" + ch)) {
-                throw new IllegalArgumentException("the characters "
-                        + new String(BANNED_CHARS_MOVE_NAME) + " are not allowed");
+                throw new IllegalArgumentException("The characters "
+                        + IllegalCharsWithSpaces(charSet) + " are not allowed.");
             }
         }
         return name.trim();
-    }
-
-    /**
-     * Checks if the given string contains any of the banned characters for move
-     * names. Throws an IllegalArgumentException if so. Used in Move.
-     *
-     * @param name string to be checked
-     * @see bodylog.logic.Move
-     */
-    public static void variableIsAllowed(String var) {
-        for (char ch : BANNED_CHARS_MOVE_NAME) {
-            if (var.contains("" + ch)) {
-                throw new IllegalArgumentException("the characters " + new String(BANNED_CHARS_VARIABLE) + " are not allowed");
-            }
-        }
     }
 
     /**

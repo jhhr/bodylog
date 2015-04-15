@@ -1,7 +1,6 @@
 package bodylog.logic;
 
 import bodylog.files.Constant;
-import java.time.LocalDate;
 import java.time.temporal.TemporalAccessor;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -19,19 +18,15 @@ public class SessionTest {
     public void SetUp() throws Exception{
         dateStr = "4.5.2010";
         date = Constant.UI_DATE_FORMAT.parse(dateStr);
-        session = new Session(date);
+        session = new Session();
         set1 = new Set();
         set2 = new Set();
     }
 
     @Test
-    public void DateSameAsLocalDateParsedFromDateString() {
-        assertEquals(LocalDate.from(Constant.UI_DATE_FORMAT.parse(dateStr)), session.getDate());
-    }
-    
-    @Test
-    public void DateUIStringMethodReturnsOriginalDateString(){
-        assertEquals(dateStr,session.getUIDateString());
+    public void UIDateStringReturnsExpectedDate() {        
+        session.setDate(date);
+        assertEquals(dateStr, session.getUIDateString());
     }
 
     @Test

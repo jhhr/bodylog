@@ -1,11 +1,8 @@
 package bodylog.files;
 
-import bodylog.logic.Move;
-import bodylog.logic.Session;
-import bodylog.logic.Set;
 import java.io.File;
 
-public class Util {
+public class Delete {
 
 
     /**
@@ -13,7 +10,7 @@ public class Util {
      * folders and the data folder. Deletes all files in the move folder and
      * deletes the move folder.
      */
-    public static void deleteFiles() {
+    public static void filesAndFolders() {
 
         if (Constant.DATA_DIR.exists()) {
             for (File folder : Constant.DATA_DIR.listFiles()) {

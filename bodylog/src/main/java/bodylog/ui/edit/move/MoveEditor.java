@@ -1,11 +1,10 @@
 package bodylog.ui.edit.move;
 
-import bodylog.files.edit.MoveSaver;
-import bodylog.files.edit.Saver;
-import bodylog.ui.edit.abstracts.Editor;
+import bodylog.files.Saver;
+import bodylog.ui.edit.Editor;
 import bodylog.logic.Move;
 import bodylog.logic.DataHandling;
-import bodylog.ui.edit.MoveChooserUpdater;
+import bodylog.ui.MoveListContainerUpdater;
 import bodylog.ui.tables.edit.MoveEditorTable;
 import bodylog.ui.tables.abstracts.EditorTable;
 import java.io.IOException;
@@ -26,8 +25,7 @@ import javax.swing.JTable;
  */
 public class MoveEditor extends Editor {
 
-    private MoveSaver saver;
-    private MoveChooserUpdater updater;
+    private final MoveListContainerUpdater updater;
 
     /**
      * Creates a new <code>MoveEditor</code> for the given <code>Move</code>
@@ -40,13 +38,12 @@ public class MoveEditor extends Editor {
      * @param move Move to be edited
      * @param saver
      * @param window Container of this <code>MoveEditor</code>
-     * @param updater MoveChooserUpdater used to update list contents in all
+     * @param updater MoveListContainerUpdater used to update list contents in all
  existing MoveChoosers
      */
     public MoveEditor(Move move, Saver saver, MoveEditorWindow window,
-            MoveChooserUpdater updater) {
+            MoveListContainerUpdater updater) {
         super(move, saver, window);
-        this.saver = new MoveSaver(move);
         this.updater = updater;
 
         setEditorBorder("");
@@ -117,7 +114,6 @@ public class MoveEditor extends Editor {
     protected void saveToFile() {
         try {
             saver.saveToFile();
-            updater.updateChoosers();
         } catch (FileAlreadyExistsException fae) {
 
         } catch (IOException io) {

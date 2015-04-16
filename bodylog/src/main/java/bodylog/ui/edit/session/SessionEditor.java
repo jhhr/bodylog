@@ -1,11 +1,11 @@
 package bodylog.ui.edit.session;
 
-import bodylog.ui.edit.abstracts.Editor;
+import bodylog.ui.edit.Editor;
 import bodylog.ui.tables.abstracts.EditorTable;
 import bodylog.logic.Set;
 import bodylog.logic.Session;
 import bodylog.files.Constant;
-import bodylog.files.edit.Saver;
+import bodylog.files.Saver;
 import bodylog.logic.Move;
 import bodylog.ui.tables.edit.SessionEditorTable;
 import java.time.format.DateTimeParseException;

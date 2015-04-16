@@ -3,6 +3,7 @@ package bodylog.logic;
 import bodylog.files.Constant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * The first component in the logical hierarchy. Container for session data and
@@ -107,7 +108,7 @@ public class Move {
      * @throws IllegalArgumentException when name is not allowed
      * @see bodylog.logic.DataHandling#variableIsAllowed
      */
-    public void addVariable(String var) {
+    public void addVariable(String var) throws IllegalArgumentException{
         String newVar = DataHandling.nameIsAllowed(var, DataHandling.Illegal.VARIABLE);
         variables = Arrays.copyOf(variables, variables.length + 1);
         variables[variables.length - 1] = newVar;
@@ -146,6 +147,10 @@ public class Move {
         }
         sessionList.add(session);
     }
+    
+    public void clearSessions(){
+        sessionList.clear();
+    }
 
     public String getName() {
         return name;
@@ -173,5 +178,12 @@ public class Move {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 67 * hash + Objects.hashCode(this.name);
+        return hash;
     }
 }

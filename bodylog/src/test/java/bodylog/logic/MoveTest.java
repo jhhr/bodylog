@@ -1,6 +1,5 @@
 package bodylog.logic;
 
-import bodylog.logic.Move;
 import java.time.LocalDate;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -74,11 +73,25 @@ public class MoveTest {
     }
 
     @Test
-    public void AddedVariableFoundAtExpectedIndex() {
+    public void VariableAddedNormallyFoundAtExpectedIndex() {
         bench.addVariable(varWeight);
         assertEquals(varWeight, bench.getVariable(0));
         bench.addVariable(varReps);
         assertEquals(varReps, bench.getVariable(1));
+    }
+    
+    
+    @Test
+    public void VariableAddedBeyondCurrectLengthFoundAtExpectedIndex(){
+        bench.addVariable(varWeight,5);
+        assertEquals(varWeight,bench.getVariable(5));
+    }
+    
+    @Test
+    public void VariableAddedToSpecificIndexReplacesPreviousValue(){
+        bench.addVariable(varWeight);
+        bench.addVariable(varReps,0);
+        assertEquals(varReps, bench.getVariable(0));
     }
 
     @Test

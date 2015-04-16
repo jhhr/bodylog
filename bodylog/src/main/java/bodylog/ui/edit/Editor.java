@@ -1,6 +1,6 @@
-package bodylog.ui.edit.abstracts;
+package bodylog.ui.edit;
 
-import bodylog.files.edit.Saver;
+import bodylog.files.Saver;
 import bodylog.logic.Move;
 import bodylog.ui.tables.abstracts.EditorTable;
 import java.awt.Dimension;
@@ -27,7 +27,7 @@ import javax.swing.JTextField;
  *
  * @see bodylog.ui.dataediting.SessionEditor
  * @see bodylog.ui.dataediting.MoveEditor
- * @see bodylog.ui.edit.abstracts.WindowWithMoveChooser
+ * @see bodylog.ui.edit.WindowWithMoveChooser
  * @see bodylog.ui.dataediting.MoveChooser
  */
 public abstract class Editor extends JPanel implements ActionListener {
@@ -146,7 +146,7 @@ public abstract class Editor extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        window.removeEditorComponent(this);
+        window.removeEditor(this);
     }
 
     /**

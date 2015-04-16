@@ -5,10 +5,12 @@
  */
 package bodylog.files.edit;
 
+import bodylog.files.Saver;
 import bodylog.files.Constant;
 import bodylog.logic.Move;
 import bodylog.logic.Session;
 import bodylog.logic.Set;
+import bodylog.ui.MoveListContainerUpdater;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,9 +19,7 @@ import java.io.IOException;
  * Class for encapsulating the saving of a <code>Session</code> to file and
  * editing files relating to a <code>Session</code>.
  */
-public class SessionSaver implements Saver {
-
-    private final Move move;
+public class SessionSaver extends Saver {
 
     /**
      * Creates a new SessionSaver for the specified Move and adds a new Session
@@ -27,8 +27,8 @@ public class SessionSaver implements Saver {
      *
      * @param move Move whose session will be saved
      */
-    public SessionSaver(Move move) {
-        this.move = move;
+    public SessionSaver(MoveListContainerUpdater updater, Move move) {
+        super(updater, move);
         this.move.addSession(new Session());
     }
 
@@ -80,6 +80,8 @@ public class SessionSaver implements Saver {
     @Override
     public void saveToFile() throws IOException {
         writeToFile();
+        updater.updateDisplayer(move);
+        move.clearSessions();
     }
 
     private void writeToFile() throws IOException {

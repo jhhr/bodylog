@@ -106,17 +106,18 @@ public class DataHandling {
     }
 
     /**
-     * Converts given string into an object suitable to be given to a Set.
-     * Inverse of setValueToString(). Will produce exceptions if given a string
-     * won't parse as a double or isn't "null","false" or "true".
+     * Converts the given string into an object suitable to be given to a Set.
+     * Inverse of setValueToString(). Will produce exceptions if the given
+     * string won't parse as a double or isn't "null","false" or "true".
      *
      * @param str String to be manipulated
      * @return null if given "null false/true if given "false"/"true" double if
      * successfully parsed as double
+     * @throws NumberFormatException when parsing fails
      * @see bodylog.files.FromFile#setForSession
      * @see bodylog.ui.tables.EditorTable#setValueAt
      */
-    public static Object stringToSetValue(String str) {
+    public static Object stringToSetValue(String str) throws NumberFormatException {
         switch (str) {
             case "null":
                 return null;
@@ -127,6 +128,18 @@ public class DataHandling {
             default:
                 return Double.parseDouble(str);
         }
+    }
+
+    /**
+     * Converts the given line from a session file to an array of strings that
+     * can parsed into values for a Set.
+     *
+     * @param line line to be parsed
+     * @return String array
+     */
+    public static String[] lineToStringArray(String line) {
+        String subLine = line.substring(line.indexOf("{") + 1, line.indexOf("}"));
+        return subLine.split(",");
     }
 
 }

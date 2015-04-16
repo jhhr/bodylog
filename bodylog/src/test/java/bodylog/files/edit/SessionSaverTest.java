@@ -1,11 +1,12 @@
 package bodylog.files.edit;
 
 import bodylog.files.Constant;
-import bodylog.files.Util;
+import bodylog.files.Delete;
 import bodylog.files.edit.SessionSaver;
 import bodylog.logic.Set;
 import bodylog.logic.Move;
 import bodylog.logic.Session;
+import bodylog.ui.MoveListContainerUpdater;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAccessor;
@@ -23,12 +24,12 @@ public class SessionSaverTest {
     @BeforeClass
     public static void oneTimeSetUp() {
         // Delete files first in case some files are leftover from manual testing.
-        Util.deleteFiles();
+        Delete.filesAndFolders();
     }
 
     @After
     public void tearDown() {
-        Util.deleteFiles();
+        Delete.filesAndFolders();
     }
 
     Session DLsession;
@@ -52,6 +53,7 @@ public class SessionSaverTest {
     File benchMoveFile;
     SessionSaver benchSaver;
     SessionSaver dlSaver;
+    MoveListContainerUpdater updater;
 
     @Before
     public void setUp() {
@@ -65,8 +67,9 @@ public class SessionSaverTest {
         DLSessionFile = new File(DLFolder, dateStr + Constant.SESSION_END);
         benchSessionFile = new File(benchFolder, dateStr + Constant.SESSION_END);
         benchMoveFile = new File(Constant.MOVES_DIR, benchName + Constant.MOVE_END);
-        benchSaver = new SessionSaver(bench);
-        dlSaver = new SessionSaver(deadlift);
+        updater = new MoveListContainerUpdater();
+        benchSaver = new SessionSaver(updater,bench);
+        dlSaver = new SessionSaver(updater,deadlift);
     }
 
     private void addDLSets() {
@@ -96,6 +99,11 @@ public class SessionSaverTest {
         benchSession.addSet(set1);
         benchSession.addSet(set2);
         bench.addSession(benchSession);
+    }
+    
+    @Test
+    public void GetsCorrectMove(){
+        assertEquals(deadlift, dlSaver.getMove());
     }
 
     @Test

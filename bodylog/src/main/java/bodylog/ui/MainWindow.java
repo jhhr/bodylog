@@ -1,10 +1,9 @@
 package bodylog.ui;
 
-import bodylog.ui.edit.MoveChooserUpdater;
 import bodylog.ui.help.HelpWindow;
-import bodylog.files.FromFile;
+import bodylog.files.read.MoveReader;
 import bodylog.ui.edit.move.MoveEditorWindow;
-import bodylog.ui.view.StatWindow;
+import bodylog.ui.view.StatisticsViewerWindow;
 import bodylog.ui.edit.session.SessionEditorWindow;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -25,18 +24,18 @@ import javax.swing.JTabbedPane;
  * closeable. Selecting to open a tab that is already open will not open another
  * one but make that tab be selected as active. Opens instances of
  * <code>MoveEditorWindow</code>, <code>SessionEditorWindow</code>, and
- * <code>StatWindow</code> and <code>HelpWindow</code>.
+ * <code>StatisticsViewerWindow</code> and <code>HelpWindow</code>.
  *
  * @see bodylog.ui.edit.move.MoveEditorWindow
  * @see bodylog.ui.edit.session.SessionEditorWindow
- * @see bodylog.ui.view.StatWindow
+ * @see bodylog.ui.view.StatisticsViewerWindow
  * @see bodylog.ui.HelpWindow
  */
 public class MainWindow extends JFrame implements ActionListener {
 
     private final JTabbedPane tabs;
     private final JMenuBar menuBar;
-    private MoveChooserUpdater updater;
+    private MoveListContainerUpdater updater;
     private static final String SESSION_EDITOR = "Session Editor";
     private static final String MOVE_EDITOR = "Move Editor";
     private static final String STATISTICS = "Statistics";
@@ -56,7 +55,7 @@ public class MainWindow extends JFrame implements ActionListener {
         super("Bodylog");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        this.updater = new MoveChooserUpdater();
+        this.updater = new MoveListContainerUpdater();
 
         menuBar = new JMenuBar();
         menuBar.add(mainMenu());
@@ -163,7 +162,7 @@ public class MainWindow extends JFrame implements ActionListener {
                     comp = new SessionEditorWindow(updater);
                     break;
                 case STATISTICS:
-                    comp = new StatWindow();
+                    comp = new StatisticsViewerWindow(updater);
                     break;
                 case INFO:
                     comp = new HelpWindow();

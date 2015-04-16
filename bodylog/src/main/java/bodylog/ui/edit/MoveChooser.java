@@ -1,15 +1,14 @@
 package bodylog.ui.edit;
 
 import bodylog.logic.Move;
-import bodylog.ui.edit.abstracts.WindowWithMoveChooser;
+import bodylog.ui.MoveListContainer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import javax.swing.BoxLayout;
-import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 /**
  * Container for a JComboBox containing a list of Moves acquired from files.
@@ -18,24 +17,24 @@ import javax.swing.JPanel;
  * contained in a <code>DefaultComboBoxModel</code> which uses the obsolete
  * collection <code>Vector</code> as its data model.
  */
-public class MoveChooser extends JPanel implements ActionListener {
+public class MoveChooser extends MoveListContainer
+        implements ActionListener {
 
-    private final WindowWithMoveChooser window;
     private final JComboBox moveList;
 
     /**
      * Creates a new MoveChooser for the specified WindowWithMoveChooser.
      *
      * @param window the WindowWithMoveChooser that contains this
-     * @param model the data model initially given to the move list
+     * @param moves the list of Moves initially used to populate the JComboBox
      * @throws FileNotFoundException if a file is not found
      * @see bodylog.files.FromFile#allMovesWithoutSessions
      */
-    public MoveChooser(WindowWithMoveChooser window, ComboBoxModel model) throws FileNotFoundException {
-        this.window = window;
-        this.moveList = new JComboBox();
+    public MoveChooser(WindowWithMoveChooser window, Move[] moves)
+            throws FileNotFoundException {
+        super(window);
+        this.moveList = new JComboBox(moves);
         this.moveList.addActionListener(this);
-        this.moveList.setModel(model);
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
@@ -46,15 +45,30 @@ public class MoveChooser extends JPanel implements ActionListener {
     /**
      * Loads or reloads the list. Used when changes are made to move files.
      *
-     * @param model ComboBoxModel to be set as the data model of the JComboBox
-     * contained in the MoveChooser
+     * @param moves list of Moves to be used in creating a new
+     * DefaultComboBoxModel for MoveChooser
      */
-    public void updateMoveChooser(ComboBoxModel model) {
-        moveList.setModel(model);
+    @Override
+    public void reloadMoveList(Move[] moves) {
+        moveList.setModel(new DefaultComboBoxModel(moves));
+    }
+
+    @Override
+    public void addMove(Move move) {
+        moveList.addItem(move);
+    }
+
+    @Override
+    public void removeMove(Move move) {
+        //removing an item fires an event as if an item was selected
+        //removing ActionListner avoids this
+        moveList.removeActionListener(this);
+        moveList.removeItem(move);
+        moveList.addActionListener(this);
     }
 
     /**
-     * Calls <code>addNewEditor</code> of the parent window
+     * Calls <code>moveSelectedAction</code> of the parent window
      *
      * @param e User clicks on a move in the ComboBox
      * @see bodylog.ui.dataediting.WindowWithMoveChooser#addNewEditor
@@ -64,7 +78,7 @@ public class MoveChooser extends JPanel implements ActionListener {
         JComboBox cb = (JComboBox) e.getSource();
         Move move = (Move) cb.getSelectedItem();
         try {
-            window.addNewEditor(move);
+            window.moveSelectedAction(move);
         } catch (Exception ex) {
             throw ex;
         }

@@ -21,3 +21,4 @@
 - la 11.4 klo 10-18 javadocia korjailtu, käyttöliittymää viimeistä osaa tehty, kaaviota korjattu
 - ti 14.4 klo 14-00:30 tiedostokäsittelyä enkapsuloitu paremmin pois ui-luokista, logiikkaa muokattu ui:n kehittyessä
 - ke 15.4 klo 13-23 ui:n liikelistan autopäivitys valmis, tiedostokäsittelyä järjestelty taas, luokkakaavion piirtoa
+- to 16.4 klo 13-1:30 tiedostokäsittely enkapsuloitu uusiksi, ui:n liikelistojen autopäivitys laajenttu

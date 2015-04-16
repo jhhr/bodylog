@@ -48,10 +48,12 @@
                     <targetClasses>
                         <param>bodylog.logic.*</param>            
                         <param>bodylog.files.*</param>
+                        <param>bodylog.ui.*</param>
                     </targetClasses>
                     <targetTests>
                         <param>bodylog.logic.*</param>      
                         <param>bodylog.files.*</param>
+                        <param>bodylog.ui.*</param>
                     </targetTests>
                 </configuration>
             </plugin>

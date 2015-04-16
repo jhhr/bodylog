@@ -16,12 +16,12 @@ public class ConstantTest {
     @BeforeClass
     public static void oneTimeSetUp() {
         // Delete files first in case some files are leftover from manual testing.
-        Util.deleteFiles();
+        Delete.filesAndFolders();
     }
 
     @After
     public void tearDown() {
-        Util.deleteFiles();
+        Delete.filesAndFolders();
     }
 
     @Test
@@ -35,11 +35,25 @@ public class ConstantTest {
     }
 
     @Test
-    public void Move_MoveFolderCreationWhenNotAlreadyExisting() throws Exception {
-        if (!Constant.MOVES_DIR.exists()) {
-            Constant.createMovesFolder();
-        }
-        assertTrue(Constant.MOVES_DIR.exists());
+    public void MovesFolderCreationReturnsTrueWhenNotAlreadyExisting() throws Exception {
+        assertTrue(Constant.createMovesFolder());
+    }
+    
+    @Test
+    public void MovesFolderCreationReturnsTrueWhenAlreadyExisting() throws Exception {
+        Constant.MOVES_DIR.mkdir();
+        assertTrue(Constant.createMovesFolder());
+    }
+    
+    @Test
+    public void DataFolderCreationReturnsTrueWhenNotAlreadyExisting() throws Exception {
+        assertTrue(Constant.createMovesFolder());
+    }
+    
+    @Test
+    public void DataFolderCreationReturnsTrueWhenAlreadyExisting() throws Exception {
+        Constant.DATA_DIR.mkdir();
+        assertTrue(Constant.createMovesFolder());
     }
 
 }

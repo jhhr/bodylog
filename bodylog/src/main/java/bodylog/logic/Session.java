@@ -54,14 +54,6 @@ public class Session {
     }
 
     /**
-     *
-     * @return the date of this Session
-     */
-    public TemporalAccessor getDate() {
-        return date;
-    }
-
-    /**
      * Converts the date of this Session into a string format used in files.
      *
      * @return a date as a string

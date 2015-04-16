@@ -1,9 +1,9 @@
 package bodylog.ui.edit.session;
 
 import bodylog.files.edit.SessionSaver;
-import bodylog.ui.edit.abstracts.WindowWithMoveChooser;
+import bodylog.ui.edit.WindowWithMoveChooser;
 import bodylog.logic.Move;
-import bodylog.ui.edit.MoveChooserUpdater;
+import bodylog.ui.MoveListContainerUpdater;
 import javax.swing.JOptionPane;
 
 /**
@@ -16,13 +16,13 @@ import javax.swing.JOptionPane;
  */
 public class SessionEditorWindow extends WindowWithMoveChooser {
 
-    public SessionEditorWindow(MoveChooserUpdater updater) throws Exception {
+    public SessionEditorWindow(MoveListContainerUpdater updater) throws Exception {
         super(updater);
     }
 
     @Override
     protected void addEditor(Move move) {
-        editorPanel.add(new SessionEditor(move, new SessionSaver(move), this));
+        editorPanel.add(new SessionEditor(move, new SessionSaver(updater,move), this));
         validate();
         repaint();
     }
@@ -30,7 +30,7 @@ public class SessionEditorWindow extends WindowWithMoveChooser {
     /**
      * Checks if the given move has no variables or if there's an existing
      * SessionEditor for the move. If so for either case, adding an editor for
-     * the Move is not allowed. Used in <code>addNewEditor</code>.
+     * the Move is not allowed. Used in <code>moveSelectedAction</code>.
      *
      * @param move Move used in checking if adding an Editor is allowed
      * @return true if allowed, false otherwise

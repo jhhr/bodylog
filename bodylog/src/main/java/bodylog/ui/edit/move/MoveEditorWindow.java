@@ -1,9 +1,9 @@
 package bodylog.ui.edit.move;
 
 import bodylog.files.edit.MoveSaver;
-import bodylog.ui.edit.abstracts.WindowWithMoveChooser;
+import bodylog.ui.edit.WindowWithMoveChooser;
 import bodylog.logic.Move;
-import bodylog.ui.edit.MoveChooserUpdater;
+import bodylog.ui.MoveListContainerUpdater;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -18,8 +18,6 @@ import javax.swing.JButton;
  * @see bodylog.ui.edit.move.MoveEditor
  */
 public class MoveEditorWindow extends WindowWithMoveChooser {
-    
-    private final MoveChooserUpdater updater;
 
     /**
      * Creates a new updater with an additional button in the top component for
@@ -29,11 +27,10 @@ public class MoveEditorWindow extends WindowWithMoveChooser {
      * {@link bodylog.ui.dataediting.WindowWithMoveChooser#WindowWithMoveChooser() WindowWithMoveChooser}
      * @see bodylog.ui.dataediting.WindowWithMoveChooser#WindowWithMoveChooser
      */
-    public MoveEditorWindow(MoveChooserUpdater updater) throws Exception {
+    public MoveEditorWindow(MoveListContainerUpdater updater) throws Exception {
         super(updater);
-        this.updater = updater;
 
-        moveChooser.add(newMoveButton());
+        moveListContainer.add(newMoveButton());
     }
 
     private JButton newMoveButton() {
@@ -42,7 +39,7 @@ public class MoveEditorWindow extends WindowWithMoveChooser {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                addNewEditor(new Move());
+                moveSelectedAction(new Move());
             }
         });
         return newMoveButton;
@@ -50,7 +47,7 @@ public class MoveEditorWindow extends WindowWithMoveChooser {
 
     @Override
     protected void addEditor(Move move) {
-        editorPanel.add(new MoveEditor(move, new MoveSaver(move),
+        editorPanel.add(new MoveEditor(move, new MoveSaver(updater, move),
                 this, updater));
         validate();
         repaint();

@@ -4,8 +4,7 @@ import bodylog.logic.DataHandling;
 import bodylog.logic.Move;
 import bodylog.logic.Session;
 import bodylog.logic.Set;
-import bodylog.ui.tables.view.StatTable;
-import java.io.Serializable;
+import bodylog.ui.tables.view.ViewTable;
 
 /**
  * Implementation of a TableModel with row and column adding functionality like
@@ -13,7 +12,7 @@ import java.io.Serializable;
  * EditorTable.
  *
  */
-public class CustomEditorTable extends StatTable {
+public class CustomEditorTable extends ViewTable {
 
     public CustomEditorTable(Session session, Move move) {
         super(session, move);

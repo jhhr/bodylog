@@ -20,9 +20,10 @@ import javax.swing.JButton;
 public class MoveEditorWindow extends WindowWithMoveChooser {
 
     /**
-     * Creates a new updater with an additional button in the top component for
+     * Creates a new window with an additional button in the top component for
      * adding new Moves.
      *
+     * @param updater MoveListContainerUpdater given by MainWindow
      * @throws Exception see constructor for
      * {@link bodylog.ui.dataediting.WindowWithMoveChooser#WindowWithMoveChooser() WindowWithMoveChooser}
      * @see bodylog.ui.dataediting.WindowWithMoveChooser#WindowWithMoveChooser
@@ -47,7 +48,7 @@ public class MoveEditorWindow extends WindowWithMoveChooser {
 
     @Override
     protected void addEditor(Move move) {
-        editorPanel.add(new MoveEditor(move, new MoveSaver(updater, move),
+        editorPanel.add(new MoveEditor(new MoveSaver(updater, move),
                 this, updater));
         validate();
         repaint();

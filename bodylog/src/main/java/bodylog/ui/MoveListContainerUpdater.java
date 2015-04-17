@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 /**
  * Class for updating the contents of the list of Moves in MoveChoosers when new
- * move files have been added or old ones edited.
+ fetchMove files have been added or old ones edited.
  *
  * Contains a list of MoveListContainers. When a WindowWithMoveChooser is
  * created, it adds its MoveChooser to that list.
@@ -61,24 +61,24 @@ public class MoveListContainerUpdater {
     }
 
     /**
-     * Creates a new data model from move files to be used by MoveChoosers.
+     * Creates a new data model from fetchMove files to be used by MoveChoosers.
      *
      * @return a new DefaultComboBoxModel containing a list of Moves
      * @throws FileNotFoundException if a file cannot be found during reading
-     * move files
+ fetchMove files
      */
     public Move[] newMoveList() throws FileNotFoundException {
-        return reader.allMoves();
+        return reader.fetchAllMoves();
     }
 
     /**
      * Updates the MoveListContainers with a new list of moves.
      *
-     * @throws FileNotFoundException when a move file is not found while
-     * creating the move list
+     * @throws FileNotFoundException when a fetchMove file is not found while
+ creating the fetchMove list
      */
     public void updateContainers() throws FileNotFoundException {
-        Move[] moves = reader.allMoves();
+        Move[] moves = reader.fetchAllMoves();
         for (MoveListContainer container : moveListContainers) {
             container.reloadMoveList(moves);
         }

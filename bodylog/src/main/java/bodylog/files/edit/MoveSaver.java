@@ -28,9 +28,9 @@ public class MoveSaver extends Saver {
     private static final int FOLDER_RENAME_FAILED = 2;
     private static final int BOTH_RENAMES_FAILED = 3;
 
-    public static final int NEW_MOVE = 4;
-    public static final int MOVE_UPDATED = 5;
-    public static final int MOVE_RENAMED = 6;
+    private static final int NEW_MOVE = 4;
+    private static final int MOVE_UPDATED = 5;
+    private static final int MOVE_RENAMED = 6;
 
     /**
      * Creates a new MoveSaver for the specified Move.

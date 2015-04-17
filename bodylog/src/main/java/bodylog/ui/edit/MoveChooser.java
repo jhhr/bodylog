@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
@@ -33,7 +32,7 @@ public class MoveChooser extends MoveListContainer
     public MoveChooser(WindowWithMoveChooser window, Move[] moves)
             throws FileNotFoundException {
         super(window);
-        this.moveList = new JComboBox(moves);
+        this.moveList = new JComboBox(new SortedComboBoxModel(moves));
         this.moveList.addActionListener(this);
 
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -50,12 +49,16 @@ public class MoveChooser extends MoveListContainer
      */
     @Override
     public void reloadMoveList(Move[] moves) {
-        moveList.setModel(new DefaultComboBoxModel(moves));
+        moveList.setModel(new SortedComboBoxModel(moves));
     }
 
     @Override
     public void addMove(Move move) {
+        //adding an item fires an event as if an item was selected
+        //adding ActionListner avoids this
+        moveList.removeActionListener(this);
         moveList.addItem(move);
+        moveList.addActionListener(this);
     }
 
     @Override

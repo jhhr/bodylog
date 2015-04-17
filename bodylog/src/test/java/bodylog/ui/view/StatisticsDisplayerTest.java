@@ -18,6 +18,7 @@ import java.awt.Component;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.TitledBorder;
 import org.junit.After;
 import org.junit.Before;
@@ -84,7 +85,7 @@ public class StatisticsDisplayerTest {
     @Test
     public void TablesContentEqualsVariableAndSetContent() throws Exception {
         util.useSkipLegsFiles();        
-        skipLegs = sessionReader.addSessionsToMove(moveReader.move(util.skipMoveFile));
+        skipLegs = sessionReader.fetchSessionsForMove(moveReader.fetchMove(util.skipMoveFile));
         
         Move newMove = new Move(util.skipName);
         for (String var : util.skipVarData) {
@@ -95,8 +96,9 @@ public class StatisticsDisplayerTest {
         String[] dates = new String[]{util.dateStrONE,util.dateStrTWO};
         for (int k = 0; k < display.getComponentCount(); k++) {
             JScrollPane pane = (JScrollPane) display.getComponent(k);
-            TitledBorder border = (TitledBorder) pane.getBorder();
-            assertEquals(dates[k], border.getTitle());
+            CompoundBorder cBorder = (CompoundBorder) pane.getBorder();
+            TitledBorder tBorder = (TitledBorder) cBorder.getOutsideBorder();
+            assertEquals(dates[k], Constant.uiDateToFileDate(tBorder.getTitle()));
             JTable table = (JTable) pane.getViewport().getComponent(0);
             for (int i = 0; i < table.getColumnCount(); i++) {
                 assertEquals(skipLegs.getVariable(i),table.getColumnName(i));

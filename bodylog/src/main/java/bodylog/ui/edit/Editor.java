@@ -35,21 +35,18 @@ public abstract class Editor extends JPanel implements ActionListener {
     protected final EditorTable tableModel;
     protected final JTable table;
     protected final JScrollPane tablePane;
-    protected final Move move;
     protected final Saver saver;
     protected final WindowWithMoveChooser window;
     protected final JPanel buttonsUpper;
     protected final JPanel buttonsLeft;
 
     /**
-     * Creates a new Editor for the given move and window.
+     * Creates a new Editor for the given Saver and window.
      *
-     * @param move Move to be used in this Editor
      * @param saver
      * @param window Window that contains this Editor
      */
-    public Editor(Move move, Saver saver, WindowWithMoveChooser window) {
-        this.move = move;
+    public Editor(Saver saver, WindowWithMoveChooser window) {
         this.window = window;
         this.saver = saver;
         this.tableModel = setTableModel();
@@ -157,7 +154,8 @@ public abstract class Editor extends JPanel implements ActionListener {
      */
     protected void setEditorBorder(String addition) {
         setBorder(BorderFactory
-                .createCompoundBorder(BorderFactory.createTitledBorder(move.getName() + addition),
+                .createCompoundBorder(BorderFactory.createTitledBorder(
+                                getMove().getName() + addition),
                         BorderFactory.createEmptyBorder(5, 5, 5, 5))
         );
     }
@@ -343,7 +341,7 @@ public abstract class Editor extends JPanel implements ActionListener {
      */
     protected boolean userConfirmsSaveToFile(String addition) {
         if (fileExists()) {
-            String message = "Movement: " + move.getName() + addition + "\n"
+            String message = "Movement: " + getMove().getName() + addition + "\n"
                     + "A file for this already exists.\n"
                     + "Do you want to overwrite it?\n";
             Object[] options = {"Yes", "No"};
@@ -359,7 +357,7 @@ public abstract class Editor extends JPanel implements ActionListener {
     }
 
     public Move getMove() {
-        return move;
+        return saver.getMove();
     }
 
 }

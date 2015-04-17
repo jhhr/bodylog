@@ -22,7 +22,7 @@ public class SessionEditorWindow extends WindowWithMoveChooser {
 
     @Override
     protected void addEditor(Move move) {
-        editorPanel.add(new SessionEditor(move, new SessionSaver(updater,move), this));
+        editorPanel.add(new SessionEditor(new SessionSaver(updater,move), this));
         validate();
         repaint();
     }

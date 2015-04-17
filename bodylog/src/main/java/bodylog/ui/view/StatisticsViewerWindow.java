@@ -36,7 +36,6 @@ import bodylog.ui.MoveListContainerUpdater;
 import bodylog.ui.WindowWithMoveListContainer;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;

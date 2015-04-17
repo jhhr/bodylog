@@ -53,7 +53,8 @@ public class SessionSaver extends Saver {
     @Override
     public boolean fileExists() {
         String dateStr = move.getSession(0).getFileDateString();
-        return new File(Constant.DATA_DIR, move + "/" + dateStr + Constant.SESSION_END).exists();
+        return new File(Constant.DATA_DIR, 
+                move + "/" + dateStr + Constant.SESSION_END).exists();
     }
 
     /**
@@ -85,11 +86,12 @@ public class SessionSaver extends Saver {
     }
 
     private void writeToFile() throws IOException {
-        for (Session sessio : move.getSessions()) {
-            String dateStr = sessio.getFileDateString();
-            File sessioTiedosto = new File(Constant.DATA_DIR, move + "/" + dateStr + Constant.SESSION_END);
-            FileWriter writer = new FileWriter(sessioTiedosto);
-            for (Set set : sessio.getSets()) {
+        for (Session session : move.getSessions()) {
+            String dateStr = session.getFileDateString();
+            File sessionFile = new File(Constant.DATA_DIR, 
+                    move + "/" + dateStr + Constant.SESSION_END);
+            FileWriter writer = new FileWriter(sessionFile);
+            for (Set set : session.getSets()) {
                 writer.write(set.toString() + "\n");
             }
             writer.close();

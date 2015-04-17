@@ -16,25 +16,25 @@ import java.util.Scanner;
 public class SessionReader {
 
     /**
-     * Creates a new Move with Sessions added. Reads a move file and all session
-     * files in the movement's folder. First creates a Move without Sessions,
-     * then adds all the Sessions. Identifies session files in the movement's
-     * folder through the file ending using a SessionFileFilter.
+     * Creates a new Move with Sessions added. Reads a move file and all fetchSession
+ files in the movement's folder. First creates a Move without Sessions,
+ then adds all the Sessions. Identifies fetchSession files in the movement's
+ folder through the file ending using a SessionFileFilter.
      *
      * @param move Move to which sessions will be added
-     * @return A Move with Sessions added, populated with Sets when the session
-     * file contained set data.
-     * @throws FileNotFoundException when a session file cannot be found
+     * @return A Move with Sessions added, populated with Sets when the fetchSession
+ file contained set data.
+     * @throws FileNotFoundException when a fetchSession file cannot be found
      * @see bodylog.files.SessionFileFilter
      * @see bodylog.logic.Move
      * @see bodylog.logic.Session
      * @see bodylog.logic.Set
      */
-    public Move addSessionsToMove(Move move) throws FileNotFoundException {
+    public Move fetchSessionsForMove(Move move) throws FileNotFoundException {
         File moveDataFolder = new File(Constant.DATA_DIR, move.getName());
         moveDataFolder.mkdir();
         for (File sessionFile : moveDataFolder.listFiles(new SessionFileFilter())) {
-            move.addSession(session(sessionFile));
+            move.addSession(fetchSession(sessionFile));
         }
         return move;
     }
@@ -54,11 +54,11 @@ public class SessionReader {
      * @see bodylog.logic.Set
      * @see bodylog.files.Constant#FILE_DATE_FORMAT
      */
-    public Session session(File sessionFile) throws FileNotFoundException {
+    public Session fetchSession(File sessionFile) throws FileNotFoundException {
         Scanner scanner = new Scanner(sessionFile);
-        Session session = new Session(dateForSession(sessionFile));
+        Session session = new Session(fetchDateForSession(sessionFile));
         while (scanner.hasNextLine()) {
-            session.addSet(setForSession(scanner));
+            session.addSet(fetchSetForSession(scanner));
         }
         scanner.close();
         return session;
@@ -66,23 +66,24 @@ public class SessionReader {
 
     /**
      * Creates a time object for a Session. Acquired from the filename of a
-     * session file. Uses a DateTimeFormatter to parse the string into a
-     * TemporalAccessor.
+ fetchSession file. Uses a DateTimeFormatter to parse the string into a
+ TemporalAccessor.
      *
      * @param sessionFile file to be read
      * @return a TemporalAccessor used in the constructor of a Session
      * @see bodylog.logic.Session
      * @see bodylog.files.Constant#FILE_DATE_FORMAT
      */
-    private TemporalAccessor dateForSession(File sessionFile) {
+    private TemporalAccessor fetchDateForSession(File sessionFile) {
         String dateStr = sessionFile.getName();
-        dateStr = dateStr.substring(0, dateStr.length() - 4);
+        dateStr = dateStr.substring(0, 
+                dateStr.length() - Constant.SESSION_END.length());
         return Constant.FILE_DATE_FORMAT.parse(dateStr);
     }
 
     /**
-     * Creates a Set from a line in a session file given in a Scanner. Private
-     * method used by <code>session</code>. Uses
+     * Creates a Set from a line in a fetchSession file given in a Scanner. Private
+     * method used by <code>fetchSession</code>. Uses
      * <code>DataHandling.stringToSetValue</code> to parse the strings into
      * appropriate values for the Set.
      *
@@ -91,7 +92,7 @@ public class SessionReader {
      * @see bodylog.logic.DataHandling#stringToSetValue(String)
      * @see bodylog.logic.Set
      */
-    private Set setForSession(Scanner scanner) {
+    private Set fetchSetForSession(Scanner scanner) {
         Set set = new Set();
         String[] stringValues = DataHandling.lineToStringArray(scanner.nextLine());
         for (String valueStr : stringValues) {

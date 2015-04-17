@@ -3,7 +3,6 @@ package bodylog.files.edit;
 import bodylog.files.Constant;
 import bodylog.files.Delete;
 import bodylog.files.Saver.FileRenameException;
-import bodylog.files.edit.MoveSaver;
 import bodylog.logic.Move;
 import bodylog.ui.MoveListContainerUpdater;
 import java.io.File;

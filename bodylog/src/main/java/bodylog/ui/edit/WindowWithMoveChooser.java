@@ -1,8 +1,6 @@
 package bodylog.ui.edit;
 
-import bodylog.ui.edit.MoveChooser;
 import bodylog.logic.Move;
-import bodylog.ui.MoveListContainer;
 import bodylog.ui.MoveListContainerUpdater;
 import bodylog.ui.WindowWithMoveListContainer;
 import java.awt.Component;
@@ -14,7 +12,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 
 /**
@@ -34,11 +31,11 @@ public abstract class WindowWithMoveChooser extends WindowWithMoveListContainer 
     protected final JLabel noEditorsOpen;
 
     /**
-     * Creates a new updater with the MoveChooser at the top and a JLabel titled
+     * Creates a new window with the MoveChooser at the top and a JLabel titled
      * "No movements selected" as the component contained in the bottom part.
      *
-     * @param updater MoveListContainerUpdater to which is given the MoveListContainer
-     * of this window, the MoveChooser
+     * @param updater MoveListContainerUpdater given by the MainWindow to which
+     * is given the MoveListContainer of this window, the MoveChooser
      * @throws FileNotFoundException when creating the MoveChooser as it reads
      * move files a file may not be founds
      */

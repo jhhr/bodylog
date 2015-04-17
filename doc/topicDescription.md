@@ -22,7 +22,7 @@ Käyttäjä avaa ohjelman salilta tullessaan ja lisää tekemästään harjoitte
 * sessiotiedostot: `tilastotKansio/liikkeenNimi/sessionPaivamaara.sessiopääte`
 * liiketiedostot: `liikkeetKansio/liikkeenNimi.liikepääte`
 
-Sessiotiedostolla ja liiketiedostolla on eri päätteet. Päätteet ovat kolmikirjaimisia.
+Sessiotiedostolla ja liiketiedostolla on eri päätteet.
 
 ### Datan lukeminen:
 Tallennetua dataa on tarkoitus tarkastella vähintäänkin taulukoiden ja mahdollisesti viiva- tai palkkikaavioiden tai näiden yhdistelmän muodossa. Tarkoitus olisi pystyä rakentamaan numero-muuttujista käyttäjän valitsemia johdannaisia: 

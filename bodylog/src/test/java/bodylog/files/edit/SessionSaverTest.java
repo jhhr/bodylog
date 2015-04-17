@@ -46,30 +46,27 @@ public class SessionSaverTest {
     Set set1;
     Set set2;
     Set set3;
-    File benchFolder;
-    File DLFolder;
-    File DLSessionFile;
-    File benchSessionFile;
-    File benchMoveFile;
+    File DLFolder = new File(Constant.DATA_DIR, DLName);
+    File benchFolder = new File(Constant.DATA_DIR, benchName);
+    File DLSessionFile = new File(DLFolder, dateStr + Constant.SESSION_END);
+    File benchSessionFile = new File(benchFolder, dateStr + Constant.SESSION_END);
     SessionSaver benchSaver;
     SessionSaver dlSaver;
     MoveListContainerUpdater updater;
 
     @Before
     public void setUp() {
-
         DLsession = new Session(date);
         benchSession = new Session(date);
         bench = new Move(benchName);
         deadlift = new Move(DLName);
-        DLFolder = new File(Constant.DATA_DIR, DLName);
-        benchFolder = new File(Constant.DATA_DIR, benchName);
-        DLSessionFile = new File(DLFolder, dateStr + Constant.SESSION_END);
-        benchSessionFile = new File(benchFolder, dateStr + Constant.SESSION_END);
-        benchMoveFile = new File(Constant.MOVES_DIR, benchName + Constant.MOVE_END);
         updater = new MoveListContainerUpdater();
-        benchSaver = new SessionSaver(updater,bench);
-        dlSaver = new SessionSaver(updater,deadlift);
+        
+        deadlift.addSession(DLsession);
+        bench.addSession(benchSession);
+
+        benchSaver = new SessionSaver(updater, bench);
+        dlSaver = new SessionSaver(updater, deadlift);
     }
 
     private void addDLSets() {
@@ -81,7 +78,6 @@ public class SessionSaverTest {
         deadlift.addVariable(varReps);
         deadlift.addVariable(varBool);
         DLsession.addSet(set3);
-        deadlift.addSession(DLsession);
     }
 
     private void addBenchSets() {
@@ -98,25 +94,38 @@ public class SessionSaverTest {
         bench.addVariable(varBool);
         benchSession.addSet(set1);
         benchSession.addSet(set2);
-        bench.addSession(benchSession);
     }
-    
+
     @Test
-    public void GetsCorrectMove(){
+    public void GetsCorrectMove() {
         assertEquals(deadlift, dlSaver.getMove());
     }
 
     @Test
-    public void Sessions_CreatingMoveFiles_SessionFileCheckerReturnsTrue() throws Exception {
-        addDLSets();
-        addBenchSets();
+    public void Sessions_CreatesSessionFile() throws Exception {
+        Constant.DATA_DIR.mkdir();
+        benchFolder.mkdir();
+        benchSaver.saveToFile();
+        assertTrue(benchSessionFile.exists());
+    }
+
+    @Test
+    public void Sessions_AfterSavingClearsMoveSessionList() throws Exception {
         Constant.DATA_DIR.mkdir();
         DLFolder.mkdir();
-        benchFolder.mkdir();
         dlSaver.saveToFile();
-        benchSaver.saveToFile();
-        assertTrue(DLSessionFile.exists() && dlSaver.fileExists());
-        assertTrue(benchSessionFile.exists() && benchSaver.fileExists());
+        assertTrue(deadlift.getSessions().isEmpty());
+    }
+
+    @Test
+    public void Sessions_FindsSessionFileWithSameDateAsOnSession() throws Exception {
+        Constant.DATA_DIR.mkdir();
+        DLFolder.mkdir();
+        DLSessionFile.createNewFile();
+        System.out.println("sessionFile: " + DLSessionFile.getName());
+        System.out.println("session date from movesaver: "
+                +dlSaver.getMove().getSession(0).getFileDateString());
+        assertTrue(dlSaver.fileExists());
     }
 
     @Test

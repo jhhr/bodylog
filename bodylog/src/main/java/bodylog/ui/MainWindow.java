@@ -1,7 +1,6 @@
 package bodylog.ui;
 
 import bodylog.ui.help.HelpWindow;
-import bodylog.files.read.MoveReader;
 import bodylog.ui.edit.move.MoveEditorWindow;
 import bodylog.ui.view.StatisticsViewerWindow;
 import bodylog.ui.edit.session.SessionEditorWindow;
@@ -9,10 +8,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -65,21 +62,18 @@ public class MainWindow extends JFrame implements ActionListener {
         tabs = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
         addTab(INFO);
 
-        tabs.setTabLayoutPolicy(JTabbedPane.WRAP_TAB_LAYOUT);
-
         setContentPane(tabs);
         setSize(new Dimension(600, 600));
 
         setLocationRelativeTo(null);
-
     }
 
     private JMenu mainMenu() {
         JMenu mainMenu = new JMenu("Menu");
 
         mainMenu.add(sessionEditMenuItem());
+        mainMenu.add(moveEditMenuItem());        
         mainMenu.add(statisticsMenuItem());
-        mainMenu.add(moveEditMenuItem());
 
         return mainMenu;
     }
@@ -92,31 +86,31 @@ public class MainWindow extends JFrame implements ActionListener {
     }
 
     private JMenuItem sessionEditMenuItem() {
-        JMenuItem sessionMenu = new JMenuItem("Add session(s)");
-        sessionMenu.setActionCommand(SESSION_EDITOR);
-        sessionMenu.addActionListener(this);
-        return sessionMenu;
+        JMenuItem sessionItem = new JMenuItem("Add session(s)");
+        sessionItem.setActionCommand(SESSION_EDITOR);
+        sessionItem.addActionListener(this);
+        return sessionItem;
     }
 
     private JMenuItem statisticsMenuItem() {
-        JMenuItem statMenu = new JMenuItem("View statistics");
-        statMenu.setActionCommand(STATISTICS);
-        statMenu.addActionListener(this);
-        return statMenu;
+        JMenuItem statItem = new JMenuItem("View statistics");
+        statItem.setActionCommand(STATISTICS);
+        statItem.addActionListener(this);
+        return statItem;
     }
 
     private JMenuItem moveEditMenuItem() {
-        JMenuItem moveMenu = new JMenuItem("Add/edit movements");
-        moveMenu.setActionCommand(MOVE_EDITOR);
-        moveMenu.addActionListener(this);
-        return moveMenu;
+        JMenuItem moveItem = new JMenuItem("Add/edit movement(s)");
+        moveItem.setActionCommand(MOVE_EDITOR);
+        moveItem.addActionListener(this);
+        return moveItem;
     }
 
     private JMenuItem infoMenuItem() {
-        JMenuItem infoMenu = new JMenuItem("Help");
-        infoMenu.setActionCommand(INFO);
-        infoMenu.addActionListener(this);
-        return infoMenu;
+        JMenuItem infoItem = new JMenuItem("Help");
+        infoItem.setActionCommand(INFO);
+        infoItem.addActionListener(this);
+        return infoItem;
     }
 
     /**

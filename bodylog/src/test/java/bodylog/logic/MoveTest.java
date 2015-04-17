@@ -1,7 +1,12 @@
 package bodylog.logic;
 
 import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.TreeSet;
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -79,18 +84,17 @@ public class MoveTest {
         bench.addVariable(varReps);
         assertEquals(varReps, bench.getVariable(1));
     }
-    
-    
+
     @Test
-    public void VariableAddedBeyondCurrectLengthFoundAtExpectedIndex(){
-        bench.addVariable(varWeight,5);
-        assertEquals(varWeight,bench.getVariable(5));
+    public void VariableAddedBeyondCurrectLengthFoundAtExpectedIndex() {
+        bench.addVariable(varWeight, 5);
+        assertEquals(varWeight, bench.getVariable(5));
     }
-    
+
     @Test
-    public void VariableAddedToSpecificIndexReplacesPreviousValue(){
+    public void VariableAddedToSpecificIndexReplacesPreviousValue() {
         bench.addVariable(varWeight);
-        bench.addVariable(varReps,0);
+        bench.addVariable(varReps, 0);
         assertEquals(varReps, bench.getVariable(0));
     }
 
@@ -122,5 +126,36 @@ public class MoveTest {
         assertFalse(bench.equals(dl));
         assertFalse(bench.equals(null));
         assertFalse(bench.equals(benchName));
+    }
+
+    @Test
+    public void MovesAreOrderedAlphabeticallyByName() {
+        Move first = new Move("abc");
+        Move second = new Move("BBC");
+        Move third = new Move("sp ace");
+        Move fourth = new Move("zzTop");
+        TreeSet moveList = new TreeSet<Move>();
+        moveList.add(first);
+        moveList.add(fourth);
+        moveList.add(third);
+        moveList.add(second);
+        assertArrayEquals(new Move[]{first, second, third, fourth},
+                moveList.toArray());
+    }
+    
+    @Test
+    public void MoveHashCodeNotSameAsJustNameHashCode(){
+        assertFalse(bench.hashCode() == benchName.hashCode());
+    }
+
+    @Test
+    public void MovesWithSameNameAreReplacedAsHashMapValues() {
+        HashMap moveMap = new HashMap<Move, String>();
+        Move abc1 = new Move("abc");
+        moveMap.put(abc1, "one");
+        Move abc2 = new Move("abc");
+        moveMap.put(abc2, "two");
+        assertEquals("two", moveMap.get(new Move("abc")));
+
     }
 }

@@ -47,13 +47,13 @@ public class ConstantTest {
     
     @Test
     public void DataFolderCreationReturnsTrueWhenNotAlreadyExisting() throws Exception {
-        assertTrue(Constant.createMovesFolder());
+        assertTrue(Constant.createDataFolder());
     }
     
     @Test
     public void DataFolderCreationReturnsTrueWhenAlreadyExisting() throws Exception {
         Constant.DATA_DIR.mkdir();
-        assertTrue(Constant.createMovesFolder());
+        assertTrue(Constant.createDataFolder());
     }
 
 }

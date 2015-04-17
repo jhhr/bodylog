@@ -33,18 +33,16 @@ public class SessionEditor extends Editor {
     private String dateStr;
 
     /**
-     * Creates a new SessionEditor for the given Move. Date is set to the
-     * current time acquired by with <code>LocalDate.now()</code>. The date is
-     * shown in the border surrounding this component and is changed with
-     * <code>setEditorBorder</code>.
+     * Creates a new SessionEditor for the given Saver which contains the Move
+     * to be edited. The date is shown in the border surrounding this component
+     * and is changed with <code>setEditorBorder</code>.
      *
-     * @param move Move to be added session data into
      * @param saver
      * @param editorWindow Parent container of this SessionEditor
      * @see bodylog.ui.dataediting.Editor#setEditorBorder
      */
-    public SessionEditor(Move move, Saver saver, SessionEditorWindow editorWindow) {
-        super(move, saver, editorWindow);
+    public SessionEditor(Saver saver, SessionEditorWindow editorWindow) {
+        super(saver, editorWindow);
         dateStr = saver.getMove().getSession(0).getUIDateString();
 
         setEditorBorder(" " + dateStr);
@@ -56,7 +54,7 @@ public class SessionEditor extends Editor {
 
     @Override
     protected EditorTable setTableModel() {
-        return new SessionEditorTable(move.getVariables(), 1);
+        return new SessionEditorTable(getMove().getVariables(), 1);
     }
 
     @Override
@@ -109,8 +107,11 @@ public class SessionEditor extends Editor {
         try {
             saver.saveToFile();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(getParent(), ex.getCause() + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(SessionEditor.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(getParent(),
+                    ex.getCause() + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(SessionEditor.class.getName()).log(
+                    Level.SEVERE, null, ex);
         }
     }
 
@@ -118,7 +119,7 @@ public class SessionEditor extends Editor {
      * Creates the Set objects to be given the the Session of the Move. One set
      * for each row in the table. If nothing was inputted into a cell,
      * <code>null</code> is saved as the value in the proper index of that Set.
-     * 
+     *
      * Should implement a custom TableModel encapsulating this.
      */
     private void addSetsToSession() {

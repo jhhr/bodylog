@@ -28,22 +28,17 @@ public class MoveEditor extends Editor {
     private final MoveListContainerUpdater updater;
 
     /**
-     * Creates a new <code>MoveEditor</code> for the given <code>Move</code>
-     * which can be a newly created blank one. Identifies whether the
-     * <code>Move</code> being edited is a new one or loaded from a move move by
-     * checking in the constructor if a move move corresponding to this Move
-     * exists. If so, the Move must've been loaded from that. This affects
-     * behavior on saving the Move to move.
+     * Creates a new <code>MoveEditor</code> for the given Saver which contains
+     * the Move to be edited which can be a newly created blank one.
      *
-     * @param move Move to be edited
      * @param saver
      * @param window Container of this <code>MoveEditor</code>
-     * @param updater MoveListContainerUpdater used to update list contents in all
- existing MoveChoosers
+     * @param updater MoveListContainerUpdater used to update list contents in
+     * all existing MoveChoosers
      */
-    public MoveEditor(Move move, Saver saver, MoveEditorWindow window,
+    public MoveEditor(Saver saver, MoveEditorWindow window,
             MoveListContainerUpdater updater) {
-        super(move, saver, window);
+        super(saver, window);
         this.updater = updater;
 
         setEditorBorder("");
@@ -57,17 +52,18 @@ public class MoveEditor extends Editor {
     @Override
     protected EditorTable setTableModel() {
         Object[][] tableData;
-        int varCount = move.variableCount();
+        int varCount = saver.getMove().variableCount();
         if (varCount > 0) {
             tableData = new Object[varCount][2];
             for (int i = 0; i < varCount; i++) {
-                tableData[i][0] = move.getVariable(i);
+                tableData[i][0] = getMove().getVariable(i);
                 tableData[i][1] = null;
             }
         } else {
             tableData = new Object[][]{{null, null}};
         }
-        return new MoveEditorTable(tableData, new String[]{"Variable", "Boolean"}, move);
+        return new MoveEditorTable(tableData,
+                new String[]{"Variable", "Boolean"}, getMove());
     }
 
     @Override

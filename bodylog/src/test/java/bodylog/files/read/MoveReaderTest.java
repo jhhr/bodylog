@@ -37,13 +37,13 @@ public class MoveReaderTest {
     @Test
     public void MoveWithoutSessions_MoveNameSameAsOnFile() throws Exception {
         util.useReadingFiles();
-        util.compareMoveName(util.readingName, reader.move(util.readMoveFile));
+        util.compareMoveName(util.readingName, reader.fetchMove(util.readMoveFile));
     }
 
     @Test
     public void MoveWithoutSessions_MoveVariablesSameAsInFile() throws Exception {
         util.useReadingFiles();
-        util.compareVariableData(util.readingVarData, reader.move(util.readMoveFile));
+        util.compareVariableData(util.readingVarData, reader.fetchMove(util.readMoveFile));
     }
 
     @Test
@@ -52,7 +52,7 @@ public class MoveReaderTest {
         util.useReadingFiles();
         util.useSkipLegsFiles();
 
-        Move[] moves = reader.allMoves();
+        Move[] moves = reader.fetchAllMoves();
 
         util.compareMoveName(util.readingName, moves[0]);
         util.compareMoveName(util.skipName, moves[1]);
@@ -65,7 +65,7 @@ public class MoveReaderTest {
         util.useReadingFiles();
         util.useSkipLegsFiles();
 
-        File[] files = reader.moveFileList();
+        File[] files = reader.fetchMoveFileList();
 
         assertArrayEquals(new File[]{util.readMoveFile, util.skipMoveFile}, files);
 

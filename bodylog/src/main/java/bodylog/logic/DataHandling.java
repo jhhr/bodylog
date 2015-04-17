@@ -1,7 +1,7 @@
 package bodylog.logic;
 
 /**
- * Static class for string manipulation. Used for writing Set data to session
+ * Class for encapsulating the parsing of data. Used for writing Set data to session
  * files and creating Set objects from reading session files and checking names
  * of moves and variables for characters used in parsing move file contents.
  */

@@ -1,7 +1,6 @@
 package bodylog.files;
 
 import java.io.File;
-import java.nio.file.FileSystemException;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
@@ -31,7 +30,7 @@ public class Constant {
      * File ending for move files. Not .mov so it's not confused for a video
      * file.
      */
-    public static final String MOVE_END = ".moo";
+    public static final String MOVE_END = ".mo";
 
     /**
      * DateTimeFormatter for formatting dates into the form yyyy-mm-dd, suitable

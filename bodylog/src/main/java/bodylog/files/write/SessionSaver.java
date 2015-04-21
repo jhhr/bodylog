@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package bodylog.files.edit;
+package bodylog.files.write;
 
 import bodylog.files.Saver;
 import bodylog.files.Constant;
@@ -25,6 +25,8 @@ public class SessionSaver extends Saver {
      * Creates a new SessionSaver for the specified Move and adds a new Session
      * to it.
      *
+     * @param updater MoveListContainerUpdater that is called to update session
+     * views if any are open
      * @param move Move whose session will be saved
      */
     public SessionSaver(MoveListContainerUpdater updater, Move move) {
@@ -53,7 +55,7 @@ public class SessionSaver extends Saver {
     @Override
     public boolean fileExists() {
         String dateStr = move.getSession(0).getFileDateString();
-        return new File(Constant.DATA_DIR, 
+        return new File(Constant.DATA_DIR,
                 move + "/" + dateStr + Constant.SESSION_END).exists();
     }
 
@@ -88,7 +90,7 @@ public class SessionSaver extends Saver {
     private void writeToFile() throws IOException {
         for (Session session : move.getSessions()) {
             String dateStr = session.getFileDateString();
-            File sessionFile = new File(Constant.DATA_DIR, 
+            File sessionFile = new File(Constant.DATA_DIR,
                     move + "/" + dateStr + Constant.SESSION_END);
             FileWriter writer = new FileWriter(sessionFile);
             for (Set set : session.getSets()) {

@@ -1,5 +1,6 @@
 package bodylog.logic;
 
+import bodylog.logic.datahandling.Sets;
 import java.util.Arrays;
 
 /**
@@ -94,20 +95,13 @@ public class Set {
     }
 
     /**
-     * Converts this Set object into a string. Uses the values of this Set. Each
-     * value is converted to a string by <code>DataHandling#setValueToString</code>.
+     * Converts this Set object into a string. Uses the values of this Set.
      *
-     * @return the Set in the format {value1, ... ,valueN}
-     * @see bodylog.logic.DataHandling#setValueToString
+     * @return the Set in string format
+     * @see bodylog.logic.datahandling.Sets#format
      */
     @Override
     public String toString() {
-        String strSet = "{";
-        for (Object value : values) {
-            String strValue = DataHandling.setValueToString(value);
-            strSet += strValue + ",";
-        }
-        strSet = strSet.substring(0, strSet.length() - 1) + "}";
-        return strSet;
+        return Sets.format(this);
     }
 }

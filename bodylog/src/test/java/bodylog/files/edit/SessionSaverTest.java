@@ -2,7 +2,7 @@ package bodylog.files.edit;
 
 import bodylog.files.Constant;
 import bodylog.files.Delete;
-import bodylog.files.edit.SessionSaver;
+import bodylog.files.write.SessionSaver;
 import bodylog.logic.Set;
 import bodylog.logic.Move;
 import bodylog.logic.Session;

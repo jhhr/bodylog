@@ -26,30 +26,4 @@ public abstract class Saver {
     public Move getMove() {
         return move;
     }
-    
-    
-        /**
-     * Custom exception used for creating files or folders.
-     * 
-     * @see bodylog.files.edit.MoveSaver#createSessionFolder
-     */
-    public class FileCreationException extends FileSystemException {
-
-        public FileCreationException(String file, String message) {
-            super(file, null, message);
-        }
-    }
-
-    /**
-     * Custom exception for renaming files.
-     * 
-     * @see bodylog.files.edit.MoveSaver#saveToFile
-     */
-    public class FileRenameException extends FileSystemException {
-
-        public FileRenameException(String file, String other, String message) {
-            super(file, other, message);
-        }
-    }
-
 }

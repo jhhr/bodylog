@@ -2,8 +2,8 @@ package bodylog.ui.edit.move;
 
 import bodylog.files.Saver;
 import bodylog.ui.edit.Editor;
-import bodylog.logic.Move;
-import bodylog.logic.DataHandling;
+import bodylog.logic.datahandling.Names;
+import bodylog.logic.exceptions.NameNotAllowedException;
 import bodylog.ui.MoveListContainerUpdater;
 import bodylog.ui.tables.edit.MoveEditorTable;
 import bodylog.ui.tables.abstracts.EditorTable;
@@ -12,6 +12,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JTable;
+import javax.swing.table.TableColumn;
 
 /**
  * The UI component used in creating new movements and editing existing ones.
@@ -45,7 +46,7 @@ public class MoveEditor extends Editor {
 
         setButtonLayouts("add variable", "remove variable",
                 "name:", "Characters not allowed in name: "
-                + DataHandling.IllegalCharsWithSpaces(DataHandling.Illegal.MOVE_NAME),
+                + Names.IllegalCharsWithSpaces(Names.Illegal.MOVE_NAME),
                 "", "close movement");
     }
 
@@ -56,7 +57,7 @@ public class MoveEditor extends Editor {
         if (varCount > 0) {
             tableData = new Object[varCount][2];
             for (int i = 0; i < varCount; i++) {
-                tableData[i][0] = getMove().getVariable(i);
+                tableData[i][0] = getMove().getVariableName(i);
                 tableData[i][1] = null;
             }
         } else {
@@ -71,9 +72,11 @@ public class MoveEditor extends Editor {
         JTable newTable = new JTable(tableModel);
         //tooltip displayed when hovering over the table
         newTable.setToolTipText("Characters not allowed in variables: "
-                + DataHandling.IllegalCharsWithSpaces(DataHandling.Illegal.VARIABLE));
+                + Names.IllegalCharsWithSpaces(Names.Illegal.VARIABLE));
         newTable.setPreferredScrollableViewportSize(newTable.getPreferredSize());
         newTable.getTableHeader().setReorderingAllowed(false);
+        TableColumn varTypeColumn = newTable.getColumnModel().getColumn(2);
+        varTypeColumn.setCellEditor(new VariableEditor());
         return newTable;
     }
 
@@ -90,7 +93,7 @@ public class MoveEditor extends Editor {
     protected void textFieldAction(String text) {
         try {
             getMove().setName(text);
-        } catch (IllegalArgumentException ill) {
+        } catch (NameNotAllowedException ill) {
             return;
         }
         setEditorBorder("");

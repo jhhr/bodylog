@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package bodylog.files.edit;
+package bodylog.files.write;
 
 import bodylog.files.Saver;
 import bodylog.files.Constant;
 import bodylog.logic.Move;
+import bodylog.logic.exceptions.FileCreationException;
+import bodylog.logic.exceptions.FileRenameException;
 import bodylog.ui.MoveListContainerUpdater;
 import java.io.File;
 import java.io.FileWriter;
@@ -200,7 +202,7 @@ public class MoveSaver extends Saver {
     private void writeToFile() throws IOException {
         File moveFile = new File(Constant.MOVES_DIR, move.getName() + Constant.MOVE_END);
         FileWriter writer = new FileWriter(moveFile);
-        for (String variable : move.getVariables()) {
+        for (String variable : move.getVariableNames()) {
             writer.write(variable + "\n");
         }
         writer.close();

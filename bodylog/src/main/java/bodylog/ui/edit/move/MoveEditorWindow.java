@@ -1,6 +1,6 @@
 package bodylog.ui.edit.move;
 
-import bodylog.files.edit.MoveSaver;
+import bodylog.files.write.MoveSaver;
 import bodylog.ui.edit.WindowWithMoveChooser;
 import bodylog.logic.Move;
 import bodylog.ui.MoveListContainerUpdater;

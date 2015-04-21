@@ -54,7 +54,7 @@ public class SessionEditor extends Editor {
 
     @Override
     protected EditorTable setTableModel() {
-        return new SessionEditorTable(getMove().getVariables(), 1);
+        return new SessionEditorTable(getMove().getVariableNames(), 1);
     }
 
     @Override

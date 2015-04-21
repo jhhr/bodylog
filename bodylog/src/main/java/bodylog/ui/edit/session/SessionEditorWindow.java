@@ -1,6 +1,6 @@
 package bodylog.ui.edit.session;
 
-import bodylog.files.edit.SessionSaver;
+import bodylog.files.write.SessionSaver;
 import bodylog.ui.edit.WindowWithMoveChooser;
 import bodylog.logic.Move;
 import bodylog.ui.MoveListContainerUpdater;

@@ -2,41 +2,20 @@ package bodylog.ui.tables.view;
 
 import bodylog.logic.Move;
 import bodylog.logic.Session;
-import javax.swing.table.AbstractTableModel;
+import bodylog.ui.tables.abstracts.MoveTableModel;
 
 /**
  * TableModel for viewing statistics. Used in MoveTables.
  *
  * @see bodylog.ui.dataviewing.MoveTables
  */
-public class ViewTable extends AbstractTableModel {
+public class ViewTable extends MoveTableModel {
+    
+    protected final Session session;
 
-    protected Move move;
-    protected Session session;
-
-    /**
-     * Takes data from a Move and a Session.
-     *
-     * @param session Session whose Sets displayed in the table
-     * @param move Move used in this table
-     * @see bodylog.logic.Move
-     * @see bodylog.logic.Session
-     */
     public ViewTable(Session session, Move move) {
-        this.move = move;
+        super(move);
         this.session = session;
-    }
-
-    /**
-     * Returns column name which is a variable of the Move.
-     *
-     * @param colummn index to get variable
-     * @return the variable
-     * @see bodylog.logic.Move#getVariable(int)
-     */
-    @Override
-    public String getColumnName(int colummn) {
-        return move.getVariable(colummn);
     }
 
     /**
@@ -49,17 +28,6 @@ public class ViewTable extends AbstractTableModel {
     @Override
     public int getRowCount() {
         return session.getSets().size();
-    }
-
-    /**
-     * Returns column count which is the number of variables in the Move.
-     *
-     * @return the number of variables
-     * @see bodylog.logic.Move#variableCount
-     */
-    @Override
-    public int getColumnCount() {
-        return move.variableCount();
     }
 
     /**

@@ -4,10 +4,10 @@ import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * TableModel for creating session data. Used in SessionEditor. Extends
- * DefaultTableModel which already contains the functionality for receiving user
- * input but uses the obsolete collection Vector. Should create a custom
- * TableModel with editing capability.
+ * Abstract TableModel class acting as a base for TableModels used in editing
+ * Moves or Sessions. Used in. Extends DefaultTableModel which already contains
+ * the functionality for receiving user input but uses the obsolete collection
+ * Vector. Should create a custom TableModel with editing capability.
  *
  * @see bodylog.ui.dataediting.SessionEditor
  */

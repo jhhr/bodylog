@@ -10,10 +10,11 @@ import bodylog.files.Delete;
 import bodylog.files.read.MoveReader;
 import bodylog.files.read.SessionReader;
 import bodylog.files.read.Util;
-import bodylog.logic.DataHandling;
+import bodylog.logic.datahandling.Names;
 import bodylog.logic.Move;
 import bodylog.logic.Session;
 import bodylog.logic.Set;
+import bodylog.logic.datahandling.Sets;
 import java.awt.Component;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -63,21 +64,13 @@ public class StatisticsDisplayerTest {
         Session sesONE = new Session(
                 Constant.FILE_DATE_FORMAT.parse(util.dateStrONE));
         for (String line : util.skipSessionONEData) {
-            Set set = new Set();
-            for (String valueStr : DataHandling.lineToStringArray(line)) {
-                set.addValue(valueStr);
-            }
-            sesONE.addSet(set);
+            sesONE.addSet(Sets.parseLine(line));
         }
         skipLegs.addSession(sesONE);
         Session sesTWO = new Session(
                 Constant.FILE_DATE_FORMAT.parse(util.dateStrTWO));
         for (String line : util.skipSessionTWOData) {
-            Set set = new Set();
-            for (String valueStr : DataHandling.lineToStringArray(line)) {
-                set.addValue(valueStr);
-            }
-            sesONE.addSet(set);
+            sesONE.addSet(Sets.parseLine(line));
         }
         skipLegs.addSession(sesTWO);
     }
@@ -101,7 +94,7 @@ public class StatisticsDisplayerTest {
             assertEquals(dates[k], Constant.uiDateToFileDate(tBorder.getTitle()));
             JTable table = (JTable) pane.getViewport().getComponent(0);
             for (int i = 0; i < table.getColumnCount(); i++) {
-                assertEquals(skipLegs.getVariable(i),table.getColumnName(i));
+                assertEquals(skipLegs.getVariableName(i),table.getColumnName(i));
             }
             for (int i = 0; i < table.getRowCount(); i++) {
                 for (int j = 0; j < table.getColumnCount(); j++) {

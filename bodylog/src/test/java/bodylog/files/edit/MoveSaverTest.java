@@ -1,5 +1,6 @@
 package bodylog.files.edit;
 
+import bodylog.files.write.MoveSaver;
 import bodylog.files.Constant;
 import bodylog.files.Delete;
 import bodylog.files.Saver.FileRenameException;

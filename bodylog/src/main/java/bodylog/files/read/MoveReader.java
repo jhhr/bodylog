@@ -2,13 +2,16 @@ package bodylog.files.read;
 
 import bodylog.files.Constant;
 import bodylog.files.filters.MoveFileFilter;
+import bodylog.logic.datahandling.Names;
+import bodylog.logic.datahandling.Names.NameNotAllowedException;
 import bodylog.logic.Move;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /**
- * Class encapsulating the reading of fetchMove files and creating Moves from them.
+ * Class encapsulating the reading of fetchMove files and creating Moves from
+ * them.
  */
 public class MoveReader {
 
@@ -37,9 +40,9 @@ public class MoveReader {
     /**
      * Creates a list of fetchMove files which are used to create new Moves.
      *
-     * @return An array of Files, empty if no fetchMove files are in the movements
- folder. Identifies the right kinds of files through the file ending using
- a MoveFileFilter.
+     * @return An array of Files, empty if no fetchMove files are in the
+     * movements folder. Identifies the right kinds of files through the file
+     * ending using a MoveFileFilter.
      * @throws SecurityException if the files cannot be accessed
      * @see bodylog.files.MoveFileFilter
      */
@@ -49,14 +52,14 @@ public class MoveReader {
     }
 
     /**
-     * Creates a list of MoveFiles by reading all fetchMove files and creating a new
- MoveSaver from each one. Used in the MoveChooser UI class and the method
-     * allMovesWithSessions.
+     * Creates a list of MoveFiles by reading all fetchMove files and creating a
+     * new MoveSaver from each one. Used in the MoveChooser UI class and the
+     * method allMovesWithSessions.
      *
      * @return An array containing Moves with Sessions added. The array is empty
- if no fetchMove files are found. The Moves will contain no Sessions if no
- session files are found. The Sessions contain Sets when the session file
- contains set data.
+     * if no fetchMove files are found. The Moves will contain no Sessions if no
+     * session files are found. The Sessions contain Sets when the session file
+     * contains set data.
      * @throws FileNotFoundException when a fetchMove file is not found
      * @throws SecurityException when a fetchMove file cannot be accessed
      * @see bodylog.files.FromFile#moveFileList

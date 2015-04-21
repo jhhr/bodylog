@@ -1,5 +1,7 @@
 package bodylog.logic;
 
+import bodylog.logic.datahandling.Names;
+import bodylog.logic.exceptions.NameNotAllowedException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -53,12 +55,12 @@ public class MoveTest {
     @Test
     public void CantUseBannedCharsWhenSettingName() {
         boolean nameSet = false;
-        for (char ch : DataHandling.Illegal.MOVE_NAME.getChars()) {
+        for (char ch : Names.Illegal.MOVE_NAME.getChars()) {
             try {
                 String name = "asd" + ch + "fjkl";
                 bench.setName(name);
                 nameSet = true;
-            } catch (IllegalArgumentException e) {
+            } catch (NameNotAllowedException e) {
             }
         }
         assertFalse(nameSet);
@@ -67,7 +69,7 @@ public class MoveTest {
     @Test
     public void CantUseBannedCharsInVariable() {
         boolean variableAdded = false;
-        for (char ch : DataHandling.Illegal.VARIABLE.getChars()) {
+        for (char ch : Names.Illegal.VARIABLE.getChars()) {
             try {
                 bench.addVariable("asd" + ch + "fjkl");
                 variableAdded = true;
@@ -80,22 +82,22 @@ public class MoveTest {
     @Test
     public void VariableAddedNormallyFoundAtExpectedIndex() {
         bench.addVariable(varWeight);
-        assertEquals(varWeight, bench.getVariable(0));
+        assertEquals(varWeight, bench.getVariableName(0));
         bench.addVariable(varReps);
-        assertEquals(varReps, bench.getVariable(1));
+        assertEquals(varReps, bench.getVariableName(1));
     }
 
     @Test
     public void VariableAddedBeyondCurrectLengthFoundAtExpectedIndex() {
         bench.addVariable(varWeight, 5);
-        assertEquals(varWeight, bench.getVariable(5));
+        assertEquals(varWeight, bench.getVariableName(5));
     }
 
     @Test
     public void VariableAddedToSpecificIndexReplacesPreviousValue() {
         bench.addVariable(varWeight);
         bench.addVariable(varReps, 0);
-        assertEquals(varReps, bench.getVariable(0));
+        assertEquals(varReps, bench.getVariableName(0));
     }
 
     @Test

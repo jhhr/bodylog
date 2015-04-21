@@ -44,7 +44,7 @@ public class Util {
     }
 
     public void compareVariableData(String[] varData, Move move) {
-        assertArrayEquals(varData, move.getVariables());
+        assertArrayEquals(varData, move.getVariableNames());
     }
 
     public void compareDateInSession(String dateStr, Session session) {

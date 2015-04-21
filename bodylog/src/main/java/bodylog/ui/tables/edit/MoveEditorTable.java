@@ -7,7 +7,6 @@ package bodylog.ui.tables.edit;
 
 import bodylog.logic.Move;
 import bodylog.ui.tables.abstracts.EditorTable;
-import java.util.Vector;
 
 public class MoveEditorTable extends EditorTable {
 
@@ -18,10 +17,10 @@ public class MoveEditorTable extends EditorTable {
         this.move = move;
     }
 
-    @Override
-    public Class getColumnClass(int column) {
-        return (column == 0) ? String.class : Boolean.class;
-    }
+//    @Override
+//    public Class getColumnClass(int column) {
+//        return (column == 0) ? String.class : Boolean.class;
+//    }
 
     @Override
     protected Object parseValue(Object value, int row, int column) {

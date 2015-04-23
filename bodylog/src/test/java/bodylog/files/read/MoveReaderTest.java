@@ -1,6 +1,5 @@
 package bodylog.files.read;
 
-import bodylog.files.Constant;
 import bodylog.files.Delete;
 import bodylog.logic.Move;
 import java.io.File;
@@ -12,7 +11,7 @@ import org.junit.Test;
 
 public class MoveReaderTest {
 
-    private Util util;
+    private final Util util = new Util();
     private MoveReader reader;
 
     @BeforeClass
@@ -23,7 +22,6 @@ public class MoveReaderTest {
 
     @Before
     public void setUp() throws Exception {
-        util = new Util();
         reader = new MoveReader();
     }
 
@@ -43,7 +41,7 @@ public class MoveReaderTest {
     @Test
     public void MoveWithoutSessions_MoveVariablesSameAsInFile() throws Exception {
         util.useReadingFiles();
-        util.compareVariableData(util.readingVarData, reader.fetchMove(util.readMoveFile));
+        util.compareVariableNames(util.readingVarNames, reader.fetchMove(util.readMoveFile));
     }
 
     @Test
@@ -56,8 +54,8 @@ public class MoveReaderTest {
 
         util.compareMoveName(util.readingName, moves[0]);
         util.compareMoveName(util.skipName, moves[1]);
-        util.compareVariableData(util.readingVarData, moves[0]);
-        util.compareVariableData(util.skipVarData, moves[1]);
+        util.compareVariableNames(util.readingVarNames, moves[0]);
+        util.compareVariableNames(util.skipVarNames, moves[1]);
     }
 
     @Test

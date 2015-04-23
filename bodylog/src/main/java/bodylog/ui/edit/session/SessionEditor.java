@@ -2,10 +2,11 @@ package bodylog.ui.edit.session;
 
 import bodylog.ui.edit.Editor;
 import bodylog.ui.tables.abstracts.EditorTable;
+import bodylog.logic.Variable.Type;
 import bodylog.logic.Set;
 import bodylog.logic.Session;
 import bodylog.files.Constant;
-import bodylog.files.Saver;
+import bodylog.files.abstracts.Saver;
 import bodylog.logic.Move;
 import bodylog.ui.tables.edit.SessionEditorTable;
 import java.time.format.DateTimeParseException;
@@ -13,6 +14,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumn;
 
 /**
  * The UI component used in creating actual training data and writing it into
@@ -54,14 +57,20 @@ public class SessionEditor extends Editor {
 
     @Override
     protected EditorTable setTableModel() {
-        return new SessionEditorTable(getMove().getVariableNames(), 1);
+        return new SessionEditorTable(getMove(), 1);
     }
 
     @Override
     protected JTable setTable() {
         JTable newTable = new JTable(tableModel);
-        //sets tooltip for describing what inputs are accepted, displayed when hovering over the table
-        newTable.setToolTipText("Allowed values are numbers of the form X or X.X, 'true', 'false' and nothing.");
+        //sets tooltips for describing what inputs are accepted
+        //displayed when hovering over the table
+        for (int i = 0; i < newTable.getColumnCount(); i++) {
+            TableColumn column = newTable.getColumnModel().getColumn(i);
+            DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
+            renderer.setToolTipText(getMove().getVariable(i).getToolTipText());
+            column.setCellRenderer(renderer);
+        }
         newTable.setPreferredScrollableViewportSize(newTable.getPreferredSize());
         newTable.getTableHeader().setReorderingAllowed(false);
         return newTable;

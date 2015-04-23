@@ -1,5 +1,6 @@
 package bodylog.logic;
 
+import bodylog.logic.datahandling.Sets;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -97,7 +98,7 @@ public class SetTest {
         set.addValue(null);
         set.addValue(false);
         set.addValue(0.0);
-        assertEquals("{62.5,15,null,false,0}", set.toString());
+        assertEquals(Sets.format(set), set.toString());
     }
 
 }

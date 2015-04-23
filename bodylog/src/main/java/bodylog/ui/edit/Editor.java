@@ -1,6 +1,6 @@
 package bodylog.ui.edit;
 
-import bodylog.files.Saver;
+import bodylog.files.abstracts.Saver;
 import bodylog.logic.Move;
 import bodylog.ui.tables.abstracts.EditorTable;
 import java.awt.Dimension;

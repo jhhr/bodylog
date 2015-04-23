@@ -10,6 +10,10 @@ import java.time.format.FormatStyle;
  */
 public class Constant {
 
+    //static class, does not have instances
+    private Constant() {
+    }
+
     /**
      * The statistics folder which contains the folders of movements which
      * contain their session files.

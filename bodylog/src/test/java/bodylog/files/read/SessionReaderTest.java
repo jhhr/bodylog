@@ -10,7 +10,7 @@ import org.junit.Test;
 public class SessionReaderTest {
 
     private SessionReader reader;
-    private Util util;
+    private final Util util = new Util();
 
     @BeforeClass
     public static void oneTimeSetUp() {
@@ -20,7 +20,6 @@ public class SessionReaderTest {
 
     @Before
     public void setUp() throws Exception {
-        util = new Util();
         reader = new SessionReader();
     }
 
@@ -46,7 +45,8 @@ public class SessionReaderTest {
     @Test
     public void AddSessionsToMove_SessionsDatesAsExpected() throws Exception {
         util.useSkipLegsFiles();
-        Move skipLegs2 = reader.fetchSessionsForMove(new Move(util.skipName));
+        Move skipLegs2 = new Move(util.skipName);
+        reader.fetchSessionsForMove(skipLegs2);
 
         util.compareDateInSession(util.dateStrONE, skipLegs2.getSession(0));
         util.compareDateInSession(util.dateStrTWO, skipLegs2.getSession(1));
@@ -55,7 +55,8 @@ public class SessionReaderTest {
     @Test
     public void AddSessionsToMove_SetDataAsExpected() throws Exception {
         util.useSkipLegsFiles();
-        Move skipLegs2 = reader.fetchSessionsForMove(new Move(util.skipName));
+        Move skipLegs2 = new Move(util.skipName);
+        reader.fetchSessionsForMove(skipLegs2);
 
         util.compareSetDataInSession(util.skipSessionONEData, skipLegs2.getSession(0));
         util.compareSetDataInSession(util.skipSessionTWOData, skipLegs2.getSession(1));

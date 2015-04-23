@@ -6,6 +6,9 @@
 package bodylog.ui.tables.edit;
 
 import bodylog.logic.Move;
+import bodylog.logic.Variable;
+import bodylog.logic.Variable.Type;
+import bodylog.logic.datahandling.Variables;
 import bodylog.ui.tables.abstracts.EditorTable;
 
 public class MoveEditorTable extends EditorTable {
@@ -17,19 +20,35 @@ public class MoveEditorTable extends EditorTable {
         this.move = move;
     }
 
-//    @Override
-//    public Class getColumnClass(int column) {
-//        return (column == 0) ? String.class : Boolean.class;
-//    }
+    @Override
+    public Class getColumnClass(int column) {
+        return String.class;
+    }
+
+    @Override
+    public void addRow(Object[] rowData) {
+        super.addRow(rowData);
+        move.addVariable(new Variable());
+    }
+
+    @Override
+    public void removeRow(int row) {
+        super.removeRow(row);
+    }
 
     @Override
     protected Object parseValue(Object value, int row, int column) {
-        if (column == 0) {
-            try {
-                move.addVariable((String) value, row);
-            } catch (IllegalArgumentException e) {
-                return null;
-            }
+        switch (column) {
+            case 0:
+                try {
+                    move.getVariable(row).setName((String) value);
+                } catch (Exception e) {
+                }
+            case 1:
+                try {
+                    move.getVariable(row).setType(Variables.parseType((String) value));
+                } catch (Exception e) {
+                }
         }
         return value;
     }

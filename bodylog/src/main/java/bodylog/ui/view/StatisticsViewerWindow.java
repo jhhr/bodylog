@@ -31,6 +31,8 @@
 package bodylog.ui.view;
 
 import bodylog.logic.Move;
+import bodylog.logic.exceptions.ParsingException;
+import bodylog.logic.exceptions.VariableStateException;
 import bodylog.ui.MoveListContainer;
 import bodylog.ui.MoveListContainerUpdater;
 import bodylog.ui.WindowWithMoveListContainer;
@@ -70,9 +72,12 @@ public class StatisticsViewerWindow extends WindowWithMoveListContainer {
      * MoveListContainer of this window, the JList
      * @throws FileNotFoundException if any file cannot be found
      * @throws SecurityException if any file cannot be accessed
+     * @throws ParsingException when failing to parse the type of a Variable
+     * @throws VariableStateException when a parsed Variable is found not proper
      */
     public StatisticsViewerWindow(MoveListContainerUpdater updater)
-            throws FileNotFoundException {
+            throws FileNotFoundException, SecurityException, ParsingException,
+            VariableStateException {
         super(updater);
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -125,12 +130,16 @@ public class StatisticsViewerWindow extends WindowWithMoveListContainer {
      */
     @Override
     public void moveSelectedAction(Move move) {
+        if (move == null) {
+            return;
+        }
         for (Component previousTables : tablePanel.getComponents()) {
             tablePanel.remove(previousTables);
         }
         try {
             tablePanel.add(displayer.getStatisticsDisplay(move));
-        } catch (FileNotFoundException ex) {
+        } catch (FileNotFoundException | ParsingException |
+                VariableStateException ex) {
             Logger.getLogger(StatisticsViewerWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
         tablePanel.validate();

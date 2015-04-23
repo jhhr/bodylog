@@ -2,6 +2,8 @@ package bodylog.logic;
 
 import bodylog.logic.datahandling.Names;
 import bodylog.logic.exceptions.NameNotAllowedException;
+import bodylog.logic.exceptions.VariableStateException;
+import java.util.Arrays;
 
 /**
  * Class that defines the different types of variables the user can give to a
@@ -73,7 +75,7 @@ public class Variable {
      * @see bodylog.logic.DataHandling#nameIsAllowed
      */
     public void setName(String name) throws NameNotAllowedException {
-        this.name = Names.nameIsAllowed(name, Names.Illegal.VARIABLE);
+        this.name = Names.isAllowed(name, Names.Illegal.VARIABLE);
     }
 
     public String getName() {
@@ -83,7 +85,7 @@ public class Variable {
     public void setType(Type type) {
         this.type = type;
     }
-    
+
     public Type getType() {
         return type;
     }
@@ -111,7 +113,30 @@ public class Variable {
     }
 
     public String[] getChoices() {
-        return choices;
+        switch (type) {
+            case OPTIONAL_CHOICE:
+                int length = choices.length;
+                String[] optChoices = Arrays.copyOf(choices, length + 1);
+                optChoices[length] = "null";
+                return optChoices;
+            default:
+                return choices;
+        }
+    }
+
+    public String getToolTipText() {
+        switch (type) {
+            case NUMERICAL:
+                return "Input numbers in the form X or X.X";
+            case CHECKBOX:
+                return "Check or uncheck the box";
+            case OPTIONAL_CHOICE:
+                return "You may choose one or none";
+            case MANDATORY_CHOICE:
+                return "You must choose one";
+            default:
+                return "";
+        }
     }
 
     public int choiceCount() {
@@ -144,31 +169,22 @@ public class Variable {
                     message += "No choices are allowed when type is "
                             + type + ".";
                 }
+                break;
             case OPTIONAL_CHOICE:
                 if (choices.length == 0) {
                     message += "There must be at least 1 choice when type is "
                             + type + ".";
                 }
+                break;
             case MANDATORY_CHOICE:
                 if (choices.length < 2) {
                     message += "There must be at least 2 choices when type is "
                             + type + ".";
                 }
+                break;
         }
         if (!message.isEmpty()) {
             throw new VariableStateException(message);
-        }
-    }
-
-    /**
-     * Custom exception used in the Variable class.
-     *
-     * @see bodylog.logic.Variable#throwExceptions
-     */
-    public class VariableStateException extends Exception {
-
-        public VariableStateException(String message) {
-            super(message);
         }
     }
 }

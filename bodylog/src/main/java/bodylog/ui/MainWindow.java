@@ -52,7 +52,7 @@ public class MainWindow extends JFrame implements ActionListener {
         super("Bodylog");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        this.updater = new MoveListContainerUpdater();
+        this.updater = new MoveListContainerUpdater(this);
 
         menuBar = new JMenuBar();
         menuBar.add(mainMenu());

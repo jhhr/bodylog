@@ -1,6 +1,8 @@
 package bodylog.ui.edit;
 
 import bodylog.logic.Move;
+import bodylog.logic.exceptions.ParsingException;
+import bodylog.logic.exceptions.VariableStateException;
 import bodylog.ui.MoveListContainerUpdater;
 import bodylog.ui.WindowWithMoveListContainer;
 import java.awt.Component;
@@ -40,7 +42,8 @@ public abstract class WindowWithMoveChooser extends WindowWithMoveListContainer 
      * move files a file may not be founds
      */
     public WindowWithMoveChooser(MoveListContainerUpdater updater)
-            throws FileNotFoundException {
+            throws FileNotFoundException, SecurityException,
+            ParsingException, VariableStateException {
         super(updater);
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());

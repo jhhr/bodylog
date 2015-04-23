@@ -25,7 +25,7 @@ public class Names {
     public static enum Illegal {
 
         MOVE_NAME(new char[]{'/', '\\', ':', '*', '?', '"', '<', '>', '|'}),
-        VARIABLE(Delimiters.charArray());
+        VARIABLE(Delimiters.CHARS);
 
         private final char[] charList;
 
@@ -72,11 +72,8 @@ public class Names {
      * @see bodylog.logic.Move
      * @see bodylog.logic.datahandling.Names
      */
-    public static String nameIsAllowed(String name, Illegal charSet)
+    public static String isAllowed(String name, Illegal charSet)
             throws NameNotAllowedException {
-        if (name.isEmpty()) {
-            throw new NameNotAllowedException("A blank name is not allowed.");
-        }
         for (char ch : charSet.getChars()) {
             if (name.contains("" + ch)) {
                 throw new NameNotAllowedException("The characters "

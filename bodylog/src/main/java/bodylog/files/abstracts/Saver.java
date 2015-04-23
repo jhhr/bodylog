@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package bodylog.files;
+package bodylog.files.abstracts;
 
 import bodylog.logic.Move;
 import bodylog.ui.MoveListContainerUpdater;
@@ -25,5 +25,9 @@ public abstract class Saver {
 
     public Move getMove() {
         return move;
+    }
+
+    public MoveListContainerUpdater getUpdater() {
+        return updater;
     }
 }

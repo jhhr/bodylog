@@ -1,6 +1,8 @@
 package bodylog.ui.edit.move;
 
-import bodylog.files.Saver;
+import bodylog.files.abstracts.Saver;
+import bodylog.logic.Variable;
+import bodylog.logic.Variable.Type;
 import bodylog.ui.edit.Editor;
 import bodylog.logic.datahandling.Names;
 import bodylog.logic.exceptions.NameNotAllowedException;
@@ -9,8 +11,11 @@ import bodylog.ui.tables.edit.MoveEditorTable;
 import bodylog.ui.tables.abstracts.EditorTable;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.table.TableColumn;
 
@@ -26,21 +31,15 @@ import javax.swing.table.TableColumn;
  */
 public class MoveEditor extends Editor {
 
-    private final MoveListContainerUpdater updater;
-
     /**
      * Creates a new <code>MoveEditor</code> for the given Saver which contains
      * the Move to be edited which can be a newly created blank one.
      *
      * @param saver
      * @param window Container of this <code>MoveEditor</code>
-     * @param updater MoveListContainerUpdater used to update list contents in
-     * all existing MoveChoosers
      */
-    public MoveEditor(Saver saver, MoveEditorWindow window,
-            MoveListContainerUpdater updater) {
+    public MoveEditor(Saver saver, MoveEditorWindow window) {
         super(saver, window);
-        this.updater = updater;
 
         setEditorBorder("");
 
@@ -53,18 +52,21 @@ public class MoveEditor extends Editor {
     @Override
     protected EditorTable setTableModel() {
         Object[][] tableData;
-        int varCount = saver.getMove().variableCount();
+        int varCount = getMove().variableCount();
         if (varCount > 0) {
-            tableData = new Object[varCount][2];
+            tableData = new Object[varCount][3];
             for (int i = 0; i < varCount; i++) {
-                tableData[i][0] = getMove().getVariableName(i);
-                tableData[i][1] = null;
+                Variable var = getMove().getVariable(i);
+                tableData[i][0] = var.getName();
+                tableData[i][1] = var.getType();
+                tableData[i][2] = Arrays.toString(var.getChoices());
             }
         } else {
-            tableData = new Object[][]{{null, null}};
+            tableData = new Object[][]{{null, null, null}};
+            getMove().addVariable(new Variable());
         }
         return new MoveEditorTable(tableData,
-                new String[]{"Variable", "Boolean"}, getMove());
+                new String[]{"Variable", "Type", "Choices"}, getMove());
     }
 
     @Override
@@ -75,8 +77,18 @@ public class MoveEditor extends Editor {
                 + Names.IllegalCharsWithSpaces(Names.Illegal.VARIABLE));
         newTable.setPreferredScrollableViewportSize(newTable.getPreferredSize());
         newTable.getTableHeader().setReorderingAllowed(false);
-        TableColumn varTypeColumn = newTable.getColumnModel().getColumn(2);
-        varTypeColumn.setCellEditor(new VariableEditor());
+
+        TableColumn varTypeColumn = newTable.getColumnModel().getColumn(1);
+        JComboBox typeChooser = new JComboBox();
+        typeChooser.addItem(Type.NUMERICAL);
+        typeChooser.addItem(Type.CHECKBOX);
+        typeChooser.addItem(Type.OPTIONAL_CHOICE);
+        typeChooser.addItem(Type.MANDATORY_CHOICE);
+        varTypeColumn.setCellEditor(new DefaultCellEditor(typeChooser));
+
+        TableColumn varChoicesColumn = newTable.getColumnModel().getColumn(2);
+        varChoicesColumn.setCellEditor(
+                new VariableChoicesEditor(saver.getUpdater().getFrame()));
         return newTable;
     }
 

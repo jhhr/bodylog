@@ -3,14 +3,18 @@ package bodylog.logic.datahandling;
 import bodylog.logic.Set;
 import bodylog.logic.Variable;
 import bodylog.logic.exceptions.ParsingException;
-import java.util.Scanner;
+import java.util.Arrays;
 
 /**
  * Contains all definitions of how Sets are converted to strings and back.
  */
 public class Sets {
 
-    private static final String LINE_PREFIX = "values" + Delimiters.TITLE;
+    //static class, does not have instances
+    private Sets() {
+    }
+
+    public static final String LINE_PREFIX = "values" + Delimiters.TITLE;
 
     /**
      * Formats a Set into a single line string.
@@ -36,14 +40,14 @@ public class Sets {
      *
      * @param line the line to be parsed
      * @param vars the variables from which choices for values are checked
-     * @return a Set object populated with the values
+     * @return a Set object populated with values
      * @throws NumberFormatException when parsing to double fails
      * @throws ParsingException when parsing from choices fails
      */
     public static Set parseLine(String line, Variable[] vars) throws
             NumberFormatException, ParsingException {
         Set set = new Set();
-        String[] values = line.substring(LINE_PREFIX.length(), line.length())
+        String[] values = line.substring(LINE_PREFIX.length())
                 .split(Delimiters.VALUE);
         if (!values[0].isEmpty()) {
             for (int i = 0; i < values.length; i++) {
@@ -75,7 +79,7 @@ public class Sets {
                 }
             }
             throw new ParsingException("Error while parsing Set from string: "
-                    + "choices were found but value was not among them.");
+                    + "value ("+str+") is not one of "+Arrays.toString(choices));
         }
         switch (str) {
             case "null":
@@ -102,15 +106,15 @@ public class Sets {
      */
     public static String formatValue(Object value) {
         if (value != null) {
-            if (value.equals(true) || value.equals(false) || value instanceof Integer) {
-                return value.toString();
-            } else {
+            if (value instanceof Double) {
                 double valueD = (Double) value;
                 if (valueD == (long) valueD) {
                     return String.format("%d", (long) valueD);
                 } else {
                     return String.format("%s", valueD);
                 }
+            } else {
+                return value.toString();
             }
         }
         return null;

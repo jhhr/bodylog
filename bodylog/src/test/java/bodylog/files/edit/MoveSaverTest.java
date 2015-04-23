@@ -3,8 +3,14 @@ package bodylog.files.edit;
 import bodylog.files.write.MoveSaver;
 import bodylog.files.Constant;
 import bodylog.files.Delete;
-import bodylog.files.Saver.FileRenameException;
 import bodylog.logic.Move;
+import bodylog.logic.Variable;
+import bodylog.logic.Variable.Type;
+import bodylog.logic.datahandling.Delimiters;
+import bodylog.logic.datahandling.Moves;
+import bodylog.logic.datahandling.Variables;
+import bodylog.logic.exceptions.FileRenameException;
+import bodylog.logic.exceptions.NameNotAllowedException;
 import bodylog.ui.MoveListContainerUpdater;
 import java.io.File;
 import java.util.Scanner;
@@ -16,6 +22,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class MoveSaverTest {
+    
+    private final Util util = new Util();
 
     @BeforeClass
     public static void oneTimeSetUp() {
@@ -27,20 +35,20 @@ public class MoveSaverTest {
     public void tearDown() {
         Delete.filesAndFolders();
     }
-
-    Move bench;
-    Move deadlift;
-    Move newMove;
-    String benchName = "bench";
-    String dlName = "deadlift";
-    String varWeight = "weight";
-    String varReps = "reps";
-    String varPumped = "pumped";
-    File benchMoveFile;
-    File dlMoveFile;
-    File newSessionFolder;
-    File benchSessionFolder;
-    File dlSessionFolder;
+    
+    final String moveFileContents = Moves.VARS_START
+            + Variables.format(util.varWeight) + "\n"
+            + Variables.format(util.varReps) + "\n"
+            + Variables.format(util.varPumped) + "\n"
+            + Variables.format(util.varJacked) + "\n"
+            + Variables.format(util.varProg);
+   
+    final File benchMoveFile = 
+            new File(Constant.MOVES_DIR, util.benchName + Constant.MOVE_END);
+    final File dlMoveFile = 
+            new File(Constant.MOVES_DIR, util.dlName + Constant.MOVE_END);
+    File benchFolder = new File(Constant.DATA_DIR, util.benchName);
+    File dlFolder = new File(Constant.DATA_DIR, util.dlName);
     MoveSaver benchSaver;
     MoveListContainerUpdater updater;
 
@@ -48,20 +56,16 @@ public class MoveSaverTest {
     public void setUp() {
 
         Constant.MOVES_DIR.mkdir();
-        bench = new Move(benchName);
-        deadlift = new Move(dlName);
-        newMove = new Move();
-        benchMoveFile = new File(Constant.MOVES_DIR, benchName + Constant.MOVE_END);
-        dlMoveFile = new File(Constant.MOVES_DIR, dlName + Constant.MOVE_END);
-        benchSessionFolder = new File(Constant.DATA_DIR, benchName);
-        dlSessionFolder = new File(Constant.DATA_DIR, dlName);
-        updater = new MoveListContainerUpdater();
-        benchSaver = new MoveSaver(updater, bench);
+        util.bench = new Move(util.benchName);
+        util.deadlift = new Move(util.dlName);
+        util.newMove = new Move();
+        updater = new MoveListContainerUpdater(null);
+        benchSaver = new MoveSaver(updater, util.bench);
     }
-    
+
     @Test
-    public void GetsCorrectMove(){
-        assertEquals(bench, benchSaver.getMove());
+    public void GetsCorrectMove() {
+        assertEquals(util.bench, benchSaver.getMove());
     }
 
     @Test
@@ -72,17 +76,16 @@ public class MoveSaverTest {
 
     @Test
     public void MoveFileContentsAsExpected() throws Exception {
-        bench.addVariable(varWeight);
-        bench.addVariable(varReps);
-        bench.addVariable(varPumped);
+        for (Variable var : util.vars) {
+            util.bench.addVariable(var);
+        }
         benchSaver.saveToFile();
 
         Scanner lukija = new Scanner(benchMoveFile);
         lukija.useDelimiter("\\Z");
-        String fileContents = "";
-        fileContents = lukija.next();
+        String fileContents = lukija.next();
         lukija.close();
-        assertEquals(varWeight + "\n" + varReps + "\n" + varPumped, fileContents);
+        assertEquals(moveFileContents, fileContents);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -90,50 +93,52 @@ public class MoveSaverTest {
         benchSaver = new MoveSaver(updater, new Move());
         benchSaver.saveToFile();
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void CannotSaveWithNewMoveNameChangedToAnExistingNameOnMoveFile()
             throws Exception {
-        benchSaver = new MoveSaver(updater, newMove);
-        newMove.setName(benchName);
+        benchSaver = new MoveSaver(updater, util.newMove);
+        util.newMove.setName(util.benchName);
         benchMoveFile.createNewFile();
         benchSaver.saveToFile();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void CannotSaveWithNameChangedToBlank() throws Exception {
-        bench.setName("");
+        util.bench.setName("");
         benchSaver.saveToFile();
     }
 
     @Test
     public void CreatesSessionFolderForNewMove() throws Exception {
-        benchSaver = new MoveSaver(updater, newMove);
-        newMove.setName(benchName);
+        benchSaver = new MoveSaver(updater, util.newMove);
+        util.newMove.setName(util.benchName);
         benchSaver.saveToFile();
-        assertTrue(benchSessionFolder.exists());
+        assertTrue(benchFolder.exists());
     }
 
     @Test
     public void FilenamesChangedWhenRenamingMoveWithExistingFiles()
             throws Exception {
         benchMoveFile.createNewFile();
-        benchSessionFolder.mkdirs();
-        bench.setName(dlName);
+        benchFolder.mkdirs();
+        util.bench.setName(util.dlName);
         benchSaver.saveToFile();
         assertTrue(!benchMoveFile.exists() && dlMoveFile.exists());
-        assertTrue(!benchSessionFolder.exists() && dlSessionFolder.exists());
+        assertTrue(!benchFolder.exists() && dlFolder.exists());
     }
 
     @Test
     public void MoveFileContentsAsExpectedAfterRenamingAndOverwriting()
             throws Exception {
-        bench.addVariable(varWeight);
-        bench.addVariable(varReps);
-        benchSessionFolder.mkdirs();
+        util.bench.addVariable(util.varWeight);
+        util.bench.addVariable(util.varReps);
+        util.bench.addVariable(util.varPumped);
+        benchFolder.mkdirs();
         benchSaver.saveToFile();
-        bench.addVariable(varPumped);
-        bench.setName(dlName);
+        util.bench.addVariable(util.varJacked);
+        util.bench.addVariable(util.varProg);
+        util.bench.setName(util.dlName);
         benchSaver.saveToFile();
 
         Scanner lukija = new Scanner(dlMoveFile);
@@ -141,16 +146,19 @@ public class MoveSaverTest {
         String fileContents = "";
         fileContents = lukija.next();
         lukija.close();
-        assertEquals(varWeight + "\n" + varReps + "\n" + varPumped, fileContents);
+        assertEquals(moveFileContents, fileContents);
     }
 
     @Test
-    public void MoveFileContentsAsExpectedAfterAddingVariableAndOverwriting()
+    public void MoveFileContentsAsExpectedAfterAddingMoreVariablesAndOverwriting()
             throws Exception {
-        bench.addVariable(varWeight);
-        bench.addVariable(varReps);
+        util.bench.addVariable(util.varWeight);
+        util.bench.addVariable(util.varReps);
+        util.bench.addVariable(util.varPumped);
+        benchFolder.mkdirs();
         benchSaver.saveToFile();
-        bench.addVariable(varPumped);
+        util.bench.addVariable(util.varJacked);
+        util.bench.addVariable(util.varProg);
         benchSaver.saveToFile();
 
         Scanner lukija = new Scanner(benchMoveFile);
@@ -158,19 +166,19 @@ public class MoveSaverTest {
         String fileContents = "";
         fileContents = lukija.next();
         lukija.close();
-        assertEquals(varWeight + "\n" + varReps + "\n" + varPumped, fileContents);
+        assertEquals(moveFileContents, fileContents);
     }
 
     @Test(expected = FileRenameException.class)
     public void RenamingThrowsExceptionWhenMoveFileIsDeleted() throws Exception {
-        bench.setName(dlName);
+        util.bench.setName(util.dlName);
         benchMoveFile.delete();
         benchSaver.saveToFile();
     }
-    
+
     @Test(expected = FileRenameException.class)
     public void RenamingThrowsExceptionWhenTargetFileExists() throws Exception {
-        bench.setName(dlName);
+        util.bench.setName(util.dlName);
         dlMoveFile.createNewFile();
         benchSaver.saveToFile();
     }

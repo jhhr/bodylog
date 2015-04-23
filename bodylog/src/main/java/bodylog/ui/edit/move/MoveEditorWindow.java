@@ -49,7 +49,7 @@ public class MoveEditorWindow extends WindowWithMoveChooser {
     @Override
     protected void addEditor(Move move) {
         editorPanel.add(new MoveEditor(new MoveSaver(updater, move),
-                this, updater));
+                this));
         validate();
         repaint();
     }

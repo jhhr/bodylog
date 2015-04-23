@@ -2,11 +2,11 @@ package bodylog.files.read;
 
 import bodylog.files.Constant;
 import bodylog.files.filters.SessionFileFilter;
-import bodylog.logic.datahandling.Names;
 import bodylog.logic.Move;
 import bodylog.logic.Session;
-import bodylog.logic.Set;
-import bodylog.logic.datahandling.Sets;
+import bodylog.logic.datahandling.Sessions;
+import bodylog.logic.exceptions.ParsingException;
+import bodylog.logic.exceptions.VariableStateException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.temporal.TemporalAccessor;
@@ -21,21 +21,23 @@ public class SessionReader {
      * the movement's folder through the file ending using a SessionFileFilter.
      *
      * @param move Move to which sessions will be added
-     * @return A Move with Sessions added, populated with Sets when the
-     * fetchSession file contained set data.
+     *
      * @throws FileNotFoundException when a fetchSession file cannot be found
+     * @throws ParsingException when failing to parse the type of a Variable
+     * @throws VariableStateException when a parsed Variable is found not proper
+     *
      * @see bodylog.files.SessionFileFilter
      * @see bodylog.logic.Move
      * @see bodylog.logic.Session
      * @see bodylog.logic.Set
      */
-    public Move fetchSessionsForMove(Move move) throws FileNotFoundException {
+    public void fetchSessionsForMove(Move move) throws FileNotFoundException,
+            ParsingException, VariableStateException {
         File moveDataFolder = new File(Constant.DATA_DIR, move.getName());
         moveDataFolder.mkdir();
         for (File sessionFile : moveDataFolder.listFiles(new SessionFileFilter())) {
             move.addSession(fetchSession(sessionFile));
         }
-        return move;
     }
 
     /**
@@ -45,20 +47,22 @@ public class SessionReader {
      * one Set. into appropriate values.
      *
      * @param sessionFile file to be read
+     *
      * @return A new Session populated with Sets, unless the file was empty
+     *
      * @throws FileNotFoundException when the file cannot be found
+     * @throws ParsingException when failing to parse the type of a Variable
+     * @throws VariableStateException when a parsed Variable is found not proper
      *
      * @see bodylog.logic.DataHandling#stringToSetValue(String)
      * @see bodylog.logic.Session
      * @see bodylog.logic.Set
      * @see bodylog.files.Constant#FILE_DATE_FORMAT
      */
-    public Session fetchSession(File sessionFile) throws FileNotFoundException {
+    public Session fetchSession(File sessionFile) throws FileNotFoundException,
+            ParsingException, VariableStateException {
         Scanner scanner = new Scanner(sessionFile);
-        Session session = new Session(fetchDateForSession(sessionFile));
-        while (scanner.hasNextLine()) {
-            session.addSet(fetchSetForSession(scanner));
-        }
+        Session session = Sessions.parse(scanner, fetchDate(sessionFile));
         scanner.close();
         return session;
     }
@@ -73,24 +77,10 @@ public class SessionReader {
      * @see bodylog.logic.Session
      * @see bodylog.files.Constant#FILE_DATE_FORMAT
      */
-    private TemporalAccessor fetchDateForSession(File sessionFile) {
+    private TemporalAccessor fetchDate(File sessionFile) {
         String dateStr = sessionFile.getName();
         dateStr = dateStr.substring(0,
                 dateStr.length() - Constant.SESSION_END.length());
         return Constant.FILE_DATE_FORMAT.parse(dateStr);
     }
-
-    /**
-     * Creates a Set from a line in a session file contained in a Scanner.
-     * Private method used by <code>fetchSession</code>.
-     *
-     * @param scanner Scanner that holds the file, given by the calling method
-     * @return a Set with the values read from the line in the file
-     * @see bodylog.logic.datahandling.Sets#parseLine
-     * @see bodylog.logic.Set
-     */
-    private Set fetchSetForSession(Scanner scanner) {
-        return Sets.parseLine(scanner.nextLine());
-    }
-
 }

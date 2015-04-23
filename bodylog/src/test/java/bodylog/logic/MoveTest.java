@@ -1,11 +1,10 @@
 package bodylog.logic;
 
+import bodylog.logic.Variable.Type;
 import bodylog.logic.datahandling.Names;
 import bodylog.logic.exceptions.NameNotAllowedException;
 import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.TreeSet;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertArrayEquals;
@@ -17,20 +16,21 @@ public class MoveTest {
     Move bench;
     String benchName = "bench";
     Session session;
-    String varWeight = "weight";
-    String varReps = "reps";
+    Variable varWeight = new Variable("weight", Type.NUMERICAL, new String[]{});
+    Variable varTearing = new Variable(
+            "tore something", Type.CHECKBOX, new String[]{});
 
     @Before
     public void SetUp() {
         bench = new Move(benchName);
-        session = new Session(LocalDate.now());
+        session = new Session();
     }
 
     @Test
     public void Constructor_BlankNameNoVarsNoSessionsInNewMove() {
         Move blank = new Move();
 
-        assertEquals("", blank.toString());
+        assertEquals("", blank.getName());
         assertEquals(0, blank.variableCount());
         assertTrue(blank.getSessions().isEmpty());
     }
@@ -41,9 +41,9 @@ public class MoveTest {
     }
 
     @Test
-    public void Constructor_WithNameWhiteSpaceRemoved() {
-        Move withSpaces = new Move(" spaces  \n");
-        assertEquals("spaces", withSpaces.toString());
+    public void SetName_RemovesTrailingWhiteSpace() throws Exception {
+        bench.setName(" spaces  ");
+        assertEquals("spaces", bench.getName());
     }
 
     @Test
@@ -67,37 +67,24 @@ public class MoveTest {
     }
 
     @Test
-    public void CantUseBannedCharsInVariable() {
-        boolean variableAdded = false;
-        for (char ch : Names.Illegal.VARIABLE.getChars()) {
-            try {
-                bench.addVariable("asd" + ch + "fjkl");
-                variableAdded = true;
-            } catch (IllegalArgumentException e) {
-            }
-        }
-        assertFalse(variableAdded);
-    }
-
-    @Test
     public void VariableAddedNormallyFoundAtExpectedIndex() {
         bench.addVariable(varWeight);
-        assertEquals(varWeight, bench.getVariableName(0));
-        bench.addVariable(varReps);
-        assertEquals(varReps, bench.getVariableName(1));
+        assertEquals(varWeight.getName(), bench.getVariableName(0));
+        bench.addVariable(varTearing);
+        assertEquals(varTearing.getName(), bench.getVariableName(1));
     }
 
     @Test
     public void VariableAddedBeyondCurrectLengthFoundAtExpectedIndex() {
         bench.addVariable(varWeight, 5);
-        assertEquals(varWeight, bench.getVariableName(5));
+        assertEquals(varWeight.getName(), bench.getVariableName(5));
     }
 
     @Test
     public void VariableAddedToSpecificIndexReplacesPreviousValue() {
         bench.addVariable(varWeight);
-        bench.addVariable(varReps, 0);
-        assertEquals(varReps, bench.getVariableName(0));
+        bench.addVariable(varTearing, 0);
+        assertEquals(varTearing.getName(), bench.getVariableName(0));
     }
 
     @Test
@@ -109,13 +96,8 @@ public class MoveTest {
         assertEquals(ses2, bench.getSession(1));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void CantAddNullIntoSessionList() {
-        bench.addSession(null);
-    }
-
     @Test
-    public void NumberOfSetsOneWhenOneSetAdded() {
+    public void NumberOfSessionsOneWhenOneSessionAdded() {
         bench.addSession(session);
         assertEquals(1, bench.getSessions().size());
     }
@@ -144,9 +126,9 @@ public class MoveTest {
         assertArrayEquals(new Move[]{first, second, third, fourth},
                 moveList.toArray());
     }
-    
+
     @Test
-    public void MoveHashCodeNotSameAsJustNameHashCode(){
+    public void MoveHashCodeNotSameAsJustNameHashCode() {
         assertFalse(bench.hashCode() == benchName.hashCode());
     }
 

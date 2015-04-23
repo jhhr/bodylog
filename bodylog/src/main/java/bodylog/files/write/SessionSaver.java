@@ -5,11 +5,12 @@
  */
 package bodylog.files.write;
 
-import bodylog.files.Saver;
+import bodylog.files.abstracts.Saver;
 import bodylog.files.Constant;
 import bodylog.logic.Move;
 import bodylog.logic.Session;
 import bodylog.logic.Set;
+import bodylog.logic.datahandling.Sessions;
 import bodylog.ui.MoveListContainerUpdater;
 import java.io.File;
 import java.io.FileWriter;
@@ -34,11 +35,6 @@ public class SessionSaver extends Saver {
         this.move.addSession(new Session());
     }
 
-    @Override
-    public Move getMove() {
-        return move;
-    }
-
     /**
      * Checks if the specified Move has a session file of specified date. The
      * filename of the session file is the same as the given date string with an
@@ -60,14 +56,8 @@ public class SessionSaver extends Saver {
     }
 
     /**
-     * Writes the data contained in the Sessions of the t Move into session
-     * files. Uses a DateTimeFormatter to format the date of Sessions into a
-     * string used for the filename of the session files. Used in the UI class
-     * SessionEditor.
-     *
-     * Writes each Session into one file, writing one line per each Set
-     * contained in the Session. Nothing is written if no Sets are found. No
-     * files are created if no Session are found.
+     * Writes the data contained in the Sessions of the Move into session files.
+     * Used in the UI class SessionEditor. Writes each Session into one file.
      *
      * @throws IOException if the file exists but is a directory rather than a
      * regular file, does not exist but cannot be created, or cannot be opened
@@ -89,13 +79,14 @@ public class SessionSaver extends Saver {
 
     private void writeToFile() throws IOException {
         for (Session session : move.getSessions()) {
+            session.setVariables(move.getVariables());
+            
             String dateStr = session.getFileDateString();
             File sessionFile = new File(Constant.DATA_DIR,
-                    move + "/" + dateStr + Constant.SESSION_END);
+                    move.getName() + "/" + dateStr + Constant.SESSION_END);
             FileWriter writer = new FileWriter(sessionFile);
-            for (Set set : session.getSets()) {
-                writer.write(set.toString() + "\n");
-            }
+
+            writer.write(Sessions.format(session));
             writer.close();
         }
     }

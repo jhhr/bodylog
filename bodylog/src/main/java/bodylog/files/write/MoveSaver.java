@@ -5,9 +5,10 @@
  */
 package bodylog.files.write;
 
-import bodylog.files.Saver;
+import bodylog.files.abstracts.Saver;
 import bodylog.files.Constant;
 import bodylog.logic.Move;
+import bodylog.logic.datahandling.Moves;
 import bodylog.logic.exceptions.FileCreationException;
 import bodylog.logic.exceptions.FileRenameException;
 import bodylog.ui.MoveListContainerUpdater;
@@ -44,7 +45,7 @@ public class MoveSaver extends Saver {
      */
     public MoveSaver(MoveListContainerUpdater updater, Move move) {
         //this will be an empty string if the Move was not loaded from file
-        super(updater,move);
+        super(updater, move);
         this.oldName = move.getName();
     }
 
@@ -156,15 +157,15 @@ public class MoveSaver extends Saver {
     /**
      * Renames the specified file to the target.
      */
-    private int renameFiles() throws SecurityException, FileSystemException {        
+    private int renameFiles() throws SecurityException, FileSystemException {
         File oldFile = new File(Constant.MOVES_DIR, oldName + Constant.MOVE_END);
         File newFile = new File(Constant.MOVES_DIR, move.getName() + Constant.MOVE_END);
-        
+
         //throw exception if renaming would fail with move files
-        throwRenameException(oldFile, newFile, "file");    
+        throwRenameException(oldFile, newFile, "file");
         File oldFolder = new File(Constant.DATA_DIR, oldName);
         File newFolder = new File(Constant.DATA_DIR, move.getName());
-        
+
         //throw exception if renaming would fail with move folders
         throwRenameException(oldFolder, newFolder, "folder");
         /**
@@ -202,9 +203,7 @@ public class MoveSaver extends Saver {
     private void writeToFile() throws IOException {
         File moveFile = new File(Constant.MOVES_DIR, move.getName() + Constant.MOVE_END);
         FileWriter writer = new FileWriter(moveFile);
-        for (String variable : move.getVariableNames()) {
-            writer.write(variable + "\n");
-        }
+        writer.write(Moves.format(move));
         writer.close();
     }
 

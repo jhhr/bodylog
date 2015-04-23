@@ -1,6 +1,7 @@
 package bodylog.logic;
 
 import bodylog.files.Constant;
+import bodylog.logic.abstracts.VariableList;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  * @see bodylog.logic.Move
  * @see bodylog.logic.Set
  */
-public class Session {
+public class Session extends VariableList {
 
     private TemporalAccessor date;
     private final ArrayList<Set> sets;
@@ -25,6 +26,7 @@ public class Session {
      * @see bodylog.files.Constant#FILE_DATE_FORMAT
      */
     public Session(TemporalAccessor date) {
+        super();
         this.date = LocalDate.from(date);
         this.sets = new ArrayList<>();
     }
@@ -35,6 +37,7 @@ public class Session {
      * @see java.time.LocalDate
      */
     public Session() {
+        super();
         //not calling other constructor to avoid superfluous call LocalDate.from(LocalDate.now())
         this.date = LocalDate.now();
         this.sets = new ArrayList<>();
@@ -121,5 +124,9 @@ public class Session {
             throw new IllegalArgumentException("tried to add null to session");
         }
         sets.add(set);
+    }
+
+    public void removeLastSet() {
+        sets.remove(sets.size() - 1);
     }
 }

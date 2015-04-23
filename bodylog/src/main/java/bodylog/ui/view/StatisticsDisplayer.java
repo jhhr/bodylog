@@ -4,6 +4,8 @@ import bodylog.files.read.SessionReader;
 import bodylog.ui.tables.view.ViewTable;
 import bodylog.logic.Move;
 import bodylog.logic.Session;
+import bodylog.logic.exceptions.ParsingException;
+import bodylog.logic.exceptions.VariableStateException;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,10 +39,6 @@ public class StatisticsDisplayer {
         movesToStatisticsMap.put(move, null);
     }
 
-    private Move fetchSessions(Move move) throws FileNotFoundException {
-        return reader.fetchSessionsForMove(move);
-    }
-
     /**
      * Creates the tables for the given Move. Sessions are read from
      * fetchSession files and added to the Move. Each table consists of the data
@@ -50,12 +48,16 @@ public class StatisticsDisplayer {
      * @return JPanel containing JTables displaying the data or an informative
      * JLabel if no sessions were found
      * @throws FileNotFoundException if a file cannot be found
+     * @throws ParsingException when failing to parse the type of a Variable
+     * @throws VariableStateException when a parsed Variable is found not proper
      */
-    public JPanel getStatisticsDisplay(Move move) throws FileNotFoundException {
+    public JPanel getStatisticsDisplay(Move move) throws FileNotFoundException,
+            ParsingException, VariableStateException {
         JPanel statisticsPanel = movesToStatisticsMap.get(move);
         if (statisticsPanel == null) {
             move.clearSessions();
-            statisticsPanel = new StatisticsDisplay(fetchSessions(move));
+            reader.fetchSessionsForMove(move);
+            statisticsPanel = new StatisticsDisplay(move);
             movesToStatisticsMap.put(move, statisticsPanel);
         }
         return statisticsPanel;

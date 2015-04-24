@@ -3,6 +3,7 @@ package bodylog.ui.edit;
 import bodylog.files.abstracts.Saver;
 import bodylog.logic.Move;
 import bodylog.ui.tables.abstracts.EditorTable;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -10,11 +11,14 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -113,7 +117,8 @@ public abstract class Editor extends JPanel implements ActionListener {
      * @see bodylog.ui.edit.abstracts.Editor#saveButton
      * @see bodylog.ui.edit.abstracts.Editor#closeButton
      */
-    protected void setButtonLayouts(String rowAdderLabel,
+    protected void setButtonLayouts(
+            String rowAdderLabel,
             String rowRemoverLabel,
             String textFieldLabel,
             String textFieldToolTip,
@@ -189,33 +194,55 @@ public abstract class Editor extends JPanel implements ActionListener {
      * @return JButton with ActionListener added
      */
     protected JButton rowRemoverButton(String title) {
-        JButton setRemoverButton = new JButton(title);
-        setRemoverButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int rowCount = tableModel.getRowCount();
-                //check if there's more than one row
-                if (rowCount > 1) {
-                    //if so check if the last row is empty
-                    if (tableModel.rowIsEmpty(rowCount - 1)
-                            //if not ask user for confirmation
-                            || userConfirmsRemoveRow()) {
-                        tableModel.removeRow(rowCount - 1);
-                        resizeAndUpdate();
-                    }
-                }
-            }
-        });
+        final JButton setRemoverButton = new JButton(title);
+        setRemoverButton.addActionListener(
+                new RemoveListenerAndConfirmPopup(setRemoverButton));
         return setRemoverButton;
     }
 
-    private boolean userConfirmsRemoveRow() {
-        int userChoice = JOptionPane.showConfirmDialog(this,
-                "The row has data, do you still want to remove it?",
-                "Confirm remove row", JOptionPane.YES_NO_OPTION,
-                JOptionPane.WARNING_MESSAGE);
-        return userChoice == JOptionPane.YES_OPTION ? true : false;
+    private class RemoveListenerAndConfirmPopup implements ActionListener {
+
+        private final JPopupMenu confirmPopup;
+        private final JButton removeButton;
+
+        public RemoveListenerAndConfirmPopup(JButton removeButton) {
+            this.removeButton = removeButton;
+            this.confirmPopup = new JPopupMenu();
+            JLabel info = new JLabel(" row is not empty");
+            info.setForeground(Color.GRAY);
+            confirmPopup.add(info);
+            confirmPopup.addSeparator();
+            confirmPopup.add(new JMenuItem(new AbstractAction("confirm remove") {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    removeRow(tableModel.getRowCount() - 1);
+                }
+            }));
+            confirmPopup.setPreferredSize(new Dimension(110,
+                    confirmPopup.getPreferredSize().height));
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            int rowCount = tableModel.getRowCount();
+            //check if there's more than one row
+            if (rowCount > 1) {
+                //if so check if the last row is empty
+                if (!tableModel.rowIsEmpty(rowCount - 1)) {
+                    confirmPopup.show(removeButton,
+                            removeButton.getBounds().x,
+                            removeButton.getBounds().y);
+                } else {
+                    removeRow(rowCount - 1);
+                }
+            }
+        }
+
+        private void removeRow(int row) {
+            tableModel.removeRow(row);
+            resizeAndUpdate();
+        }
+
     }
 
     /**

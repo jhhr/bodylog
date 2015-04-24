@@ -1,23 +1,27 @@
 package bodylog.ui.edit.move;
 
 import bodylog.files.abstracts.Saver;
-import bodylog.logic.Variable;
 import bodylog.logic.Variable.Type;
 import bodylog.ui.edit.Editor;
 import bodylog.logic.datahandling.Names;
+import bodylog.logic.exceptions.DuplicateVariableNameException;
+import bodylog.logic.exceptions.FileCreationException;
+import bodylog.logic.exceptions.FileRenameException;
 import bodylog.logic.exceptions.NameNotAllowedException;
-import bodylog.ui.MoveListContainerUpdater;
+import bodylog.logic.exceptions.VariableStateException;
 import bodylog.ui.tables.edit.MoveEditorTable;
 import bodylog.ui.tables.abstracts.EditorTable;
-import java.io.IOException;
-import java.nio.file.FileAlreadyExistsException;
+import java.awt.event.ActionEvent;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 /**
  * The UI component used in creating new movements and editing existing ones.
@@ -51,22 +55,7 @@ public class MoveEditor extends Editor {
 
     @Override
     protected EditorTable setTableModel() {
-        Object[][] tableData;
-        int varCount = getMove().variableCount();
-        if (varCount > 0) {
-            tableData = new Object[varCount][3];
-            for (int i = 0; i < varCount; i++) {
-                Variable var = getMove().getVariable(i);
-                tableData[i][0] = var.getName();
-                tableData[i][1] = var.getType();
-                tableData[i][2] = Arrays.toString(var.getChoices());
-            }
-        } else {
-            tableData = new Object[][]{{null, null, null}};
-            getMove().addVariable(new Variable());
-        }
-        return new MoveEditorTable(tableData,
-                new String[]{"Variable", "Type", "Choices"}, getMove());
+        return new MoveEditorTable(getMove());
     }
 
     @Override
@@ -75,20 +64,33 @@ public class MoveEditor extends Editor {
         //tooltip displayed when hovering over the table
         newTable.setToolTipText("Characters not allowed in variables: "
                 + Names.IllegalCharsWithSpaces(Names.Illegal.VARIABLE));
-        newTable.setPreferredScrollableViewportSize(newTable.getPreferredSize());
-        newTable.getTableHeader().setReorderingAllowed(false);
+        newTable.setRowHeight(20);
 
-        TableColumn varTypeColumn = newTable.getColumnModel().getColumn(1);
+        TableColumnModel model = newTable.getColumnModel();
+        model.getColumn(0).setPreferredWidth(80);
+
+        TableColumn varTypeColumn = model.getColumn(1);
+        varTypeColumn.setPreferredWidth(100);
         JComboBox typeChooser = new JComboBox();
         typeChooser.addItem(Type.NUMERICAL);
         typeChooser.addItem(Type.CHECKBOX);
         typeChooser.addItem(Type.OPTIONAL_CHOICE);
         typeChooser.addItem(Type.MANDATORY_CHOICE);
+        typeChooser.setSelectedItem(Type.NUMERICAL);
         varTypeColumn.setCellEditor(new DefaultCellEditor(typeChooser));
 
-        TableColumn varChoicesColumn = newTable.getColumnModel().getColumn(2);
-        varChoicesColumn.setCellEditor(
-                new VariableChoicesEditor(saver.getUpdater().getFrame()));
+        TableColumn varChoicesColumn = model.getColumn(2);
+        varChoicesColumn.setPreferredWidth(150);;
+        varChoicesColumn.setCellEditor(new VariableChoicesEditor());
+
+        varChoicesColumn.setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            protected void setValue(Object value) {
+                setText((value == null) ? "" : Arrays.toString((String[]) value));
+            }
+        });
+        newTable.setPreferredScrollableViewportSize(newTable.getPreferredSize());
+        newTable.getTableHeader().setReorderingAllowed(false);
         return newTable;
     }
 
@@ -110,6 +112,12 @@ public class MoveEditor extends Editor {
         }
         setEditorBorder("");
     }
+    
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        window.removeEditor(this);
+        getMove().clearSessions();
+    }
 
     @Override
     public boolean fileExists() {
@@ -125,14 +133,20 @@ public class MoveEditor extends Editor {
     protected void saveToFile() {
         try {
             saver.saveToFile();
-        } catch (FileAlreadyExistsException fae) {
+        } catch (IllegalArgumentException | VariableStateException |
+                FileCreationException | FileRenameException |
+                DuplicateVariableNameException expected) {
 
-        } catch (IOException io) {
-            Logger.getLogger(MoveEditor.class.getName()).log(Level.SEVERE, null, io);
-        } catch (SecurityException sec) {
-
-        } catch (Exception e) {
-
+            JOptionPane.showMessageDialog(getParent(),
+                    expected.getMessage(),
+                    "Saving canceled", JOptionPane.INFORMATION_MESSAGE);
+        } catch (Exception unexpected) {
+            JOptionPane.showMessageDialog(getParent(),
+                    "cause: " + unexpected.getCause()
+                    + " message: " + unexpected.getMessage(),
+                    "Saving failed unexpectedly", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(this.getClass().getName()).log(
+                    Level.SEVERE, null, unexpected);
         }
     }
 

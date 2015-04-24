@@ -56,11 +56,11 @@ public class SetTest {
     public void AddingValuesToIndexIncreasesListSizeAsExpected() {
         set.addValue(60.0);
         assertEquals(1, set.size());        
-        set.addValue(null,0);    
+        set.setValue(null,0);    
         assertEquals(1, set.size());        
-        set.addValue(false,3);  
+        set.setValue(false,3);  
         assertEquals(4, set.size());        
-        set.addValue(1,2);      
+        set.setValue(1,2);      
         assertEquals(4, set.size());
     }
     
@@ -84,21 +84,11 @@ public class SetTest {
     @Test
     public void OrderOfValuesAsExpectedWhenAddingToExistingIndex(){        
         set.addValue(12.3);
-        set.addValue(4,0);
+        set.setValue(4,0);
         set.addValue(null);
-        set.addValue(false,1);
+        set.setValue(false,1);
         set.addValue(null);
         assertArrayEquals(new Object[]{4, false, null,}, set.toArray());
-    }
-
-    @Test
-    public void StringFormatCorrect() {
-        set.addValue(62.5);
-        set.addValue(15);
-        set.addValue(null);
-        set.addValue(false);
-        set.addValue(0.0);
-        assertEquals(Sets.format(set), set.toString());
     }
 
 }

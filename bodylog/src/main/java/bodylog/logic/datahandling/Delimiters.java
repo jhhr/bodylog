@@ -1,10 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package bodylog.logic.datahandling;
 
+package bodylog.logic.datahandling;
+/**
+ * Defines the characters used in parsing and formatting data.
+ * @author yonus
+ */
 public class Delimiters {
 
     //static class, does not have instances

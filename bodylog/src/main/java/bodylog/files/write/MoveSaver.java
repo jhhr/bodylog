@@ -9,8 +9,10 @@ import bodylog.files.abstracts.Saver;
 import bodylog.files.Constant;
 import bodylog.logic.Move;
 import bodylog.logic.datahandling.Moves;
+import bodylog.logic.exceptions.DuplicateVariableNameException;
 import bodylog.logic.exceptions.FileCreationException;
 import bodylog.logic.exceptions.FileRenameException;
+import bodylog.logic.exceptions.VariableStateException;
 import bodylog.ui.MoveListContainerUpdater;
 import java.io.File;
 import java.io.FileWriter;
@@ -68,35 +70,44 @@ public class MoveSaver extends Saver {
      * Writes the variables and name of the Move of this MoveSaver to file.
      * Doesn't allow a blank-named Move to be saved. If the Move was loaded from
      * file, checks if the name was changed and renames move files and folders.
-     * Writes one line per each variable. Nothing is written if no variables are
-     * found. After successful saving, informs the MoveListContainerUpdater of
-     * the made changes.
+     * After successful saving, informs the MoveListContainerUpdater of the made
+     * changes.
      *
-     * @throws IOException If the file cannot be created or opened or if an
-     * error occurs during writing. Probably a problem outside this program.
-     * @throws FileRenameException If the file to be renamed doesn't exist (user
+     * @throws IOException when the file cannot be created or opened or if an
+     * error occurs during writing
+     * @throws FileRenameException when the file to be renamed doesn't exist (user
      * deleted it), the file and rename target both exist (user set Move name
-     * same as one that is saved) or renaming failed for unknown reasons.
-     * @throws FileCreationException If the creation of the move folder fails
-     * for unknown reasons.
-     * @throws IllegalArgumentException If the name of the Move is blank. User
-     * error, trying to save a new Move without changing name.
+     * same as one that is saved) or renaming failed for unknown reasons
+     * @throws FileCreationException when the creation of the move folder fails
+     * for unknown reasons
+     * @throws IllegalArgumentException when the name of the Move is blank (user
+     * trying to save a new Move without changing name or changed name to blank)
+     * @throws VariableStateException when any of the variables is not proper
+     * @throws DuplicateVariableNameException when two variables are found to
+     * have the same name
+     *
      * @see bodylog.logic.Move
+     * @see bodylog.logic.Variable#checkState()
+     * @see bodylog.logic.abstracts.VariableList#checkVariables
      * @see bodylog.ui.dataediting.MoveEditor
      * @see bodylog.files.Constant#MOVES_DIR
      * @see bodylog.files.Constant#MOVE_END
      */
     @Override
     public void saveToFile() throws SecurityException, IllegalArgumentException,
-            FileCreationException, FileRenameException, IOException {
+            FileCreationException, FileRenameException, IOException,
+            VariableStateException, DuplicateVariableNameException {
         int updateStatus = 0;
         if (move.getName().isEmpty()) {//is the name blank?
             throw new IllegalArgumentException(
                     "Saving a move with a blank name is not allowed.");
-        } else if (oldName.isEmpty()) {//is this a new Move?
+        } else {
+            move.checkVariables();
+        }
+        if (oldName.isEmpty()) {//is this a new Move?
             if (fileExists()) {//has the name already been used?
                 throw new IllegalArgumentException(
-                        "This name has already been used by an existing movement.");
+                        "There already is a file for a movement with this name.");
             }
             createSessionFolder();
             updateStatus = NEW_MOVE;

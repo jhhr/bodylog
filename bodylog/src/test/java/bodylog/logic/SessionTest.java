@@ -50,9 +50,4 @@ public class SessionTest {
         set1.addValue(1.0);
         assertEquals(set1, session.getSet(0));
     }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void CantAddNullIntoSetList() {
-        session.addSet(null);
-    }
 }

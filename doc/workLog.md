@@ -23,5 +23,8 @@
 - ke 15.4 klo 13-23 ui:n liikelistan autopäivitys valmis, tiedostokäsittelyä järjestelty taas, luokkakaavion piirtoa
 - to 16.4 klo 13-1:30 tiedostokäsittely enkapsuloitu uusiksi, ui:n liikelistojen autopäivitys laajenttu
 - pe 17.4 klo 12-22 liikelista tehty järjestyväksi, sekvenssikaavioita kaksi ja luokkakaavio piirretty, hiukan uusia testejä
-- ma 21.4 klo 14-23 logiikan laajennusfeature aloitettu: erilaiset muuttujatyypit
-- ti 22.4 klo 14-03 muuttujatyyppi-featuren kehitys jatkuu, vanhat testit päivitetty
+- ma 20.4 klo 19-00 logiikan laajennusfeature aloitettu: erilaiset muuttujatyypit
+- ti 21.4 klo 14-23 muuttajatyyppi-featuren kehitys jatkuu
+- ke 22.4 klo 14-03 muuttujatyyppi-featuren kehitys jatkuu, vanhat testit päivitetty
+- to 23.4 klo 13-01 muuttujatyyppi-feature valmis, bugeja liiskattu, testejä korjailtu
+- pe 24.4 klo 13-23:30 bugeja liiskattu, luokkakaavio päivitetty, sekvenssikaavioita tehty pari lisää, muutama uusi testi

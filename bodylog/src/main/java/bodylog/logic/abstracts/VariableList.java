@@ -6,39 +6,57 @@
 package bodylog.logic.abstracts;
 
 import bodylog.logic.Variable;
+import bodylog.logic.exceptions.DuplicateVariableNameException;
+import bodylog.logic.exceptions.VariableStateException;
 import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * Abstract class containing the functionality required by a class that uses a
  * list of Variables.
  */
-public class VariableList {
+public abstract class VariableList {
 
     protected Variable[] variables;
-    
-    public VariableList(){
+
+    public VariableList() {
         this.variables = new Variable[0];
     }
 
     /**
      * @return the number of Variables in this
      */
-    public int variableCount() {
+    public int getVariableCount() {
         return variables.length;
     }
 
     /**
-     * @param variables the array of Variables to be set for this
+     * Sets all variables for this.
+     *
+     * @param variables the array of Variables to be set
      */
     public void setVariables(Variable[] variables) {
         this.variables = variables;
     }
 
     /**
+     * Gets all variables in this.
+     *
      * @return an array of Variables
      */
     public Variable[] getVariables() {
         return variables;
+    }
+
+    /**
+     * Gets the variable from the specified index. Doesn't check if it's out of
+     * bounds or not.
+     *
+     * @param index the index from which to get the Variable
+     * @return a Variable
+     */
+    public Variable getVariable(int index) {
+        return variables[index];
     }
 
     /**
@@ -48,8 +66,8 @@ public class VariableList {
      * @see bodylog.logic.Variable
      */
     public void addVariable(Variable var) {
-        variables = Arrays.copyOf(variables, variableCount() + 1);
-        variables[variableCount() - 1] = var;
+        variables = Arrays.copyOf(variables, getVariableCount() + 1);
+        variables[getVariableCount() - 1] = var;
     }
 
     /**
@@ -60,7 +78,7 @@ public class VariableList {
      * @param index the index to be added to
      * @see bodylog.logic.Variable
      */
-    public void addVariable(Variable var, int index) {
+    public void setVariable(Variable var, int index) {
         try {
             variables[index] = var;
         } catch (IndexOutOfBoundsException in) {
@@ -70,21 +88,13 @@ public class VariableList {
     }
 
     /**
-     * @param index the index from which to get the Variable
-     * @return a Variable
-     */
-    public Variable getVariable(int index) {
-        return variables[index];
-    }
-
-    /**
      * Constructs a string array of the names of the variables in this.
      *
      * @return a string array containing the names of the variables
      */
     public String[] getVariableNames() {
-        int varCount = variableCount();
-        String[] variableNames = new String[variableCount()];
+        int varCount = getVariableCount();
+        String[] variableNames = new String[getVariableCount()];
         for (int i = 0; i < varCount; i++) {
             variableNames[i] = getVariableName(i);
         }
@@ -100,6 +110,20 @@ public class VariableList {
      */
     public String getVariableName(int index) {
         return variables[index].getName();
+    }
+    
+    public void checkVariables() throws VariableStateException, 
+            DuplicateVariableNameException{
+        for (Variable var : variables) {
+            var.checkState();
+        }
+        HashSet<String> nameSet = new HashSet();
+        for (String name : getVariableNames()) {
+            if (!nameSet.add(name)) {
+                throw new DuplicateVariableNameException(
+                        "Duplicate variable names are not allowed.");
+            }
+        }
     }
 
 }

@@ -1,13 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package bodylog.files.abstracts;
 
 import bodylog.logic.Move;
 import bodylog.ui.MoveListContainerUpdater;
-import java.nio.file.FileSystemException;
 
 public abstract class Saver {
 
@@ -27,7 +22,7 @@ public abstract class Saver {
         return move;
     }
 
-    public MoveListContainerUpdater getUpdater() {
-        return updater;
-    }
+//    public MoveListContainerUpdater getUpdater() {
+//        return updater;
+//    }
 }

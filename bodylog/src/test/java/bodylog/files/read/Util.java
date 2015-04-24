@@ -8,6 +8,7 @@ package bodylog.files.read;
 import bodylog.files.Constant;
 import bodylog.logic.Move;
 import bodylog.logic.Session;
+import bodylog.logic.Set;
 import bodylog.logic.Variable;
 import bodylog.logic.Variable.Type;
 import bodylog.logic.datahandling.Delimiters;
@@ -17,6 +18,7 @@ import bodylog.logic.datahandling.Sets;
 import bodylog.logic.datahandling.Variables;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
@@ -80,7 +82,7 @@ public class Util {
         + "chicken",
         Sets.LINE_PREFIX
         + "999.99" + Delimiters.VALUE
-        + "null" + Delimiters.VALUE
+        + "false" + Delimiters.VALUE
         + "null"};
     public final String[] skipVarNames = {
         "times skipped", "can walk", "leg size"};
@@ -111,12 +113,10 @@ public class Util {
     }
 
     public void compareSetDataInSession(String[] setData, Session session) {
-        String listContents = "[";
-        for (String str : setData) {
-            listContents += str + ", ";
+        int setCount = session.getSetCount();
+        for (int i = 0; i < setCount; i++) {
+            assertEquals(setData[i],Sets.format(session.getSet(i)));
         }
-        listContents = listContents.substring(0, listContents.length() - 2) + "]";
-        assertEquals(listContents, session.getSets().toString());
     }
 
     public void useSkipLegsFiles() throws Exception {

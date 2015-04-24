@@ -9,7 +9,6 @@ import bodylog.files.abstracts.Saver;
 import bodylog.files.Constant;
 import bodylog.logic.Move;
 import bodylog.logic.Session;
-import bodylog.logic.Set;
 import bodylog.logic.datahandling.Sessions;
 import bodylog.ui.MoveListContainerUpdater;
 import java.io.File;
@@ -23,16 +22,14 @@ import java.io.IOException;
 public class SessionSaver extends Saver {
 
     /**
-     * Creates a new SessionSaver for the specified Move and adds a new Session
-     * to it.
+     * Creates a new SessionSaver for the specified Move.
      *
      * @param updater MoveListContainerUpdater that is called to update session
-     * views if any are open
+     * displays if any are open
      * @param move Move whose session will be saved
      */
     public SessionSaver(MoveListContainerUpdater updater, Move move) {
         super(updater, move);
-        this.move.addSession(new Session());
     }
 
     /**
@@ -74,13 +71,12 @@ public class SessionSaver extends Saver {
     public void saveToFile() throws IOException {
         writeToFile();
         updater.updateDisplayer(move);
-        move.clearSessions();
     }
 
     private void writeToFile() throws IOException {
         for (Session session : move.getSessions()) {
             session.setVariables(move.getVariables());
-            
+
             String dateStr = session.getFileDateString();
             File sessionFile = new File(Constant.DATA_DIR,
                     move.getName() + "/" + dateStr + Constant.SESSION_END);

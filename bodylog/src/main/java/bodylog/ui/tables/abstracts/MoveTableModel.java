@@ -22,7 +22,7 @@ public abstract class MoveTableModel extends AbstractTableModel {
      */
     public MoveTableModel(Move move) {
         this.move = move;
-    }
+    }  
 
     /**
      * Returns column name which is the name of a variable of the Move.
@@ -40,10 +40,10 @@ public abstract class MoveTableModel extends AbstractTableModel {
      * Returns column count which is the number of variables in the Move.
      *
      * @return the number of variables
-     * @see bodylog.logic.Move#variableCount
+     * @see bodylog.logic.Move#getVariableCount
      */
     @Override
     public int getColumnCount() {
-        return move.variableCount();
+        return move.getVariableCount();
     }
 }

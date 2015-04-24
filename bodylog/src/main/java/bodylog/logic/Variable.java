@@ -82,8 +82,8 @@ public class Variable {
         return name;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setType(Type newType) {
+        this.type = newType;
     }
 
     public Type getType() {
@@ -113,18 +113,10 @@ public class Variable {
     }
 
     public String[] getChoices() {
-        switch (type) {
-            case OPTIONAL_CHOICE:
-                int length = choices.length;
-                String[] optChoices = Arrays.copyOf(choices, length + 1);
-                optChoices[length] = "null";
-                return optChoices;
-            default:
-                return choices;
-        }
+        return choices;
     }
 
-    public String getToolTipText() {
+    public String getToolTip() {
         switch (type) {
             case NUMERICAL:
                 return "Input numbers in the form X or X.X";
@@ -157,7 +149,7 @@ public class Variable {
      * choices</li>
      * </ul>
      */
-    public void throwExceptions() throws VariableStateException {
+    public void checkState() throws VariableStateException {
         String message = "";
         if (name.isEmpty()) {
             message += "Variable name cannot be blank.\n";

@@ -18,7 +18,7 @@ import javax.swing.JTable;
 
 /**
  * The UI component responsible for generating a display of the data contained
- * in the fetchSession files of movements. The displays are sent to the
+ * in the session files of movements. The displays are sent to the
  * StatisticsViewerWindow. The display consists of JTables that contain the data
  * using ViewTable as the TableModel.
  *
@@ -40,9 +40,9 @@ public class StatisticsDisplayer {
     }
 
     /**
-     * Creates the tables for the given Move. Sessions are read from
-     * fetchSession files and added to the Move. Each table consists of the data
-     * of one Session.
+     * Creates the tables for the given Move. Sessions are read from session
+     * files and added to the Move. Each table consists of the data of one
+     * Session.
      *
      * @param move move whose session data will be displayed
      * @return JPanel containing JTables displaying the data or an informative

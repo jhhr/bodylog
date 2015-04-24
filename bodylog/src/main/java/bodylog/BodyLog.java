@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
 /**
  * Encapsulates the main window and the rest of the program.
  */
@@ -57,7 +58,7 @@ public class BodyLog implements Runnable {
         FileHandler fileHandler;
         try {
             // This block configures the logger with handler and formatter  
-            fileHandler = new FileHandler("ERROR.log");
+            fileHandler = new FileHandler("ERROR.log", true);//appends to file
             logger.addHandler(fileHandler);
             SimpleFormatter formatter = new SimpleFormatter();
             fileHandler.setFormatter(formatter);
@@ -66,7 +67,7 @@ public class BodyLog implements Runnable {
 
             logger.info("Logger created.");
 
-        } catch (SecurityException | IOException ex) {
+        } catch (Exception ex) {
             logger.info("Exception encountered while adding file handler to logger.");
         }
     }

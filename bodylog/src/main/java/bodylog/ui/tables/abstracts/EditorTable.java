@@ -47,6 +47,13 @@ public abstract class EditorTable extends DefaultTableModel {
         fireTableCellUpdated(row, column);
     }
 
+    /**
+     * Checks if a row has had data put in. Used for checking the last row
+     * before removing it.
+     *
+     * @param row row to be checked
+     * @return true when all values in the row are null, false otherwise
+     */
     public boolean rowIsEmpty(int row) {
         for (int i = 0; i < getColumnCount(); i++) {
             if (getValueAt(row, i) != null) {

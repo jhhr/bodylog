@@ -8,14 +8,22 @@ import bodylog.logic.Session;
 import bodylog.files.Constant;
 import bodylog.files.abstracts.Saver;
 import bodylog.logic.Move;
+import bodylog.logic.Variable;
 import bodylog.ui.tables.edit.SessionEditorTable;
+import java.awt.event.MouseEvent;
 import java.time.format.DateTimeParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 
 /**
  * The UI component used in creating actual training data and writing it into
@@ -57,20 +65,42 @@ public class SessionEditor extends Editor {
 
     @Override
     protected EditorTable setTableModel() {
-        return new SessionEditorTable(getMove(), 1);
+        return new SessionEditorTable(getMove());
     }
 
     @Override
     protected JTable setTable() {
-        JTable newTable = new JTable(tableModel);
-        //sets tooltips for describing what inputs are accepted
-        //displayed when hovering over the table
-        for (int i = 0; i < newTable.getColumnCount(); i++) {
-            TableColumn column = newTable.getColumnModel().getColumn(i);
-            DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
-            renderer.setToolTipText(getMove().getVariable(i).getToolTipText());
-            column.setCellRenderer(renderer);
+        JTable newTable = new JTable(tableModel) {
+            //Implement table header tool tips.
+            @Override
+            protected JTableHeader createDefaultTableHeader() {
+                return new JTableHeader(columnModel) {
+                    @Override
+                    public String getToolTipText(MouseEvent e) {
+                        java.awt.Point p = e.getPoint();
+                        int index = columnModel.getColumnIndexAtX(p.x);
+                        int realIndex
+                                = columnModel.getColumn(index).getModelIndex();
+                        return getMove().getVariable(realIndex).getToolTip();
+                    }
+                };
+            }
+        };
+        for (int i = 0; i < getMove().getVariableCount(); i++) {
+            Variable var = getMove().getVariable(i);
+            JComboBox box = new JComboBox(var.getChoices());
+            switch (var.getType()) {
+                case OPTIONAL_CHOICE:
+                    box.addItem("N/A");
+                case MANDATORY_CHOICE:
+                    box.setSelectedIndex(box.getItemCount() - 1);
+                    newTable.getColumnModel().getColumn(i).setCellEditor(
+                            new DefaultCellEditor(box));
+                default:
+                    break;
+            }
         }
+
         newTable.setPreferredScrollableViewportSize(newTable.getPreferredSize());
         newTable.getTableHeader().setReorderingAllowed(false);
         return newTable;
@@ -111,34 +141,16 @@ public class SessionEditor extends Editor {
      */
     @Override
     protected void saveToFile() {
-        addSetsToSession();
 
         try {
             saver.saveToFile();
-        } catch (Exception ex) {
+        } catch (Exception unexpected) {
             JOptionPane.showMessageDialog(getParent(),
-                    ex.getCause() + ex.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            Logger.getLogger(SessionEditor.class.getName()).log(
-                    Level.SEVERE, null, ex);
-        }
-    }
-
-    /**
-     * Creates the Set objects to be given the the Session of the Move. One set
-     * for each row in the table. If nothing was inputted into a cell,
-     * <code>null</code> is saved as the value in the proper index of that Set.
-     *
-     * Should implement a custom TableModel encapsulating this.
-     */
-    private void addSetsToSession() {
-        Session session = saver.getMove().getSession(0);
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            Set sarja = new Set();
-            for (int j = 0; j < tableModel.getColumnCount(); j++) {
-                sarja.addValue(tableModel.getValueAt(i, j));
-            }
-            session.addSet(sarja);
+                    "cause: " + unexpected.getCause()
+                    + " message: " + unexpected.getMessage(),
+                    "Saving failed unexpectedly", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(this.getClass().getName()).log(
+                    Level.SEVERE, null, unexpected);
         }
     }
 

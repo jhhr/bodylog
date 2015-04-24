@@ -1,6 +1,5 @@
 package bodylog.logic;
 
-import bodylog.logic.datahandling.Sets;
 import java.util.Arrays;
 
 /**
@@ -52,13 +51,13 @@ public class Set {
     }
 
     /**
-     * Adds a value to the specified index, replaces the existing value there if
-     * present. Increases size of list to index if index is out of bounds.
+     * Places a value to the specified index, replacing the existing value there
+     * if present. Increases size of list to index if index is out of bounds.
      *
      * @param value value to be added
      * @param index index to be added to
      */
-    public void addValue(Object value, int index) {
+    public void setValue(Object value, int index) {
         try {
             values[index] = value;
         } catch (IndexOutOfBoundsException e) {
@@ -92,16 +91,5 @@ public class Set {
             value = null;
         }
         return value;
-    }
-
-    /**
-     * Converts this Set object into a string. Uses the values of this Set.
-     *
-     * @return the Set in string format
-     * @see bodylog.logic.datahandling.Sets#format
-     */
-    @Override
-    public String toString() {
-        return Sets.format(this);
     }
 }

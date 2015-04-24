@@ -4,7 +4,6 @@ import bodylog.logic.Variable;
 import bodylog.logic.Variable.Type;
 import bodylog.logic.exceptions.ParsingException;
 import bodylog.logic.exceptions.VariableStateException;
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
 /**
@@ -30,7 +29,7 @@ public class Variables {
      * @throws VariableStateException when the parsed Variable is not proper
      *
      * @see bodylog.logic.datahandling.Names#nameIsAllowed
-     * @see bodylog.logic.Variable#throwExceptions
+     * @see bodylog.logic.Variable#checkState
      */
     public static Variable parseLine(String line)
             throws ParsingException, VariableStateException {
@@ -48,7 +47,7 @@ public class Variables {
                 : choiceList[1].split(Delimiters.VALUE);
 
         Variable var = new Variable(name, type, choices);
-        var.throwExceptions();
+        var.checkState();
         return var;
     }
 

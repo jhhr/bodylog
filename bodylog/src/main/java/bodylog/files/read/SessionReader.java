@@ -15,14 +15,14 @@ import java.util.Scanner;
 public class SessionReader {
 
     /**
-     * Creates a new Move with Sessions added. Reads a move file and all
-     * fetchSession files in the movement's folder. First creates a Move without
-     * Sessions, then adds all the Sessions. Identifies fetchSession files in
-     * the movement's folder through the file ending using a SessionFileFilter.
+     * Creates a new Move with Sessions added. Reads a move file and all session
+     * files in the movement's folder. First creates a Move without Sessions,
+     * then adds all the Sessions. Identifies session files in the movement's
+     * folder through the file ending using a SessionFileFilter.
      *
      * @param move Move to which sessions will be added
      *
-     * @throws FileNotFoundException when a fetchSession file cannot be found
+     * @throws FileNotFoundException when a session file cannot be found
      * @throws ParsingException when failing to parse the type of a Variable
      * @throws VariableStateException when a parsed Variable is found not proper
      *
@@ -34,8 +34,10 @@ public class SessionReader {
     public void fetchSessionsForMove(Move move) throws FileNotFoundException,
             ParsingException, VariableStateException {
         File moveDataFolder = new File(Constant.DATA_DIR, move.getName());
-        moveDataFolder.mkdir();
-        for (File sessionFile : moveDataFolder.listFiles(new SessionFileFilter())) {
+        moveDataFolder.mkdirs();
+        SessionFileFilter filter = new SessionFileFilter();
+        File[] fileList = moveDataFolder.listFiles(filter);
+        for (File sessionFile : fileList) {
             move.addSession(fetchSession(sessionFile));
         }
     }
@@ -69,7 +71,7 @@ public class SessionReader {
 
     /**
      * Creates a time object for a Session. Acquired from the filename of a
-     * fetchSession file. Uses a DateTimeFormatter to parse the string into a
+     * session file. Uses a DateTimeFormatter to parse the string into a
      * TemporalAccessor.
      *
      * @param sessionFile file to be read

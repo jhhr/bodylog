@@ -27,11 +27,11 @@ import static org.junit.Assert.assertEquals;
 
 public class StatisticsDisplayerTest {
 
-    private final Util util = new Util();
+    private static final Util util = new Util();
 
     @BeforeClass
     public static void oneTimeSetUp() {
-
+        
     }
 
     private StatisticsDisplayer displayer;
@@ -41,9 +41,9 @@ public class StatisticsDisplayerTest {
 
     @Before
     public void setUp() {
-        this.displayer = new StatisticsDisplayer();
-        this.moveReader = new MoveReader();
-        this.sessionReader = new SessionReader();
+        displayer = new StatisticsDisplayer();
+        moveReader = new MoveReader();
+        sessionReader = new SessionReader();
     }
 
     @After
@@ -55,10 +55,10 @@ public class StatisticsDisplayerTest {
         util.useSkipLegsFiles();
         skipLegs = Moves.parse(new Scanner(util.skipMoveFile), util.skipName);
         skipLegs.addSession(
-                Sessions.parse(new Scanner(util.skipSessionONEFile), 
+                Sessions.parse(new Scanner(util.skipSessionONEFile),
                         Constant.FILE_DATE_FORMAT.parse(util.dateStrONE)));
         skipLegs.addSession(
-                Sessions.parse(new Scanner(util.skipSessionTWOFile), 
+                Sessions.parse(new Scanner(util.skipSessionTWOFile),
                         Constant.FILE_DATE_FORMAT.parse(util.dateStrTWO)));
 
     }

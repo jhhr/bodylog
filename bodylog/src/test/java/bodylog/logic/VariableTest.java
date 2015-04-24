@@ -1,12 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package bodylog.logic;
 
+import bodylog.logic.Variable.Type;
 import bodylog.logic.datahandling.Names;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -31,10 +29,21 @@ public class VariableTest {
         }
         assertFalse(variableAdded);
     }
+
+    @Test
+    public void ReturnsClassObjectForEachType() {
+        for (Type type : Type.values()) {
+            var.setType(type);
+            assertTrue(var.getAllowedClass() instanceof Class);
+        }
+    }
     
     @Test
-    public void CantUseBannedCharsInChoices() {
-        boolean choicesAdded = false;
-        assertFalse(choicesAdded);
+    public void ReturnsNonEmptyToolTipForEachType(){
+        for (Type type : Type.values()) {
+            var.setType(type);
+            assertFalse(var.getToolTip().isEmpty());
+        }
     }
+
 }

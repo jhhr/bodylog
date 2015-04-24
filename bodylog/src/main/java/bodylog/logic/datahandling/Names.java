@@ -19,8 +19,9 @@ public class Names {
      * Names of Moves are used as filenames for the session data folders and
      * move files, so some characters would cause errors.
      *
-     * Certain characters are used in parsing data from files into Set values so
-     * they are not allowed in variables of Moves.
+     * Certain characters are used in parsing data from files into Sets and
+     * Variables so they are not allowed as Variable names or in Variable
+     * choices.
      */
     public static enum Illegal {
 
@@ -70,7 +71,7 @@ public class Names {
      * @throws NameNotAllowedException when the name is found to contain illegal
      * characters
      * @see bodylog.logic.Move
-     * @see bodylog.logic.datahandling.Names
+     * @see bodylog.logic.Variable
      */
     public static String isAllowed(String name, Illegal charSet)
             throws NameNotAllowedException {

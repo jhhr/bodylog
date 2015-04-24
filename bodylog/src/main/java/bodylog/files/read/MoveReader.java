@@ -8,11 +8,10 @@ import bodylog.logic.exceptions.ParsingException;
 import bodylog.logic.exceptions.VariableStateException;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 /**
- * Class encapsulating the reading of fetchMove files and creating Moves from
+ * Class encapsulating the reading of move files and creating Moves from
  * them.
  */
 public class MoveReader {
@@ -39,7 +38,7 @@ public class MoveReader {
     }
 
     /**
-     * Creates a list of fetchMove files which are used to create new Moves.
+     * Creates a list of move files which are used to create new Moves.
      *
      * @return an array of Files, empty if no move files are in the
      * movements folder. Identifies the right kinds of files through the file
@@ -55,7 +54,7 @@ public class MoveReader {
     }
 
     /**
-     * Creates a list of MoveFiles by reading all fetchMove files and creating a
+     * Creates a list of MoveFiles by reading all move files and creating a
      * new MoveSaver from each one. Used in the MoveChooser UI class and the
      * method allMovesWithSessions.
      *

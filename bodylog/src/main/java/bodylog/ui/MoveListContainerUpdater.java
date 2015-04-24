@@ -8,11 +8,10 @@ import bodylog.ui.view.StatisticsDisplayer;
 import java.awt.Frame;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import javax.swing.JFrame;
 
 /**
  * Class for updating the contents of the list of Moves in MoveChoosers when new
- * fetchMove files have been added or old ones edited.
+ * move files have been added or old ones edited.
  *
  * Contains a list of MoveListContainers. When a WindowWithMoveChooser is
  * created, it adds its MoveChooser to that list.
@@ -24,20 +23,14 @@ public class MoveListContainerUpdater {
 
     private final ArrayList<MoveListContainer> moveListContainers;
     private final MoveReader reader;
-    private final Frame mainWindow;
     private StatisticsDisplayer displayer;
 
     /**
      * Creates a new MoveListUpdater with an empty list of MoveListContainers.
      */
-    public MoveListContainerUpdater(Frame mainWindow) {
-        this.mainWindow = mainWindow;
+    public MoveListContainerUpdater() {
         this.moveListContainers = new ArrayList();
         this.reader = new MoveReader();
-    }
-    
-    public Frame getFrame(){
-        return mainWindow;
     }
 
     public void setDisplayer(StatisticsDisplayer displayer) {
@@ -71,11 +64,11 @@ public class MoveListContainerUpdater {
     }
 
     /**
-     * Creates a new data model from fetchMove files to be used by MoveChoosers.
+     * Creates a new data model from move files to be used by MoveChoosers.
      *
-     * @return a new DefaultComboBoxModel containing a list of Moves
+     * @return a new array of all Moves
      * @throws FileNotFoundException if a file cannot be found during reading
-     * fetchMove files
+     * move files
      * @throws SecurityException when a move file cannot be accessed
      * @throws ParsingException when failing to parse the type of a Variable
      * @throws VariableStateException when a parsed Variable is found not proper
@@ -88,8 +81,8 @@ public class MoveListContainerUpdater {
     /**
      * Updates the MoveListContainers with a new list of moves.
      *
-     * @throws FileNotFoundException when a fetchMove file is not found while
-     * creating the fetchMove list
+     * @throws FileNotFoundException when a move file is not found while
+     * creating the move list
      * @throws SecurityException when a move file cannot be accessed
      * @throws ParsingException when failing to parse the type of a Variable
      * @throws VariableStateException when a parsed Variable is found not proper

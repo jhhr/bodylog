@@ -38,17 +38,22 @@ public abstract class WindowWithMoveChooser extends WindowWithMoveListContainer 
      *
      * @param updater MoveListContainerUpdater given by the MainWindow to which
      * is given the MoveListContainer of this window, the MoveChooser
-     * @throws FileNotFoundException when creating the MoveChooser as it reads
-     * move files a file may not be founds
+     *
+     * @throws FileNotFoundException when a file is not found while creating the
+     * moveList for the updater
+     * @throws ParsingException when parsing the Moves from file fails
+     * @throws VariableStateException when a variable parsed from file is found
+     * to be improper
+     *
      */
     public WindowWithMoveChooser(MoveListContainerUpdater updater)
-            throws FileNotFoundException, SecurityException,
-            ParsingException, VariableStateException {
+            throws SecurityException, ParsingException,
+            VariableStateException, FileNotFoundException {
         super(updater);
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
 
-        this.moveListContainer = new MoveChooser(this, updater.newMoveList());
+        moveListContainer = new MoveChooser(this, updater.newMoveList());
         updater.addContainer(this.moveListContainer);
         editorPanel = new JPanel();
         noEditorsOpen = new JLabel("No movements selected");

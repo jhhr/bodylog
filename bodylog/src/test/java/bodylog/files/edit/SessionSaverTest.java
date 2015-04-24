@@ -7,7 +7,6 @@ import bodylog.logic.Set;
 import bodylog.logic.Move;
 import bodylog.logic.Session;
 import bodylog.logic.Variable;
-import bodylog.logic.datahandling.Moves;
 import bodylog.logic.datahandling.Sessions;
 import bodylog.logic.datahandling.Sets;
 import bodylog.logic.datahandling.Variables;
@@ -15,10 +14,8 @@ import bodylog.ui.MoveListContainerUpdater;
 import java.io.File;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAccessor;
-import java.util.ArrayList;
 import java.util.Scanner;
 import org.junit.After;
-import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -69,7 +66,7 @@ public class SessionSaverTest {
         benchSession = new Session(date);
         util.bench = new Move(util.benchName);
         util.deadlift = new Move(util.dlName);
-        updater = new MoveListContainerUpdater(null);
+        updater = new MoveListContainerUpdater();
 
         util.deadlift.addSession(dlSession);
         util.bench.addSession(benchSession);
@@ -133,14 +130,6 @@ public class SessionSaverTest {
         util.benchFolder.mkdir();
         benchSaver.saveToFile();
         assertTrue(benchSessionFile.exists());
-    }
-
-    @Test
-    public void Sessions_AfterSavingClearsMoveSessionList() throws Exception {
-        Constant.DATA_DIR.mkdir();
-        util.dlFolder.mkdir();
-        dlSaver.saveToFile();
-        assertTrue(util.deadlift.getSessions().isEmpty());
     }
 
     @Test

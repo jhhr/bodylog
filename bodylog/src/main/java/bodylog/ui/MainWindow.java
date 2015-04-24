@@ -52,7 +52,7 @@ public class MainWindow extends JFrame implements ActionListener {
         super("Bodylog");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        this.updater = new MoveListContainerUpdater(this);
+        this.updater = new MoveListContainerUpdater();
 
         menuBar = new JMenuBar();
         menuBar.add(mainMenu());
@@ -122,8 +122,7 @@ public class MainWindow extends JFrame implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        JMenuItem menuItem = (JMenuItem) e.getSource();
-        String itemTitle = menuItem.getActionCommand();
+        String itemTitle = e.getActionCommand();
 
         if (isTabOpen(itemTitle)) {
             return;

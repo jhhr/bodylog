@@ -31,7 +31,7 @@ public class MoveTest {
         Move blank = new Move();
 
         assertEquals("", blank.getName());
-        assertEquals(0, blank.variableCount());
+        assertEquals(0, blank.getVariableCount());
         assertTrue(blank.getSessions().isEmpty());
     }
 
@@ -47,12 +47,6 @@ public class MoveTest {
     }
 
     @Test
-    public void VariableListSizeOneWhenOneVariableAdded() {
-        bench.addVariable(varWeight);
-        assertEquals(1, bench.variableCount());
-    }
-
-    @Test
     public void CantUseBannedCharsWhenSettingName() {
         boolean nameSet = false;
         for (char ch : Names.Illegal.MOVE_NAME.getChars()) {
@@ -64,27 +58,6 @@ public class MoveTest {
             }
         }
         assertFalse(nameSet);
-    }
-
-    @Test
-    public void VariableAddedNormallyFoundAtExpectedIndex() {
-        bench.addVariable(varWeight);
-        assertEquals(varWeight.getName(), bench.getVariableName(0));
-        bench.addVariable(varTearing);
-        assertEquals(varTearing.getName(), bench.getVariableName(1));
-    }
-
-    @Test
-    public void VariableAddedBeyondCurrectLengthFoundAtExpectedIndex() {
-        bench.addVariable(varWeight, 5);
-        assertEquals(varWeight.getName(), bench.getVariableName(5));
-    }
-
-    @Test
-    public void VariableAddedToSpecificIndexReplacesPreviousValue() {
-        bench.addVariable(varWeight);
-        bench.addVariable(varTearing, 0);
-        assertEquals(varTearing.getName(), bench.getVariableName(0));
     }
 
     @Test
@@ -130,6 +103,11 @@ public class MoveTest {
     @Test
     public void MoveHashCodeNotSameAsJustNameHashCode() {
         assertFalse(bench.hashCode() == benchName.hashCode());
+    }
+    
+    @Test
+    public void MoveHashCodeIsNotNegative() {
+        assertTrue(bench.hashCode()>0);
     }
 
     @Test

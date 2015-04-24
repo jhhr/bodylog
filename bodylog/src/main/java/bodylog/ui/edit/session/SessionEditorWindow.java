@@ -42,10 +42,10 @@ public class SessionEditorWindow extends WindowWithMoveChooser {
     }
 
     private boolean moveHasNoVariables(Move liike) {
-        if (liike.variableCount() == 0) {
+        if (liike.getVariableCount() == 0) {
             JOptionPane.showMessageDialog(this,
                     "The movement has no variables, add some",
-                    "Not allowed", JOptionPane.INFORMATION_MESSAGE);
+                    "Not possible", JOptionPane.INFORMATION_MESSAGE);
             return true;
         }
         return false;

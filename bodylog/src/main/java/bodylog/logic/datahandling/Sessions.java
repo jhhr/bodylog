@@ -7,7 +7,6 @@ import bodylog.logic.exceptions.ParsingException;
 import bodylog.logic.exceptions.VariableStateException;
 import java.time.temporal.TemporalAccessor;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 /**
  * Contains all definitions of how Sessions are converted to strings and back.
@@ -33,6 +32,9 @@ public class Sessions {
      *
      * @throws ParsingException when failing to parse the type of a Variable
      * @throws VariableStateException when a parsed Variable is found not proper
+     * 
+     * @see bodylog.logic.datahandling.Sets#parseLine
+     * @see bodylog.logic.datahandling.Variables#parseLine
      */
     public static Session parse(Scanner scanner, TemporalAccessor date)
             throws ParsingException, VariableStateException {

@@ -8,9 +8,6 @@ package bodylog.files.edit;
 import bodylog.files.Constant;
 import bodylog.logic.Move;
 import bodylog.logic.Variable;
-import bodylog.logic.datahandling.Delimiters;
-import bodylog.logic.datahandling.Moves;
-import bodylog.logic.datahandling.Variables;
 import java.io.File;
 
 public class Util {

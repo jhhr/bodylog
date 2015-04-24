@@ -4,7 +4,6 @@ import bodylog.logic.Move;
 import bodylog.ui.MoveListContainer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -26,11 +25,9 @@ public class MoveChooser extends MoveListContainer
      *
      * @param window the WindowWithMoveChooser that contains this
      * @param moves the list of Moves initially used to populate the JComboBox
-     * @throws FileNotFoundException if a file is not found
      * @see bodylog.files.FromFile#allMovesWithoutSessions
      */
-    public MoveChooser(WindowWithMoveChooser window, Move[] moves)
-            throws FileNotFoundException {
+    public MoveChooser(WindowWithMoveChooser window, Move[] moves) {
         super(window);
         this.moveList = new JComboBox(new SortedComboBoxModel(moves));
         this.moveList.addActionListener(this);

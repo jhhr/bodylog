@@ -1,4 +1,4 @@
 /bodylog/target/
 /bodylog/movements/
 /bodylog/statistics/
-/bodylog/ERROR.log
+/bodylog/ERROR.*

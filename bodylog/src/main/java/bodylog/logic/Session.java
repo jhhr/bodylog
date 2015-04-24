@@ -102,6 +102,15 @@ public class Session extends VariableList {
     }
 
     /**
+     * Gets the number of Sets in this Session.
+     *
+     * @return the number of Sets
+     */
+    public int getSetCount() {
+        return sets.size();
+    }
+
+    /**
      * Gets the set at the specified index. Doesn't check whether it's out of
      * bound or not. Will throw an exception if it is.
      *
@@ -113,20 +122,21 @@ public class Session extends VariableList {
     }
 
     /**
-     * Adds a Set to this Session. Checks whether the parameter is null and
-     * throws an IllegalArgumentException if it is.
+     * Adds a Set to this Session.
      *
-     * @param set Set to be added
-     * @throws IllegalArgumentException when parameter is null
+     * @param set the Set to be added
      */
     public void addSet(Set set) {
-        if (set == null) {
-            throw new IllegalArgumentException("tried to add null to session");
-        }
         sets.add(set);
     }
 
-    public void removeLastSet() {
-        sets.remove(sets.size() - 1);
+    /**
+     * Removes the the set at the specified index. Doesn't check if it's out of
+     * bounds or not.
+     *
+     * @param index the index from which to remove
+     */
+    public void removeSet(int index) {
+        sets.remove(index);
     }
 }

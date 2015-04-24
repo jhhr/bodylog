@@ -1,10 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package bodylog.logic.exceptions;
 
+/**
+ * Custom exception used in parsing strings to Sets and Variables.
+ *
+ * @see bodylog.logic.datahandling.Sets
+ * @see bodylog.logic.datahandling.Variables
+ */
 public class ParsingException extends Exception {
 
     public ParsingException(String message) {

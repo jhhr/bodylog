@@ -4,7 +4,6 @@ import bodylog.logic.abstracts.VariableList;
 import bodylog.logic.datahandling.Names;
 import bodylog.logic.exceptions.NameNotAllowedException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 
 /**
@@ -108,12 +107,19 @@ public class Move extends VariableList implements Comparable<Move> {
     @Override
     public boolean equals(Object obj) {
         if (obj != null && obj.getClass() == getClass()) {
-            return obj.toString().equals(this.name);
+            Move move = (Move) obj;
+            return name.equals(move.getName());
         } else {
             return false;
         }
     }
 
+    /**
+     * HashCode method. Uses the name of this move plus some salt which results
+     * in a hash code that is distinct from the hash code of the name itself.
+     *
+     * @return a hash code
+     */
     @Override
     public int hashCode() {
         int hash = 3;

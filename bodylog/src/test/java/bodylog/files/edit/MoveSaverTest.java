@@ -59,7 +59,7 @@ public class MoveSaverTest {
         util.bench = new Move(util.benchName);
         util.deadlift = new Move(util.dlName);
         util.newMove = new Move();
-        updater = new MoveListContainerUpdater(null);
+        updater = new MoveListContainerUpdater();
         benchSaver = new MoveSaver(updater, util.bench);
     }
 

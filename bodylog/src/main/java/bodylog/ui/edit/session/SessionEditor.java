@@ -2,12 +2,8 @@ package bodylog.ui.edit.session;
 
 import bodylog.ui.edit.Editor;
 import bodylog.ui.tables.abstracts.EditorTable;
-import bodylog.logic.Variable.Type;
-import bodylog.logic.Set;
-import bodylog.logic.Session;
 import bodylog.files.Constant;
 import bodylog.files.abstracts.Saver;
-import bodylog.logic.Move;
 import bodylog.logic.Variable;
 import bodylog.ui.tables.edit.SessionEditorTable;
 import java.awt.event.MouseEvent;
@@ -15,15 +11,10 @@ import java.time.format.DateTimeParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
-import javax.swing.table.TableColumnModel;
 
 /**
  * The UI component used in creating actual training data and writing it into

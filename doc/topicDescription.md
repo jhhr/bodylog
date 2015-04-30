@@ -13,10 +13,10 @@ Käyttäjä avaa ohjelman salilta tullessaan ja lisää tekemästään harjoitte
 * muuttujan nimi ja
 * muuttujan tyyppi:
   1. numero,
-  2. vapaaehtoinen (voi jättää valitsematta) tai pakollinen (pakko valita) kyllä/ei-vaihtoehto,
-  3. vapaaehtoinen tai pakollinen lista itse luoduista vaihtoehdoista (enemmän kuin kaksi) tai
+  2. ruksi (kyllä/ei vaihtoehto),
+  3. lista itse luoduista vaihtoehdoista (enemmän kuin yksi) tai
   4. teksti.
-  Käyttäjä tallentaa listan tekemistään liikkeistä ja niiden muuttujista. Näistä hän valitsee sessiodataa kirjatessaan haluamansa. Data tallennetaan tiedostoihin; yksi per liike per salikerta tallentamaan suoritusdataa ja yksi tiedosto per liike tallentamaan liikedataa (nimi ja muuttujat). 
+  Käyttäjä tallentaa listan tekemistään liikkeistä ja niiden muuttujista. Hän valitsee sessiodataa kirjatessaan haluamansa liikkeet. Data tallennetaan tiedostoihin; yksi per liike per salikerta tallentamaan suoritusdataa ja yksi tiedosto per liike tallentamaan liikedataa (nimi ja muuttujat). 
 
 **Tiedostorakenne**
 * sessiotiedostot: `tilastotKansio/liikkeenNimi/sessionPaivamaara.sessiopääte`

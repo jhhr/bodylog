@@ -84,6 +84,7 @@ public class SessionSaverTest {
             util.deadlift.addVariable(var);
         }
         dlSession.addSet(setTHREE);
+        dlSession.setVariables(util.deadlift.getVariables());
         sessionFileContents = Sessions.VARS_START
                 + Variables.format(util.varWeight) + "\n"
                 + Variables.format(util.varReps) + "\n"
@@ -108,6 +109,7 @@ public class SessionSaverTest {
         }
         benchSession.addSet(setONE);
         benchSession.addSet(setTWO);
+        benchSession.setVariables(util.bench.getVariables());
         sessionFileContents = Sessions.VARS_START
                 + Variables.format(util.varWeight) + "\n"
                 + Variables.format(util.varReps) + "\n"
@@ -125,7 +127,7 @@ public class SessionSaverTest {
     }
 
     @Test
-    public void Sessions_CreatesSessionFile() throws Exception {
+    public void CreatesSessionFile() throws Exception {
         Constant.DATA_DIR.mkdir();
         util.benchFolder.mkdir();
         benchSaver.saveToFile();
@@ -133,14 +135,11 @@ public class SessionSaverTest {
     }
 
     @Test
-    public void Sessions_FindsSessionFileWithSameDateAsOnSession()
+    public void FindsSessionFileWithSameDateAsOnSession()
             throws Exception {
         Constant.DATA_DIR.mkdir();
         util.dlFolder.mkdir();
         dlSessionFile.createNewFile();
-//        System.out.println("sessionFile: " + dlSessionFile.getName());
-//        System.out.println("session date from movesaver: "
-//                + dlSaver.getMove().getSession(0).getFileDateString());
         assertTrue(dlSaver.fileExists());
     }
 
@@ -150,31 +149,31 @@ public class SessionSaverTest {
     }
 
     @Test
-    public void Sessions_SessionFileContentsAsExpectedUsingMoveWithOneSetOfData()
+    public void SessionFileContentsAsExpectedUsingMoveWithOneSetOfData()
             throws Exception {
         addDLSets();
         Constant.DATA_DIR.mkdir();
         util.dlFolder.mkdir();
         dlSaver.saveToFile();
-        compareFileContents(sessionFileContents,dlSessionFile);
+        compareFileContents(sessionFileContents, dlSessionFile);
     }
 
     @Test
-    public void Sessions_SessionFileContentsAsExpectedUsingMoveWithTwoSetsOfData()
+    public void SessionFileContentsAsExpectedUsingMoveWithTwoSetsOfData()
             throws Exception {
         addBenchSets();
         Constant.DATA_DIR.mkdir();
         util.benchFolder.mkdir();
         benchSaver.saveToFile();
-        compareFileContents(sessionFileContents,benchSessionFile);
+        compareFileContents(sessionFileContents, benchSessionFile);
     }
 
     public void compareFileContents(String expected, File actual)
             throws Exception {
         Scanner scanActual = new Scanner(actual);
         Scanner scanExpected = new Scanner(expected);
-        String expectedLine = "";
-        String actualLine = "";
+        String expectedLine;
+        String actualLine;
         try {
             while (scanExpected.hasNextLine()) {
                 expectedLine = scanExpected.nextLine();
@@ -182,8 +181,6 @@ public class SessionSaverTest {
                 assertEquals(expectedLine, actualLine);
             }
         } catch (Throwable t) {
-            System.out.println("expected: " + expectedLine);
-            System.out.println("actual: " + actualLine);
             throw t;
         } finally {
             scanActual.close();

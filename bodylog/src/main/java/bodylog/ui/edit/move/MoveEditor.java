@@ -34,7 +34,10 @@ import javax.swing.table.TableColumnModel;
  * @see bodylog.ui.dataediting.Editor
  */
 public class MoveEditor extends Editor {
-
+    
+    private static final String ADD_VAR_TITLE = "Add Variable";
+    private static final String REMOVE_VAR_TITLE = "Remove Variable";
+    
     /**
      * Creates a new <code>MoveEditor</code> for the given Saver which contains
      * the Move to be edited which can be a newly created blank one.
@@ -47,10 +50,14 @@ public class MoveEditor extends Editor {
 
         setEditorBorder("");
 
-        setButtonLayouts("add variable", "remove variable",
-                "name:", "Characters not allowed in name: "
+        setButtonLayouts(
+                ADD_VAR_TITLE, 
+                REMOVE_VAR_TITLE,
+                "name:",
+                getMove().getName(), 
+                "Characters not allowed in name: "
                 + Names.IllegalCharsWithSpaces(Names.Illegal.MOVE_NAME),
-                "", "close movement");
+                "");
     }
 
     @Override
@@ -62,7 +69,7 @@ public class MoveEditor extends Editor {
     protected JTable setTable() {
         JTable newTable = new JTable(tableModel);
         //tooltip displayed when hovering over the table
-        newTable.setToolTipText("Characters not allowed in variables: "
+        newTable.setToolTipText("Characters not allowed in name or choices: "
                 + Names.IllegalCharsWithSpaces(Names.Illegal.VARIABLE));
         newTable.setRowHeight(20);
 
@@ -80,8 +87,8 @@ public class MoveEditor extends Editor {
         varTypeColumn.setCellEditor(new DefaultCellEditor(typeChooser));
 
         TableColumn varChoicesColumn = model.getColumn(2);
-        varChoicesColumn.setPreferredWidth(150);;
-        varChoicesColumn.setCellEditor(new VariableChoicesEditor());
+        varChoicesColumn.setPreferredWidth(150);
+        varChoicesColumn.setCellEditor(new VariableChoicesEditor(newTable));
 
         varChoicesColumn.setCellRenderer(new DefaultTableCellRenderer() {
             @Override

@@ -119,11 +119,15 @@ public class Sets {
         String nullOr = "";
         switch (type) {
             case NUMERICAL:
-                try {
-                    return Double.parseDouble(str);
-                } catch (NumberFormatException nfe) {
-                    addition = " failed to parse to double.";
-                    break;
+                if (str.equals("null")) {
+                    return null;
+                } else {
+                    try {
+                        return Double.parseDouble(str);
+                    } catch (NumberFormatException nfe) {
+                        addition = " failed to parse to double.";
+                        break;
+                    }
                 }
             case CHECKBOX:
                 switch (str) {
@@ -136,10 +140,10 @@ public class Sets {
                 }
                 break;
             case OPTIONAL_CHOICE:
-                if (str.equals("null")) {
-                    return null;
+                if (str.equals(Variable.OPT_NO_CHOICE)) {
+                    return str;
                 } else {
-                    nullOr = " 'null' or";
+                    nullOr = " '" + Variable.OPT_NO_CHOICE + "' or";
                 }
             // no break, continues to next case
             case MANDATORY_CHOICE:

@@ -3,7 +3,7 @@ package bodylog.logic;
 import bodylog.logic.datahandling.Names;
 import bodylog.logic.exceptions.NameNotAllowedException;
 import bodylog.logic.exceptions.VariableStateException;
-import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * Class that defines the different types of variables the user can give to a
@@ -40,6 +40,11 @@ public class Variable {
             return super.toString().toLowerCase();
         }
     }
+    /**
+     * The default choice for not choosing anything when type is
+     * <code>OPTIONAL_CHOICE</code>.
+     */
+    public static final String OPT_NO_CHOICE = "N/A";
 
     /**
      * Creates a new Variable with all attributes set. Used when reading
@@ -83,11 +88,36 @@ public class Variable {
     }
 
     public void setType(Type newType) {
-        this.type = newType;
+        type = newType;
     }
 
     public Type getType() {
         return type;
+    }
+
+    /**
+     * Gets the default value associated with the type of this Variable.
+     *
+     * @return
+     * <ul>
+     * <li>false, when type is <code>CHECKBOX</code></li>
+     * <li><code>OPT_NO_CHOICE</code>, when type is
+     * <code>OPTIONAL_CHOICE</code></li>
+     * <li>the first choice, when type is <code>MANDATORY_CHOICE</code></li>
+     * <li>null, when type is <code>NUMERICAL</code></li>
+     * </ul>
+     */
+    public Object getDefaultValue() {
+        switch (type) {
+            case CHECKBOX:
+                return false;
+            case OPTIONAL_CHOICE:
+                return OPT_NO_CHOICE;
+            case MANDATORY_CHOICE:
+                return choices[0];
+            default:
+                return null;
+        }
     }
 
     /**
@@ -123,9 +153,9 @@ public class Variable {
             case CHECKBOX:
                 return "Check or uncheck the box";
             case OPTIONAL_CHOICE:
-                return "You may choose one or none";
+                return "Choose one or "+OPT_NO_CHOICE;
             case MANDATORY_CHOICE:
-                return "You must choose one";
+                return "Choose one";
             default:
                 return "";
         }
@@ -162,16 +192,23 @@ public class Variable {
                             + type + ".";
                 }
                 break;
+            case MANDATORY_CHOICE:
             case OPTIONAL_CHOICE:
                 if (choices.length == 0) {
                     message += "There must be at least 1 choice when type is "
                             + type + ".";
-                }
-                break;
-            case MANDATORY_CHOICE:
-                if (choices.length < 2) {
-                    message += "There must be at least 2 choices when type is "
-                            + type + ".";
+                } else {
+                    HashSet<String> choiceSet = new HashSet();
+                    for (String choice : choices) {
+                        if (choice.isEmpty()) {
+                            message += "Blank choices are not allowed.";
+                            break;
+                        } else if (!choiceSet.add(choice)) {
+                            message += "Duplicate choices in one variable"
+                                    + " are not allowed.";
+                            break;
+                        }
+                    }
                 }
                 break;
         }

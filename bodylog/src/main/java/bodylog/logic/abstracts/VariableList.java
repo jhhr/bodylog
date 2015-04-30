@@ -112,6 +112,14 @@ public abstract class VariableList {
         return variables[index].getName();
     }
     
+    public Object[] getDefaultValues(){
+        Object[] defaultValues = new Object[getVariableCount()];
+        for (int index = 0; index < defaultValues.length; index++) {
+            defaultValues[index] = getVariable(index).getDefaultValue();
+        }
+        return defaultValues;
+    }
+    
     public void checkVariables() throws VariableStateException, 
             DuplicateVariableNameException{
         for (Variable var : variables) {

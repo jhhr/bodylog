@@ -1,5 +1,6 @@
 package bodylog.ui.tables.abstracts;
 
+import bodylog.logic.Move;
 import java.util.Vector;
 import javax.swing.table.DefaultTableModel;
 
@@ -13,12 +14,13 @@ import javax.swing.table.DefaultTableModel;
  */
 public abstract class EditorTable extends DefaultTableModel {
 
-    public EditorTable(Object[] columns, int rowCount) {
-        super(columns, rowCount);
-    }
+    protected final Object[] defaultRowData;
+    protected final Move move;
 
-    public EditorTable(Object[][] data, Object[] columnNames) {
+    public EditorTable(Object[][] data, Object[] columnNames, Move move) {
         super(data, columnNames);
+        this.move = move;
+        defaultRowData = defaultRowData();
     }
 
     /**
@@ -48,21 +50,59 @@ public abstract class EditorTable extends DefaultTableModel {
     }
 
     /**
-     * Checks if a row has had data put in. Used for checking the last row
-     * before removing it.
+     * Checks if a row has been changed from the default state. Used for
+     * checking the last row before removing it.
      *
      * @param row row to be checked
      * @return true when all values in the row are null, false otherwise
      */
-    public boolean rowIsEmpty(int row) {
+    public boolean rowHasBeenEdited(int row) {
+        Object rowValue;
+        Object defaultValue;
         for (int i = 0; i < getColumnCount(); i++) {
-            if (getValueAt(row, i) != null) {
+            rowValue = getValueAt(row, i);
+            defaultValue = defaultRowData[i];
+            if (rowValue == null) {
+                if (defaultValue != null) {
+                    return false;
+                }
+            } else if (!rowValue.equals(defaultValue)) {
                 return false;
             }
         }
         return true;
     }
 
+    /**
+     * Defines the method with which input into cells is parsed into proper
+     * values for this table. A failed parsed is signaled by returning null.
+     *
+     * @param value the input to be parsed
+     * @param row the row of the cell where the input originates
+     * @param column the column of the cell where the input originates
+     * @return the parsed value, null if parsing fails
+     */
     protected abstract Object parseValue(Object value, int row, int column);
+
+    /**
+     * Sets the default array for a new row.
+     *
+     * @return an array with default values
+     */
+    protected abstract Object[] defaultRowData();
+
+    /**
+     * Adds a new row to the table model and executes an action associated with
+     * that.
+     */
+    public void addRow() {
+        super.addRow(defaultRowData);
+        addRowAction();
+    }
+
+    /**
+     * The action taken by this when a row is added.
+     */
+    public abstract void addRowAction();
 
 }

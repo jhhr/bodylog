@@ -75,7 +75,6 @@ public class SessionSaver extends Saver {
 
     private void writeToFile() throws IOException {
         for (Session session : move.getSessions()) {
-            session.setVariables(move.getVariables());
 
             String dateStr = session.getFileDateString();
             File sessionFile = new File(Constant.DATA_DIR,

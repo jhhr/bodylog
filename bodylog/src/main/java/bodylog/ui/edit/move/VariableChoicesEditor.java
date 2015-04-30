@@ -1,4 +1,3 @@
-
 package bodylog.ui.edit.move;
 
 import bodylog.logic.datahandling.Names;
@@ -33,11 +32,11 @@ public class VariableChoicesEditor extends AbstractCellEditor
     private String[] currentChoices;
     private ChoiceEditor editor;
 
-    public VariableChoicesEditor() {
+    public VariableChoicesEditor(JTable table) {
         this.button = new JButton(Arrays.toString(currentChoices));
         button.setActionCommand(EDIT);
         button.addActionListener(this);
-        editor = new ChoiceEditor(this);
+        editor = new ChoiceEditor(this,table);
     }
 
     @Override
@@ -45,6 +44,8 @@ public class VariableChoicesEditor extends AbstractCellEditor
         if (EDIT.equals(e.getActionCommand())) {
             editor.setTable(currentChoices);
             editor.setVisible(true);
+            
+            fireEditingStopped();
         } else {
             currentChoices = editor.updateChoices();
             button.setText(Arrays.toString(currentChoices));
@@ -70,12 +71,13 @@ public class VariableChoicesEditor extends AbstractCellEditor
         private JTable table;
         private DefaultTableModel model;
 
-        public ChoiceEditor(ActionListener doneListener) {
+        public ChoiceEditor(ActionListener doneListener, JTable table) {
             super(JOptionPane.getRootFrame(), "edit choices", true);
             tablePane = new JScrollPane();
+            
+            setLocationRelativeTo(null);
 
             setMinimumSize(new Dimension(120, 200));
-            setLocationRelativeTo(button);
             setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
             final JPanel outerPanel = new JPanel();
@@ -84,14 +86,14 @@ public class VariableChoicesEditor extends AbstractCellEditor
             outerPanel.add(innerPanel, BorderLayout.NORTH);
             innerPanel.setLayout(new GridBagLayout());
 
-            final JButton addChoice = new JButton("add choice");
+            final JButton addChoice = new JButton("Add Choice");
             GridBagConstraints c = new GridBagConstraints();
             c.gridx = 0;
             c.gridy = 0;
             c.fill = GridBagConstraints.HORIZONTAL;
             innerPanel.add(addChoice, c);
 
-            final JButton removeChoice = new JButton("remove last");
+            final JButton removeChoice = new JButton("Remove Last");
             final Action removeAction = new AbstractAction() {
 
                 @Override
@@ -111,11 +113,12 @@ public class VariableChoicesEditor extends AbstractCellEditor
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    //if previous count was zero, it will become one now
                     if (model.getRowCount() == 0) {
-                        removeAction.setEnabled(true);
+                        removeAction.setEnabled(true);//so make removal possible
                     }
 
-                    model.addRow(new Object[1]);
+                    model.addRow(new Object[]{""});
                     resizeAndUpdate();
                 }
             });
@@ -140,7 +143,7 @@ public class VariableChoicesEditor extends AbstractCellEditor
             innerPanel.add(tablePane, c);
 
             setContentPane(new JScrollPane(outerPanel));
-            pack();
+            pack();            
         }
 
         private void setTable(String[] currentChoices) {

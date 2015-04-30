@@ -22,6 +22,15 @@ public class Set {
     }
 
     /**
+     * Constructs a new Set with the given values.
+     *
+     * @param values the values to start with
+     */
+    public Set(Object[] values) {
+        this.values = values;
+    }
+
+    /**
      * Modifies the list of values in this Set to an array of given size. Used
      * for rows in tables in the UI, the row arrays must have the same length as
      * the column header.

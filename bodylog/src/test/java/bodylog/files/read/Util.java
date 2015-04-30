@@ -39,19 +39,19 @@ public class Util {
         + "true" + Delimiters.VALUE
         + "severe",
         Sets.LINE_PREFIX
-        + "40" + Delimiters.VALUE
+        + "null" + Delimiters.VALUE
         + "false" + Delimiters.VALUE
         + "mild"};
     public final String[] readingVarNames = {
         "pages", "looked in the mirror", "body dysmorphia"};
     public final String[] readingVarData = {
-        Variables.NAME + "pages" + Delimiters.SECTION
+        Variables.NAME + readingVarNames[0] + Delimiters.SECTION
         + Variables.TYPE + Type.NUMERICAL + Delimiters.SECTION
         + Variables.CHOICES + "",
-        Variables.NAME + "looked in the mirror" + Delimiters.SECTION
+        Variables.NAME + readingVarNames[1] + Delimiters.SECTION
         + Variables.TYPE + Type.CHECKBOX + Delimiters.SECTION
         + Variables.CHOICES + "",
-        Variables.NAME + "body dysmorphia" + Delimiters.SECTION
+        Variables.NAME + readingVarNames[2] + Delimiters.SECTION
         + Variables.TYPE + Type.MANDATORY_CHOICE + Delimiters.SECTION
         + Variables.CHOICES
         + "severe" + Delimiters.VALUE
@@ -83,7 +83,7 @@ public class Util {
         Sets.LINE_PREFIX
         + "999.99" + Delimiters.VALUE
         + "false" + Delimiters.VALUE
-        + "null"};
+        + Variable.OPT_NO_CHOICE};
     public final String[] skipVarNames = {
         "times skipped", "can walk", "leg size"};
     public final String[] skipVarData = {

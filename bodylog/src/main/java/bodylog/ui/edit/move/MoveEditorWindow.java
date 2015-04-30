@@ -18,6 +18,8 @@ import javax.swing.JButton;
  * @see bodylog.ui.edit.move.MoveEditor
  */
 public class MoveEditorWindow extends WindowWithMoveChooser {
+    
+    private static final String NEW_MOVE_TITLE = "New Movement";
 
     /**
      * Creates a new window with an additional button in the top component for
@@ -35,7 +37,7 @@ public class MoveEditorWindow extends WindowWithMoveChooser {
     }
 
     private JButton newMoveButton() {
-        JButton newMoveButton = new JButton("new movement");
+        JButton newMoveButton = new JButton(NEW_MOVE_TITLE);
         newMoveButton.addActionListener(new ActionListener() {
 
             @Override

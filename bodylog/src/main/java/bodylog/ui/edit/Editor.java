@@ -44,6 +44,9 @@ public abstract class Editor extends JPanel implements ActionListener {
     protected final JPanel buttonsUpper;
     protected final JPanel buttonsLeft;
 
+    public static final String SAVE_TITLE = "Save to File";
+    public static final String CLOSE_TITLE = "Close Editor";
+
     /**
      * Creates a new Editor for the given Saver and window.
      *
@@ -104,12 +107,12 @@ public abstract class Editor extends JPanel implements ActionListener {
     /**
      * Sets the buttons in this Editor into their proper place.
      *
-     * @param rowAdderLabel label for rowAdderButton
-     * @param rowRemoverLabel label for rowRemoverButton
-     * @param textFieldLabel label for text input field
-     * @param textFieldToolTip toolTip for text field
+     * @param rowAdderLabel the label for rowAdderButton
+     * @param rowRemoverLabel the label for rowRemoverButton
+     * @param textFieldLabel the label for the text input field
+     * @param textFieldText the text for the text input field
+     * @param textFieldToolTip toolTip for the text field
      * @param saveAddition addition added to confirm message in save button
-     * @param closeLabel label for close button
      *
      * @see bodylog.ui.edit.abstracts.Editor#rowAdderButton
      * @see bodylog.ui.edit.abstracts.Editor#rowRemoverButton
@@ -121,17 +124,17 @@ public abstract class Editor extends JPanel implements ActionListener {
             String rowAdderLabel,
             String rowRemoverLabel,
             String textFieldLabel,
+            String textFieldText,
             String textFieldToolTip,
-            String saveAddition,
-            String closeLabel) {
+            String saveAddition) {
         buttonsLeft.setLayout(new GridLayout(2, 1));
         buttonsLeft.add(rowAdderButton(rowAdderLabel));
         buttonsLeft.add(rowRemoverButton(rowRemoverLabel));
 
         buttonsUpper.setLayout(new GridLayout(1, 3));
-        buttonsUpper.add(textField(textFieldLabel, textFieldToolTip));
+        buttonsUpper.add(textField(textFieldLabel, textFieldText, textFieldToolTip));
         buttonsUpper.add(saveButton(saveAddition));
-        buttonsUpper.add(closeButton(closeLabel));
+        buttonsUpper.add(closeButton(CLOSE_TITLE));
     }
 
     /**
@@ -178,7 +181,7 @@ public abstract class Editor extends JPanel implements ActionListener {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                tableModel.addRow(new Object[tableModel.getColumnCount()]);
+                tableModel.addRow();
                 resizeAndUpdate();
             }
         });
@@ -208,7 +211,7 @@ public abstract class Editor extends JPanel implements ActionListener {
         public RemoveListenerAndConfirmPopup(JButton removeButton) {
             this.removeButton = removeButton;
             this.confirmPopup = new JPopupMenu();
-            JLabel info = new JLabel(" row is not empty");
+            JLabel info = new JLabel(" row is not default");
             info.setForeground(Color.GRAY);
             confirmPopup.add(info);
             confirmPopup.addSeparator();
@@ -228,7 +231,7 @@ public abstract class Editor extends JPanel implements ActionListener {
             //check if there's more than one row
             if (rowCount > 1) {
                 //if so check if the last row is empty
-                if (!tableModel.rowIsEmpty(rowCount - 1)) {
+                if (!tableModel.rowHasBeenEdited(rowCount - 1)) {
                     confirmPopup.show(removeButton,
                             removeButton.getBounds().x,
                             removeButton.getBounds().y);
@@ -258,23 +261,24 @@ public abstract class Editor extends JPanel implements ActionListener {
     }
 
     /**
-     * Creates an text input field. When the user types into the field it and
-     * presses enter a name change the Editor will attempt something. It is
-     * intended that, if the attempt fails nothing happens but the input will
-     * remain in the field until changed by the user.
+     * Creates a text input field. When the user types into the field it and
+     * presses enter the Editor will change the text displayed in the border. It
+     * is intended that, if the attempt fails, nothing happens but the input
+     * will remain in the field until changed by the user.
      *
-     * @param label label used in front of the text field to signify what it's
-     * for
-     * @param message message shown in the toolTip when hovering over the text
-     * field
+     * @param label the label used in front of the text field to signify what
+     * it's for
+     * @param startText the text displayed in the text field at the start
+     * @param message the message shown in the toolTip when hovering over the
+     * text field
      * @return a JPanel containing the label and text field
      * @see bodylog.ui.edit.MoveEditor#textFieldAction
      * @see bodylog.ui.edit.SessionEditor#textFieldAction
      */
-    protected JPanel textField(String label, String message) {
+    protected JPanel textField(String label, String startText, String message) {
         JPanel setNameContainer = new JPanel();
         setNameContainer.add(new JLabel(label));
-        JTextField nameField = new JTextField(getMove().getName());
+        JTextField nameField = new JTextField(startText);
         //sets width of the text field
         nameField.setColumns(10);
         //make 5 pixels of empty space left of the text field
@@ -322,7 +326,7 @@ public abstract class Editor extends JPanel implements ActionListener {
      * @see bodylog.ui.dataediting.MoveEditor#saveToFile
      */
     protected JButton saveButton(final String addition) {
-        JButton tallennusNappi = new JButton("save to file");
+        JButton tallennusNappi = new JButton(SAVE_TITLE);
         tallennusNappi.addActionListener(new ActionListener() {
 
             @Override

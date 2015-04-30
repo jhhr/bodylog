@@ -32,11 +32,21 @@ public class MainWindow extends JFrame implements ActionListener {
 
     private final JTabbedPane tabs;
     private final JMenuBar menuBar;
-    private MoveListContainerUpdater updater;
+    private final MoveListContainerUpdater updater;
+    
     private static final String SESSION_EDITOR = "Session Editor";
     private static final String MOVE_EDITOR = "Move Editor";
     private static final String STATISTICS = "Statistics";
     private static final String INFO = "Help";
+    
+    private static final String SESSION_ITEM_TITLE = "Add Sessions";
+    private static final String MOVE_ITEM_TITLE = "Add/Edit Movements";
+    private static final String STAT_ITEM_TITLE = "View Statistics";
+    
+    private static final String MAIN_MENU_TITLE = "Menu";
+    private static final String HELP_MENU_TITLE = "Help";
+    
+    private static final String HELP_ITEM_TITLE = "View Help";
 
     /**
      * Creates a new MainWindow. Adds the menuBar, two menus and the
@@ -69,7 +79,7 @@ public class MainWindow extends JFrame implements ActionListener {
     }
 
     private JMenu mainMenu() {
-        JMenu mainMenu = new JMenu("Menu");
+        JMenu mainMenu = new JMenu(MAIN_MENU_TITLE);
 
         mainMenu.add(sessionEditMenuItem());
         mainMenu.add(moveEditMenuItem());        
@@ -79,35 +89,35 @@ public class MainWindow extends JFrame implements ActionListener {
     }
 
     private JMenu helpMenu() {
-        JMenu helpMenu = new JMenu("Help");
+        JMenu helpMenu = new JMenu(HELP_MENU_TITLE);
         helpMenu.add(infoMenuItem());
 
         return helpMenu;
     }
 
     private JMenuItem sessionEditMenuItem() {
-        JMenuItem sessionItem = new JMenuItem("Add session(s)");
+        JMenuItem sessionItem = new JMenuItem(SESSION_ITEM_TITLE);
         sessionItem.setActionCommand(SESSION_EDITOR);
         sessionItem.addActionListener(this);
         return sessionItem;
     }
 
     private JMenuItem statisticsMenuItem() {
-        JMenuItem statItem = new JMenuItem("View statistics");
+        JMenuItem statItem = new JMenuItem(STAT_ITEM_TITLE);
         statItem.setActionCommand(STATISTICS);
         statItem.addActionListener(this);
         return statItem;
     }
 
     private JMenuItem moveEditMenuItem() {
-        JMenuItem moveItem = new JMenuItem("Add/edit movement(s)");
+        JMenuItem moveItem = new JMenuItem(MOVE_ITEM_TITLE);
         moveItem.setActionCommand(MOVE_EDITOR);
         moveItem.addActionListener(this);
         return moveItem;
     }
 
     private JMenuItem infoMenuItem() {
-        JMenuItem infoItem = new JMenuItem("Help");
+        JMenuItem infoItem = new JMenuItem(HELP_ITEM_TITLE);
         infoItem.setActionCommand(INFO);
         infoItem.addActionListener(this);
         return infoItem;

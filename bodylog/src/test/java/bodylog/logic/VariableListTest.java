@@ -19,14 +19,26 @@ public class VariableListTest {
     Variable varDupeWeight
             = new Variable("weight", Variable.Type.NUMERICAL, new String[]{});
     Variable varImproperNumerical
-            = new Variable("improper", Variable.Type.NUMERICAL, 
+            = new Variable("improper", Variable.Type.NUMERICAL,
                     new String[]{"a"});
-    Variable varImproperOptChoice
-            = new Variable("improper", Variable.Type.OPTIONAL_CHOICE, 
-                    new String[]{});    
-    Variable varImproperManChoice
-            = new Variable("improper", Variable.Type.MANDATORY_CHOICE, 
-                    new String[]{"a"});
+    Variable varImproperOptChoice1
+            = new Variable("improper", Variable.Type.OPTIONAL_CHOICE,
+                    new String[]{});
+    Variable varImproperOptChoice2
+            = new Variable("improper", Variable.Type.OPTIONAL_CHOICE,
+                    new String[]{""});
+    Variable varImproperOptChoice3
+            = new Variable("improper", Variable.Type.OPTIONAL_CHOICE,
+                    new String[]{"b", "b"});
+    Variable varImproperManChoice1
+            = new Variable("improper", Variable.Type.MANDATORY_CHOICE,
+                    new String[]{});
+    Variable varImproperManChoice2
+            = new Variable("improper", Variable.Type.MANDATORY_CHOICE,
+                    new String[]{""});
+    Variable varImproperManChoice3
+            = new Variable("improper", Variable.Type.MANDATORY_CHOICE,
+                    new String[]{"a", "a"});
     Variable varTearing = new Variable(
             "tore something", Variable.Type.CHECKBOX, new String[]{});
 
@@ -79,14 +91,42 @@ public class VariableListTest {
     @Test(expected = VariableStateException.class)
     public void DiscoversImproperOptionalChoiceVariableWithNoChoices()
             throws Exception {
-        varList.addVariable(varImproperOptChoice);
+        varList.addVariable(varImproperOptChoice1);
         varList.checkVariables();
     }
-    
+
     @Test(expected = VariableStateException.class)
     public void DiscoversImproperMandatoryChoiceVariableWithOneChoice()
             throws Exception {
-        varList.addVariable(varImproperManChoice);
+        varList.addVariable(varImproperManChoice1);
+        varList.checkVariables();
+    }
+
+    @Test(expected = VariableStateException.class)
+    public void DiscoversImproperOptionalChoiceVariableWithBlankChoice()
+            throws Exception {
+        varList.addVariable(varImproperOptChoice2);
+        varList.checkVariables();
+    }
+
+    @Test(expected = VariableStateException.class)
+    public void DiscoversImproperMandatoryChoiceVariableWithBlankChoice()
+            throws Exception {
+        varList.addVariable(varImproperManChoice2);
+        varList.checkVariables();
+    }
+
+    @Test(expected = VariableStateException.class)
+    public void DiscoversImproperOptionalChoiceVariableWithDuplicateChoices()
+            throws Exception {
+        varList.addVariable(varImproperOptChoice3);
+        varList.checkVariables();
+    }
+
+    @Test(expected = VariableStateException.class)
+    public void DiscoversImproperMandatoryChoiceVariableWithDuplicateChoices()
+            throws Exception {
+        varList.addVariable(varImproperManChoice3);
         varList.checkVariables();
     }
 

@@ -1,8 +1,5 @@
 package bodylog.logic.datahandling;
 
-import bodylog.logic.datahandling.Names;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;

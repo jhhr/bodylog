@@ -8,32 +8,28 @@ package bodylog.ui.tables.edit;
 import bodylog.logic.Move;
 import bodylog.logic.Variable;
 import bodylog.logic.Variable.Type;
+import bodylog.logic.exceptions.NameNotAllowedException;
 import bodylog.ui.tables.abstracts.EditorTable;
 import java.util.ArrayList;
 
 public class MoveEditorTable extends EditorTable {
 
-    private final Move move;
-
     public MoveEditorTable(Move move) {
-        super(createTableData(move), new String[]{"Name", "Type", "Choices"});
-        this.move = move;
+        super(createTableData(move), new String[]{"Name", "Type", "Choices"},move);
     }
-    
-    public static Object[][] createTableData(Move move){
-        Object[][] tableData;
+
+    public static Object[][] createTableData(Move move) {
         int varCount = move.getVariableCount();
-        if (varCount > 0) {
-            tableData = new Object[varCount][3];
-            for (int i = 0; i < varCount; i++) {
-                Variable var = move.getVariable(i);
-                tableData[i][0] = var.getName();
-                tableData[i][1] = var.getType();
-                tableData[i][2] = var.getChoices();
-            }
-        } else {
-            tableData = new Object[][]{{"", Variable.Type.NUMERICAL, new String[0]}};
+        if (varCount == 0) {
             move.addVariable(new Variable());
+            varCount++;
+        }
+        Object[][] tableData = new Object[varCount][3];
+        for (int i = 0; i < varCount; i++) {
+            Variable var = move.getVariable(i);
+            tableData[i][0] = var.getName();
+            tableData[i][1] = var.getType();
+            tableData[i][2] = var.getChoices();
         }
         return tableData;
     }
@@ -44,8 +40,7 @@ public class MoveEditorTable extends EditorTable {
     }
 
     @Override
-    public void addRow(Object[] rowData) {
-        super.addRow(rowData);
+    public void addRowAction() {
         move.addVariable(new Variable());
     }
 
@@ -58,22 +53,26 @@ public class MoveEditorTable extends EditorTable {
     protected Object parseValue(Object value, int row, int column) {
         Variable var = move.getVariable(row);
         switch (column) {
-            case 0:
+            case 0: {
                 try {
                     var.setName((String) value);
-                } catch (Exception e) {
+                } catch (NameNotAllowedException ex) {
+                    return null;
                 }
-                break;
+            }
+            break;
             case 1:
-                try {
-                    var.setType((Type) value);
-                } catch (Exception e) {
-                }
+                var.setType((Type) value);
                 break;
             case 2:
                 var.setChoices((String[]) value);
                 break;
         }
         return value;
+    }
+
+    @Override
+    protected Object[] defaultRowData() {
+        return new Object[]{"",Type.NUMERICAL,new String[0]};
     }
 }

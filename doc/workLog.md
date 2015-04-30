@@ -28,3 +28,4 @@
 - ke 22.4 klo 14-03 muuttujatyyppi-featuren kehitys jatkuu, vanhat testit päivitetty
 - to 23.4 klo 13-01 muuttujatyyppi-feature valmis, bugeja liiskattu, testejä korjailtu
 - pe 24.4 klo 13-23:30 bugeja liiskattu, luokkakaavio päivitetty, sekvenssikaavioita tehty pari lisää, muutama uusi testi
+- ke 29.4 klo 15-01 käyttöohjeiden kirjoitusta, vähän korjattu koodia

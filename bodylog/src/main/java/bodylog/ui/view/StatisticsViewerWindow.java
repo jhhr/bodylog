@@ -84,6 +84,8 @@ public class StatisticsViewerWindow extends WindowWithMoveListContainer {
 
         MoveSelector selector = new MoveSelector(this, updater.newMoveList());
         this.moveListContainer = selector;
+        updater.addContainer(moveListContainer);
+        
         this.displayer = new StatisticsDisplayer();
         updater.setDisplayer(displayer);
 

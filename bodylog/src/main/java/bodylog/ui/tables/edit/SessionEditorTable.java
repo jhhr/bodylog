@@ -8,14 +8,9 @@ package bodylog.ui.tables.edit;
 import bodylog.logic.Move;
 import bodylog.logic.Session;
 import bodylog.logic.Set;
-import bodylog.logic.datahandling.Sets;
-import bodylog.logic.exceptions.ParsingException;
 import bodylog.ui.tables.abstracts.EditorTable;
 
 public class SessionEditorTable extends EditorTable {
-
-    private final Move move;
-    private final Session session;
 
     /**
      * Creates a new table model for editing a Session of a Move. Adds a new
@@ -24,26 +19,31 @@ public class SessionEditorTable extends EditorTable {
      * @param move
      */
     public SessionEditorTable(Move move) {
-        super(move.getVariableNames(), 1);
-        this.move = move;
-        this.session = new Session();
-        move.addSession(session);
-        session.addSet(new Set());
+        super(createTableData(move), move.getVariableNames(), move);
     }
 
-    public SessionEditorTable(Move move, Session session) {
-        super(createTableData(session), move.getVariableNames());
-        this.move = move;
-        this.session = session;
-    }
-    
-    public static Object[][] createTableData(Session editSes){
-        int setCount = editSes.getSetCount();
-        Object[][] tableData = new Object[setCount][editSes.getVariableCount()];
+    public static Object[][] createTableData(Move move) {
+        Session session;
+        int setCount;
+        if (move.getSessionCount() == 0) {//adding a new session for a move
+            session = new Session();
+            session.setVariables(move.getVariables());
+            move.addSession(session);
+            session.addSet(new Set(move.getDefaultValues()));
+            setCount = 1;
+        } else {//editing a session saved in the past
+            session = move.getSession(0);
+            setCount = session.getSetCount();
+        }
+        Object[][] tableData = new Object[setCount][session.getVariableCount()];
         for (int i = 0; i < setCount; i++) {
-            tableData[i] = editSes.getSet(i).toArray();
+            tableData[i] = session.getSet(i).toArray();
         }
         return tableData;
+    }
+
+    private Session getSession() {
+        return move.getSession(0);
     }
 
     @Override
@@ -52,31 +52,25 @@ public class SessionEditorTable extends EditorTable {
     }
 
     @Override
-    public void addRow(Object[] rowData) {
-        super.addRow(rowData);
-        session.addSet(new Set());
+    public void addRowAction() {
+        getSession().addSet(new Set(defaultRowData));
     }
 
     @Override
     public void removeRow(int row) {
         super.removeRow(row);
-        session.removeSet(row);
+        getSession().removeSet(row);
     }
 
     @Override
     protected Object parseValue(Object value, int row, int column) {
-        Object parsedValue;
-        if (getColumnClass(column) == String.class) {
-            try {
-                parsedValue = Sets.parseValue((String) value,
-                        move.getVariable(column));
-                session.getSet(row).setValue(parsedValue, column);
-            } catch (NumberFormatException | ParsingException ex) {
-            }
-        } else {
-            session.getSet(row).setValue(value, column);
-        }
+        getSession().getSet(row).setValue(value, column);
         return value;
+    }
+
+    @Override
+    protected Object[] defaultRowData() {
+        return move.getDefaultValues();
     }
 
 }

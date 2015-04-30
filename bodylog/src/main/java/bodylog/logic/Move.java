@@ -61,6 +61,15 @@ public class Move extends VariableList implements Comparable<Move> {
     }
 
     /**
+     * Gets the number of sessions in this.
+     *
+     * @return the number of sessions
+     */
+    public int getSessionCount() {
+        return sessions.size();
+    }
+
+    /**
      * Gets a session from the given index in the move list. Doesn't check if
      * the index is out of bounds or not.
      *

@@ -149,7 +149,7 @@ public class Variable {
     public String getToolTip() {
         switch (type) {
             case NUMERICAL:
-                return "Input numbers in the form X or X.X";
+                return "Input form X or X.X, Press Enter to enact change";
             case CHECKBOX:
                 return "Check or uncheck the box";
             case OPTIONAL_CHOICE:

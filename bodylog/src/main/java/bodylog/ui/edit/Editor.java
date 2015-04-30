@@ -50,8 +50,8 @@ public abstract class Editor extends JPanel implements ActionListener {
     /**
      * Creates a new Editor for the given Saver and window.
      *
-     * @param saver
-     * @param window Window that contains this Editor
+     * @param saver the Saver used to save to file with this Editor
+     * @param window the window that contains this Editor
      */
     public Editor(Saver saver, WindowWithMoveChooser window) {
         this.window = window;
@@ -111,8 +111,9 @@ public abstract class Editor extends JPanel implements ActionListener {
      * @param rowRemoverLabel the label for rowRemoverButton
      * @param textFieldLabel the label for the text input field
      * @param textFieldText the text for the text input field
-     * @param textFieldToolTip toolTip for the text field
-     * @param saveAddition addition added to confirm message in save button
+     * @param textFieldToolTip the toolTip for the text field
+     * @param msgAddition an optional addition to the confirm message in save
+     * button
      *
      * @see bodylog.ui.edit.abstracts.Editor#rowAdderButton
      * @see bodylog.ui.edit.abstracts.Editor#rowRemoverButton
@@ -126,14 +127,14 @@ public abstract class Editor extends JPanel implements ActionListener {
             String textFieldLabel,
             String textFieldText,
             String textFieldToolTip,
-            String saveAddition) {
+            String msgAddition) {
         buttonsLeft.setLayout(new GridLayout(2, 1));
         buttonsLeft.add(rowAdderButton(rowAdderLabel));
         buttonsLeft.add(rowRemoverButton(rowRemoverLabel));
 
         buttonsUpper.setLayout(new GridLayout(1, 3));
         buttonsUpper.add(textField(textFieldLabel, textFieldText, textFieldToolTip));
-        buttonsUpper.add(saveButton(saveAddition));
+        buttonsUpper.add(saveButton(msgAddition));
         buttonsUpper.add(closeButton(CLOSE_TITLE));
     }
 
@@ -161,9 +162,13 @@ public abstract class Editor extends JPanel implements ActionListener {
      * @param addition Optional addition to the title of the border
      */
     protected void setEditorBorder(String addition) {
+        String moveName = getMove().getName();
+        if (moveName.isEmpty()) {
+            moveName = "Name not set";
+        }
         setBorder(BorderFactory
                 .createCompoundBorder(BorderFactory.createTitledBorder(
-                                getMove().getName() + addition),
+                                moveName + addition),
                         BorderFactory.createEmptyBorder(5, 5, 5, 5))
         );
     }
@@ -199,16 +204,16 @@ public abstract class Editor extends JPanel implements ActionListener {
     protected JButton rowRemoverButton(String title) {
         final JButton setRemoverButton = new JButton(title);
         setRemoverButton.addActionListener(
-                new RemoveListenerAndConfirmPopup(setRemoverButton));
+                new RemoveButtonListenerWithConfirmPopup(setRemoverButton));
         return setRemoverButton;
     }
 
-    private class RemoveListenerAndConfirmPopup implements ActionListener {
+    private class RemoveButtonListenerWithConfirmPopup implements ActionListener {
 
         private final JPopupMenu confirmPopup;
         private final JButton removeButton;
 
-        public RemoveListenerAndConfirmPopup(JButton removeButton) {
+        public RemoveButtonListenerWithConfirmPopup(JButton removeButton) {
             this.removeButton = removeButton;
             this.confirmPopup = new JPopupMenu();
             JLabel info = new JLabel(" row is not default");
@@ -230,7 +235,7 @@ public abstract class Editor extends JPanel implements ActionListener {
             int rowCount = tableModel.getRowCount();
             //check if there's more than one row
             if (rowCount > 1) {
-                //if so check if the last row is empty
+                //if so check if the last row has been edited
                 if (!tableModel.rowHasBeenEdited(rowCount - 1)) {
                     confirmPopup.show(removeButton,
                             removeButton.getBounds().x,
@@ -250,8 +255,8 @@ public abstract class Editor extends JPanel implements ActionListener {
 
     /**
      * Resizes the container holding the JTable when a row is added or
-     * subtracted. There should be a better way to do this than the current
-     * implementation.
+     * subtracted. There should be a better way to do this than manually
+     * changing the preferred size.
      */
     protected void resizeAndUpdate() {
         Dimension d = table.getPreferredSize();

@@ -57,7 +57,7 @@ public class SessionEditor extends Editor {
                 REMOVE_SET_TITLE,
                 "Set date:", 
                 dateStr, 
-                "Date must be in the same form as displayed.",
+                "Press Enter to enact change, use the same form as displayed.",
                 ", Session:" + dateStr);
     }
 

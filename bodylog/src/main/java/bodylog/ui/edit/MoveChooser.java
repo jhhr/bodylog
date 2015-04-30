@@ -38,12 +38,6 @@ public class MoveChooser extends MoveListContainer
         add(moveList);
     }
 
-    /**
-     * Loads or reloads the list. Used when changes are made to move files.
-     *
-     * @param moves list of Moves to be used in creating a new
-     * DefaultComboBoxModel for MoveChooser
-     */
     @Override
     public void reloadMoveList(Move[] moves) {
         moveList.setModel(new SortedComboBoxModel(moves));
@@ -70,8 +64,11 @@ public class MoveChooser extends MoveListContainer
     /**
      * Calls <code>moveSelectedAction</code> of the parent window
      *
-     * @param e User clicks on a move in the ComboBox
-     * @see bodylog.ui.dataediting.WindowWithMoveChooser#addNewEditor
+     * @param e the event that triggers this method call: user clicks on a move
+     * in the JComboBox
+     *
+     * @see bodylog.ui.edit.move.MoveEditorWindow#moveSelectedAction
+     * @see bodylog.ui.edit.session.SessionEditorWindow#moveSelectedAction
      */
     @Override
     public void actionPerformed(ActionEvent e) {

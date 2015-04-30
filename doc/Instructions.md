@@ -18,6 +18,7 @@ In the movement editor window you begin editing by selecting an existing movemen
 - the "Save to File" button will attempt to save the movement to file
 - confirmation will be asked if there already exists a file for a movement with the same name
 - you cannot save the movement if the name is blank or any of the variables is not proper (see editing variables)
+- once saved, the movement lists in any open move editor or session editor windows will be updated, open session editors in a session editor window will not be updated (see Editing Sessions)
 ###Close editor:
 - the "Close Editor" button will close the editor
 
@@ -44,7 +45,7 @@ In the movement editor window you begin editing by selecting an existing movemen
 
 ##Editing Sessions
 
-Open the session editing window from the menu through Menu-->Edit Sessions. Open a session editor for a movement by selecting it from the list. You can only have one editor open for a movement. Within the session editor you can do the following:
+Open the session editing window from the menu through Menu-->Edit Sessions. Open a session editor for a movement by selecting it from the list. You can only have one editor open for a movement. Note that if you edit and save a movement while a session editor for that movement is open, you will have to close and reopen that editor to use the updated movement. Within the session editor you can do the following:
 
 ###Set Session Date:
 - click the text field and edit the date, then press enter to execute the change; if successful the date displayed on the upper left corner of the editor will change
@@ -63,10 +64,14 @@ Open the session editing window from the menu through Menu-->Edit Sessions. Open
 ##Edit session:
 
 ###Set value for a variable:
-- depending on the variable type:
- - if type is numerical, double click on the cell and type the number you want, to execute the change press enter or click another cell; if unsuccessful the cell border will become red and you will not be able to select another cell until you input something proper
- - if type is checkbox, check or uncheck the box
- - if type is optional or mandatory choice, click the cell to show the drop down list and select one choice
 - hovering over the column header will show a tooltip on how to edit that variable
+###Numerical:
+- double click on the cell and type the number you want, to execute the change press enter or click another cell; if unsuccessful the cell border will become red and you will not be able to select another cell until you input something proper
+###Checkbox
+- check or uncheck the box
+###Optional or Mandatory Choice
+- click the cell and select once choice from the drop down list
 
 ##Viewing Sessions
+
+Open the session viewing window from the menu through Menu-->View Statistics. In this window, simply click on a movement on the left to show the display. To reload the currently selected display, press the "Reload" button. Displays not selected will be updated with any sessions you add once you select them.

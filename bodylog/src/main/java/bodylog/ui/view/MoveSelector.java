@@ -20,6 +20,16 @@ public class MoveSelector extends MoveListContainer
     private final JList moveList;
     private SortedListModel model;
 
+    /**
+     * Creates a new MoveSelector for the given window with the given Moves.
+     * Uses a SortedListModel as the data model for the Move list.
+     *
+     * @param window the window this is contained in
+     * @param moves the list of Moves this will use
+     *
+     * @see bodylog.ui.view.SortedListModel
+     * @see bodylog.ui.view.StatisticsViewerWindow
+     */
     public MoveSelector(WindowWithMoveListContainer window, Move[] moves) {
         super(window);
         this.model = new SortedListModel(moves);
@@ -29,10 +39,20 @@ public class MoveSelector extends MoveListContainer
         moveList.addListSelectionListener(this);
     }
 
+    /**
+     * Gets the JList contained in this.
+     *
+     * @return a JList
+     */
     public JList getJList() {
         return moveList;
     }
 
+    /**
+     * Gets the Move currently selected in the list.
+     *
+     * @return a Move
+     */
     public Move getSelectedMove() {
         return (Move) moveList.getSelectedValue();
     }
@@ -43,12 +63,17 @@ public class MoveSelector extends MoveListContainer
         moveList.setModel(model);
     }
 
-    //Listens to the list
+    /**
+     * Calls the <code>moveSelectedAction</code> method of the parent window.
+     *
+     * @param e the event that triggers this method call: user clicks on a Move
+     * in the JList
+     * 
+     * @see bodylog.ui.view.StatisticsViewerWindow#moveSelectedAction
+     */
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        JList list = (JList) e.getSource();
-        Move move = (Move) list.getSelectedValue();
-        window.moveSelectedAction(move);
+        window.moveSelectedAction(getSelectedMove());
     }
 
     @Override

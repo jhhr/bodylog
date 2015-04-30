@@ -37,11 +37,14 @@ public abstract class WindowWithMoveListContainer extends JScrollPane {
     }
 
     /**
-     * Returns the MoveListContainerUpdater given to this window. Used for
-     * updating the move list.
+     * Returns the <code>MoveListContainerUpdater</code> given to this window.
+     * Used for updating the container list in the updater when a window is
+     * closed.
      *
      * @return the MoveListContainerUpdater of this window, it is the same
      * object for all windows
+     * 
+     * @see bodylog.ui.CloseableTab
      */
     public MoveListContainerUpdater getUpdater() {
         return updater;

@@ -55,7 +55,7 @@ public class MoveEditor extends Editor {
                 REMOVE_VAR_TITLE,
                 "name:",
                 getMove().getName(), 
-                "Characters not allowed in name: "
+                "Press Enter to enact change, characters not allowed: "
                 + Names.IllegalCharsWithSpaces(Names.Illegal.MOVE_NAME),
                 "");
     }

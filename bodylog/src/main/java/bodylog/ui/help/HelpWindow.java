@@ -8,14 +8,13 @@ import javax.swing.JEditorPane;
 import javax.swing.JScrollPane;
 
 /**
- * Window containing instructions on how to use this program. To be implemented.
+ * Window containing instructions on how to use this program.
  */
 public class HelpWindow extends JScrollPane {
 
     public HelpWindow() {
         JEditorPane textPane = new JEditorPane();
-        System.out.println(getClass().getClassLoader().getResource("").getPath());
-        URL helpHTML = getClass().getResource("help.html");
+        URL helpHTML = getClass().getResource("/help.html");
         try {
             textPane.setPage(helpHTML);
         } catch (IOException ex) {

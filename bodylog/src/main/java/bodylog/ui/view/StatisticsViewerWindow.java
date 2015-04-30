@@ -38,9 +38,17 @@ import bodylog.ui.MoveListContainerUpdater;
 import bodylog.ui.WindowWithMoveListContainer;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -82,36 +90,90 @@ public class StatisticsViewerWindow extends WindowWithMoveListContainer {
         setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 
+        //create the MoveListContainer for this window and add it to the updater
         MoveSelector selector = new MoveSelector(this, updater.newMoveList());
         this.moveListContainer = selector;
         updater.addContainer(moveListContainer);
-        
+
+        //the manager for the views displayed in this window
         this.displayer = new StatisticsDisplayer();
         updater.setDisplayer(displayer);
 
-        JScrollPane listScrollPane = new JScrollPane(selector.getJList());
+        //the panel which holds the displays   
         tablePanel = new JPanel();
-        JScrollPane tablesScrollPane = new JScrollPane(tablePanel);
 
-        //Create a split pane with the two scroll panes in it.
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                listScrollPane, tablesScrollPane);
-        splitPane.setOneTouchExpandable(true);
-        splitPane.setDividerLocation(100);
+        //the panel that will hold the reload button
+        JPanel buttonPanel = createButtonPanel(selector);
 
-        //Provide minimum sizes for the two components in the split pane.
+        //the panel holding the buttonPanel and tablePanel
+        JPanel viewPanel = new JPanel();
+        viewPanel.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 1.0;
+        c.insets = new Insets(5, 5, 5, 5);
+        c.gridx = 0;
+        c.gridy = 0;    
+        viewPanel.add(buttonPanel,c);
+        c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 1;
+        c.weighty = 1.0;
+        c.anchor = GridBagConstraints.PAGE_START;
+        viewPanel.add(tablePanel,c);
+
+        //the scroll pane holding the move list, left side of the split pane
+        JScrollPane listScrollPane = new JScrollPane(selector.getJList());
+
+        //the scroll Pane holding the viewPanel, right side of the split pane
+        JScrollPane viewScrollPane = new JScrollPane(viewPanel);
+
+        //provide minimum sizes for the two components in the split pane
         Dimension minimumSize = new Dimension(50, 150);
         listScrollPane.setMinimumSize(minimumSize);
-        tablesScrollPane.setMinimumSize(minimumSize);
+        viewScrollPane.setMinimumSize(minimumSize);
 
-        //Provide a preferred size for the split pane.
-        splitPane.setPreferredSize(new Dimension(400, 400));
+        //create the split pane with the two scroll panes in it
+        JSplitPane splitPane = createSplitPane(listScrollPane, viewScrollPane);
         setViewportView(splitPane);
 
+        //add default content to the tablePanel
         tablePanel.add(new JLabel("Could not find any movements from "
                 + "which to display statistics"));
 
+        //get the display for the first move, if null, the above is displayed
         moveSelectedAction(selector.getSelectedMove());
+    }
+    
+    private JPanel createButtonPanel(final MoveSelector selector){
+        JPanel buttonPanel = new JPanel();
+        //create and add the button to the panel
+        JButton reloadButton = new JButton("Reload");
+        reloadButton.addActionListener(new ActionListener() {
+            //resets and reloads the display of the currectly selected Move
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Move move = selector.getSelectedMove();
+                displayer.resetDisplay(move);
+                moveSelectedAction(move);
+            }
+
+        });
+        buttonPanel.add(reloadButton);
+        
+        return buttonPanel;
+    }
+
+    private JSplitPane createSplitPane(JScrollPane left, JScrollPane right) {
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+                left, right);
+        splitPane.setOneTouchExpandable(true);
+        splitPane.setDividerLocation(100);
+
+        //provide a preferred size for the split pane
+        splitPane.setPreferredSize(new Dimension(400, 400));
+
+        return splitPane;
     }
 
     @Override
@@ -126,9 +188,11 @@ public class StatisticsViewerWindow extends WindowWithMoveListContainer {
 
     /**
      * When the list is clicked the statistics window's content is changed to
-     * the chosen Move's StatisticsDisplayer.
+     * the chosen Move's display.
      *
-     * @param move the move used to get the StatisticsDisplayer from the HashMap
+     * @param move the move used to get the display
+     *
+     * @see bodylog.ui.view.StatisticsDisplayer#getStatisticsDisplay
      */
     @Override
     public void moveSelectedAction(Move move) {
@@ -144,7 +208,7 @@ public class StatisticsViewerWindow extends WindowWithMoveListContainer {
                 VariableStateException ex) {
             Logger.getLogger(StatisticsViewerWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
-        tablePanel.validate();
-        tablePanel.repaint();
+        validate();
+        repaint();
     }
 }

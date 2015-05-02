@@ -1,4 +1,3 @@
-
 package bodylog.files.abstracts;
 
 import bodylog.logic.Move;

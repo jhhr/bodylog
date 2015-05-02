@@ -18,6 +18,11 @@ public class SortedListModel<E> extends AbstractListModel<E> {
 
     SortedSet<E> model;
 
+    /**
+     * Creates a new ListModel for the given items.
+     *
+     * @param items the data to use
+     */
     public SortedListModel(E items[]) {
         model = new TreeSet(Arrays.asList(items));
     }

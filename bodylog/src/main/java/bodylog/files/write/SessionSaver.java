@@ -41,7 +41,7 @@ public class SessionSaver extends Saver {
      * existence will be checked
      *
      * @return true if the file exists, false otherwise
-     * @see bodylog.ui.dataediting.SessionEditor
+     * @see bodylog.ui.edit.session.SessionEditor
      * @see bodylog.files.Constant#DATA_DIR
      * @see bodylog.files.Constant#SESSION_END
      */
@@ -62,8 +62,7 @@ public class SessionSaver extends Saver {
      * @see bodylog.logic.Move
      * @see bodylog.logic.Session
      * @see bodylog.logic.Set
-     * @see bodylog.ui.dataediting.SessionEditor
-     * @see bodylog.files.Constant#FILE_DATE_FORMAT
+     * @see bodylog.ui.edit.session.SessionEditor
      * @see bodylog.files.Constant#DATA_DIR
      * @see bodylog.files.Constant#SESSION_END
      */

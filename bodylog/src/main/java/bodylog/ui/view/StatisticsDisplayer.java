@@ -27,16 +27,22 @@ import javax.swing.JTable;
  */
 public class StatisticsDisplayer {
 
-    private final HashMap<Move, JPanel> movesToStatisticsMap;
+    private final HashMap<Move, JPanel> movesToDisplays;
     private final SessionReader reader;
 
     public StatisticsDisplayer() {
-        movesToStatisticsMap = new HashMap<>();
+        movesToDisplays = new HashMap<>();
         reader = new SessionReader();
     }
 
+    /**
+     * Resets the display attached to the given Move. Next time when the display
+     * for the Move is fetched, a new one will be created.
+     *
+     * @param move the Move for which to reset the display
+     */
     public void resetDisplay(Move move) {
-        movesToStatisticsMap.put(move, null);
+        movesToDisplays.put(move, null);
     }
 
     /**
@@ -53,12 +59,14 @@ public class StatisticsDisplayer {
      */
     public JPanel getStatisticsDisplay(Move move) throws FileNotFoundException,
             ParsingException, VariableStateException {
-        JPanel statisticsPanel = movesToStatisticsMap.get(move);
+        //get the display currently associated with this move
+        JPanel statisticsPanel = movesToDisplays.get(move);
+        //is null when fetched the first time or has been reset by updater
         if (statisticsPanel == null) {
             move.clearSessions();
             reader.fetchSessionsForMove(move);
             statisticsPanel = new StatisticsDisplay(move);
-            movesToStatisticsMap.put(move, statisticsPanel);
+            movesToDisplays.put(move, statisticsPanel);
         }
         return statisticsPanel;
     }
@@ -74,7 +82,7 @@ public class StatisticsDisplayer {
                 add(new JLabel("Could not find any data to display for this movement"));
             } else {
                 for (Session session : move.getSessions()) {
-                    JTable table = new JTable(new ViewTable(session, move));
+                    JTable table = new JTable(new ViewTable(session));
                     table.setPreferredScrollableViewportSize(table.getPreferredSize());
                     table.setFillsViewportHeight(true);
                     JScrollPane pane = new JScrollPane(table);

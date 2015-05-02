@@ -19,16 +19,15 @@ public class Variable {
     private String[] choices;
 
     /**
-     * Enumerator of possible types for a Variable.
+     * Enumerator of possible types for a Variable. Defines what values are
+     * allowed in a certain index in a Set.
      * <ul>
-     * <li> <code>NUMERICAL</code> allows only double values</li>
+     * <li><code>NUMERICAL</code> allows only double values</li>
      * <li><code>CHECKBOX</code> allows only boolean values</li>
-     * <li><code>OPTIONAL_CHOICE</code> or <code>MANDATORY CHOICE</code> allows
-     * only string values from a list of choices</li>
-     * <ul>
-     * <li> <code>OPTIONAL_CHOICE</code> allows no choice to be made</li>
-     * <li> <code>MANDATORY CHOICE</code> requires a choice to be made</li>
-     * </ul>
+     * <li><code>OPTIONAL_CHOICE</code> allows string values from a list of
+     * choices, has at least one choice, can choose none</li>
+     * <li><code>MANDATORY CHOICE</code> allows string values from a list of
+     * choices, has at least once choice, must choose one</li>
      * </ul>
      */
     public enum Type {
@@ -77,7 +76,7 @@ public class Variable {
      * @param name the new name
      * @throws NameNotAllowedException when the name is not allowed
      *
-     * @see bodylog.logic.DataHandling#nameIsAllowed
+     * @see bodylog.logic.datahandling.Names#isAllowed
      */
     public void setName(String name) throws NameNotAllowedException {
         this.name = Names.isAllowed(name, Names.Illegal.VARIABLE);
@@ -153,7 +152,7 @@ public class Variable {
             case CHECKBOX:
                 return "Check or uncheck the box";
             case OPTIONAL_CHOICE:
-                return "Choose one or "+OPT_NO_CHOICE;
+                return "Choose one or " + OPT_NO_CHOICE;
             case MANDATORY_CHOICE:
                 return "Choose one";
             default:

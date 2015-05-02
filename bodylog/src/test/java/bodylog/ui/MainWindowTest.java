@@ -6,8 +6,8 @@ import org.junit.Test;
 
 public class MainWindowTest {
     
-    @Test
-    public void ErrorTest(){
-    }
+//    @Test
+//    public void ErrorTest(){
+//    }
 
 }

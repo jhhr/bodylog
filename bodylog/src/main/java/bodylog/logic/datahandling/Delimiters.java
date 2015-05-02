@@ -1,7 +1,8 @@
-
 package bodylog.logic.datahandling;
+
 /**
  * Defines the characters used in parsing and formatting data.
+ *
  * @author yonus
  */
 public class Delimiters {

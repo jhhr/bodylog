@@ -9,7 +9,9 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 /**
- * Encapsulates the main window and the rest of the program.
+ * Encapsulates the starting of the UI and uncaught exception handling.
+ *
+ * @see bodylog.ui.MainWindow
  */
 public class BodyLog implements Runnable {
 
@@ -21,9 +23,9 @@ public class BodyLog implements Runnable {
     /**
      * Creates an instance of MainWindow and sets it visible. Also sets an
      * UncaughtExceptionHandler to catch any uncaught exceptions and write the
-     * stack trace to a file instead of the console. In such case a pop-up
-     * window will be displayed saying there's been an unexpected error. The
-     * program will close after closing the pop-up.
+     * stack trace to a file. In such case a pop-up window will be displayed
+     * saying there's been an unexpected error. The program will close after
+     * closing the pop-up.
      *
      * @see bodylog.ui.MainWindow
      */

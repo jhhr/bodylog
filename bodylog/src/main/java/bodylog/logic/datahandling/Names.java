@@ -43,11 +43,12 @@ public class Names {
      * Returns a string of the specified set of illegal characters with a space
      * added between each one for better readability.
      *
-     * @param charSet Enumerator <code>Illegal</code> containing the character
+     * @param charSet theEnumerator <code>Illegal</code> containing the character
      * list
+     * 
      * @return String constructed from the char list
      */
-    public static String IllegalCharsWithSpaces(Illegal charSet) {
+    public static String illegalCharsWithSpaces(Illegal charSet) {
         String chars = "";
         for (char c : charSet.getChars()) {
             chars += c + " ";
@@ -78,7 +79,7 @@ public class Names {
         for (char ch : charSet.getChars()) {
             if (name.contains("" + ch)) {
                 throw new NameNotAllowedException("The characters "
-                        + IllegalCharsWithSpaces(charSet) + " are not allowed.");
+                        + illegalCharsWithSpaces(charSet) + " are not allowed.");
             }
         }
         return name.trim();

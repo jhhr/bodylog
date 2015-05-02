@@ -6,16 +6,16 @@ import java.io.FilenameFilter;
 
 /**
  * A FileNameFilter that accepts files ending in the ending for session data
- * files. Used in the file handling class FromFile.
+ * files.
  *
  * @see bodylog.files.Constant#SESSION_END
- * @see bodylog.files.FromFile#moveWithSessions
+ * @see bodylog.files.read.SessionReader
  */
 public class SessionFileFilter implements FilenameFilter {
 
     /**
-     * Checks if the file is a session file. Ignores the parent directory as it is
-     * named by the Move and can be named anything.
+     * Checks if the file is a session file. Ignores the parent directory as it
+     * is named by the Move and can be named anything.
      *
      * @param dir the directory in which the file was found.
      * @param name the name of the file.

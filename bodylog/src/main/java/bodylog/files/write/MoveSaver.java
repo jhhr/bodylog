@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package bodylog.files.write;
 
 import bodylog.files.abstracts.Saver;
@@ -38,11 +33,13 @@ public class MoveSaver extends Saver {
     private static final int MOVE_RENAMED = 6;
 
     /**
-     * Creates a new MoveSaver for the specified Move.
+     * Creates a new MoveSaver for the specified Move and with the given
+     * updater.
      *
      * @param updater MoveListContainerUpdater used to inform MoveListContainers
      * that a Move has been edited or created
      * @param move Move to be saved
+     *
      * @see bodylog.logic.Move
      */
     public MoveSaver(MoveListContainerUpdater updater, Move move) {
@@ -57,7 +54,8 @@ public class MoveSaver extends Saver {
      * ending.
      *
      * @return true if the file exists, false otherwise
-     * @see bodylog.ui.dataediting.MoveEditor
+     *
+     * @see bodylog.ui.edit.move.MoveEditor
      * @see bodylog.files.Constant#MOVES_DIR
      * @see bodylog.files.Constant#MOVE_END
      */
@@ -75,9 +73,9 @@ public class MoveSaver extends Saver {
      *
      * @throws IOException when the file cannot be created or opened or if an
      * error occurs during writing
-     * @throws FileRenameException when the file to be renamed doesn't exist (user
-     * deleted it), the file and rename target both exist (user set Move name
-     * same as one that is saved) or renaming failed for unknown reasons
+     * @throws FileRenameException when the file to be renamed doesn't exist
+     * (user deleted it), the file and rename target both exist (user set Move
+     * name same as one that is saved) or renaming failed for unknown reasons
      * @throws FileCreationException when the creation of the move folder fails
      * for unknown reasons
      * @throws IllegalArgumentException when the name of the Move is blank (user
@@ -87,9 +85,9 @@ public class MoveSaver extends Saver {
      * have the same name
      *
      * @see bodylog.logic.Move
-     * @see bodylog.logic.Variable#checkState()
+     * @see bodylog.logic.Variable#checkState
      * @see bodylog.logic.abstracts.VariableList#checkVariables
-     * @see bodylog.ui.dataediting.MoveEditor
+     * @see bodylog.ui.edit.move.MoveEditor
      * @see bodylog.files.Constant#MOVES_DIR
      * @see bodylog.files.Constant#MOVE_END
      */

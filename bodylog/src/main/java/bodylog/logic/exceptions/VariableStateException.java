@@ -8,7 +8,7 @@ package bodylog.logic.exceptions;
 /**
  * Custom exception used in the Variable class.
  *
- * @see bodylog.logic.Variable#throwExceptions
+ * @see bodylog.logic.Variable#checkState
  */
 public class VariableStateException extends Exception {
 

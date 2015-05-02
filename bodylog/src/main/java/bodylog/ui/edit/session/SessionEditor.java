@@ -27,7 +27,7 @@ import javax.swing.table.JTableHeader;
  * @see bodylog.logic.Session
  * @see bodylog.logic.Set
  * @see bodylog.ui.edit.session.SessionEditorWindow
- * @see bodylog.ui.dataediting.Editor
+ * @see bodylog.ui.edit.Editor
  * @see bodylog.ui.tables.abstracts.EditorTable
  */
 public class SessionEditor extends Editor {
@@ -42,9 +42,10 @@ public class SessionEditor extends Editor {
      * to be edited. The date is shown in the border surrounding this component
      * and is changed with <code>setEditorBorder</code>.
      *
-     * @param saver
+     * @param saver the Saver used to write to file
      * @param editorWindow Parent container of this SessionEditor
-     * @see bodylog.ui.dataediting.Editor#setEditorBorder
+     *
+     * @see bodylog.ui.edit.Editor#setEditorBorder
      */
     public SessionEditor(Saver saver, SessionEditorWindow editorWindow) {
         super(saver, editorWindow);
@@ -53,10 +54,10 @@ public class SessionEditor extends Editor {
         setEditorBorder(" " + dateStr);
 
         setButtonLayouts(
-                ADD_SET_TITLE, 
+                ADD_SET_TITLE,
                 REMOVE_SET_TITLE,
-                "Set date:", 
-                dateStr, 
+                "Set date:",
+                dateStr,
                 "Press Enter to enact change, use the same form as displayed.",
                 ", Session:" + dateStr);
     }
@@ -111,7 +112,7 @@ public class SessionEditor extends Editor {
      * changed by the user. When the date is changed the border displaying the
      * date is redrawn.
      *
-     * @see bodylog.ui.edit.abstracts.Editor#textField
+     * @see bodylog.ui.edit.Editor#textField
      */
     @Override
     protected void textFieldAction(String text) {
@@ -134,12 +135,10 @@ public class SessionEditor extends Editor {
      * the Move of this SessionEditor.The attempt may throw an exception which
      * is handled by showing a pup-up message.
      *
-     * @see bodylog.files.SessionSaver#saveToFile
-     * @see bodylog.ui.dataediting.SessionEditor#addSessionsToMove
+     * @see bodylog.files.write.SessionSaver#saveToFile
      */
     @Override
     protected void saveToFile() {
-
         try {
             saver.saveToFile();
         } catch (Exception unexpected) {
@@ -157,7 +156,8 @@ public class SessionEditor extends Editor {
      * already exists.
      *
      * @return true if the file exists, false otherwise
-     * @see bodylog.files.SessionSaver#fileExists
+     *
+     * @see bodylog.files.write.SessionSaver#fileExists
      */
     @Override
     protected boolean fileExists() {

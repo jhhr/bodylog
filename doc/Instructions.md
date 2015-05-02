@@ -23,7 +23,6 @@ In the movement editor window you begin editing by selecting an existing movemen
 - the "Close Editor" button will close the editor
 
 ##Edit Variables:
-
 ###Set Variable Name:
 - double click a cell under the "Name" column and type into it, to execute the name change press enter or click another cell; if successful, the cell will display the new name
 - hovering over any cell will display a tooltip on what characters are allowed in the name or choices
@@ -62,7 +61,6 @@ Open the session editing window from the menu through Menu-->Edit Sessions. Open
 - the "Close Editor" button will the close the editor
 
 ##Edit session:
-
 ###Set value for a variable:
 - hovering over the column header will show a tooltip on how to edit that variable
 ###Numerical:

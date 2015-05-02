@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
  * the functionality for receiving user input but uses the obsolete collection
  * Vector. Should create a custom TableModel with editing capability.
  *
- * @see bodylog.ui.dataediting.SessionEditor
+ * @see bodylog.ui.edit.session.SessionEditor
  */
 public abstract class EditorTable extends DefaultTableModel {
 
@@ -30,12 +30,12 @@ public abstract class EditorTable extends DefaultTableModel {
      * the input to disappear, prompting to user to try again. The table should
      * have a ToolTip that describes acceptable inputs.
      *
-     * @param value value to be added
-     * @param row row
-     * @param column column
+     * @param value the value to be added
+     * @param row the row
+     * @param column the column
      *
-     * @see bodylog.ui.dataediting.SessionEditor
-     * @see bodylog.ui.dataediting.MoveEditor
+     * @see bodylog.ui.edit.session.SessionEditor
+     * @see bodylog.ui.edit.move.MoveEditor
      */
     @Override
     public void setValueAt(Object value, int row, int column) {
@@ -53,7 +53,8 @@ public abstract class EditorTable extends DefaultTableModel {
      * Checks if a row has been changed from the default state. Used for
      * checking the last row before removing it.
      *
-     * @param row row to be checked
+     * @param row the row to be checked
+     *
      * @return true when all values in the row are null, false otherwise
      */
     public boolean rowHasBeenEdited(int row) {
@@ -80,6 +81,7 @@ public abstract class EditorTable extends DefaultTableModel {
      * @param value the input to be parsed
      * @param row the row of the cell where the input originates
      * @param column the column of the cell where the input originates
+     *
      * @return the parsed value, null if parsing fails
      */
     protected abstract Object parseValue(Object value, int row, int column);

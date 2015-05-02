@@ -53,9 +53,8 @@ public class Constant {
      * used for the session files. Used in the UI class SessionEditor.
      *
      * @param dateString date string to be converted
-     * @return a date string in the format yyyy-mm-dd throws
-     * DateTimeParseException when failing to parse the given string
-     * @see bodylog.ui.dataediting.SessionEditor
+     * @return a date string in the local format
+     * @see bodylog.ui.edit.session.SessionEditor
      */
     public static String uiDateToFileDate(String dateString) {
         return FILE_DATE_FORMAT.format(UI_DATE_FORMAT.parse(dateString));
@@ -66,7 +65,7 @@ public class Constant {
      *
      * @return true if the folder exists after the operation, false otherwise
      * @throws SecurityException when access is denied
-     * @see bodylog.files.Constant#MOVES_DIR_NAME
+     * @see bodylog.files.Constant#MOVES_DIR
      */
     public static boolean createMovesFolder() throws SecurityException {
         return !Constant.MOVES_DIR.exists() ? Constant.MOVES_DIR.mkdir() : true;
@@ -78,7 +77,7 @@ public class Constant {
      *
      * @return true if the folder exists after the operation, false otherwise
      * @throws SecurityException when access is denied
-     * @see bodylog.files.Constant#DATA_DIR_NAME
+     * @see bodylog.files.Constant#DATA_DIR
      */
     public static boolean createDataFolder() throws SecurityException {
         return !Constant.DATA_DIR.exists() ? Constant.DATA_DIR.mkdir() : true;

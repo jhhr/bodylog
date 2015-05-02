@@ -29,10 +29,10 @@ import javax.swing.JTextField;
  * contained in a WindowWithMoveChooser. Has implemented methods for creating
  * some buttons and setting the border.
  *
- * @see bodylog.ui.dataediting.SessionEditor
- * @see bodylog.ui.dataediting.MoveEditor
+ * @see bodylog.ui.edit.session.SessionEditor
+ * @see bodylog.ui.edit.move.MoveEditor
  * @see bodylog.ui.edit.WindowWithMoveChooser
- * @see bodylog.ui.dataediting.MoveChooser
+ * @see bodylog.ui.edit.MoveChooser
  */
 public abstract class Editor extends JPanel implements ActionListener {
 
@@ -115,11 +115,11 @@ public abstract class Editor extends JPanel implements ActionListener {
      * @param msgAddition an optional addition to the confirm message in save
      * button
      *
-     * @see bodylog.ui.edit.abstracts.Editor#rowAdderButton
-     * @see bodylog.ui.edit.abstracts.Editor#rowRemoverButton
-     * @see bodylog.ui.edit.abstracts.Editor#textField
-     * @see bodylog.ui.edit.abstracts.Editor#saveButton
-     * @see bodylog.ui.edit.abstracts.Editor#closeButton
+     * @see bodylog.ui.edit.Editor#rowAdderButton
+     * @see bodylog.ui.edit.Editor#rowRemoverButton
+     * @see bodylog.ui.edit.Editor#textField
+     * @see bodylog.ui.edit.Editor#saveButton
+     * @see bodylog.ui.edit.Editor#closeButton
      */
     protected void setButtonLayouts(
             String rowAdderLabel,
@@ -142,6 +142,7 @@ public abstract class Editor extends JPanel implements ActionListener {
      * Creates a button for removing this component from its parent container.
      *
      * @param buttonTitle title for the button describing what is being closed.
+     *
      * @return JButton object with ActionListener added
      */
     protected JButton closeButton(String buttonTitle) {
@@ -178,6 +179,7 @@ public abstract class Editor extends JPanel implements ActionListener {
      * container of the table is resized.
      *
      * @param title The displayed title of the button
+     *
      * @return JButton with ActionListener added
      */
     protected JButton rowAdderButton(String title) {
@@ -199,6 +201,7 @@ public abstract class Editor extends JPanel implements ActionListener {
      * container of the table is resized.
      *
      * @param title The displayed title of the button
+     *
      * @return JButton with ActionListener added
      */
     protected JButton rowRemoverButton(String title) {
@@ -276,9 +279,11 @@ public abstract class Editor extends JPanel implements ActionListener {
      * @param startText the text displayed in the text field at the start
      * @param message the message shown in the toolTip when hovering over the
      * text field
+     *
      * @return a JPanel containing the label and text field
-     * @see bodylog.ui.edit.MoveEditor#textFieldAction
-     * @see bodylog.ui.edit.SessionEditor#textFieldAction
+     *
+     * @see bodylog.ui.edit.move.MoveEditor#textFieldAction
+     * @see bodylog.ui.edit.session.SessionEditor#textFieldAction
      */
     protected JPanel textField(String label, String startText, String message) {
         JPanel setNameContainer = new JPanel();
@@ -312,8 +317,9 @@ public abstract class Editor extends JPanel implements ActionListener {
      * Action taken for user input in the main text field of this Editor.
      *
      * @param text string created by the ActionListener of the text field
-     * @see bodylog.ui.edit.MoveEditor#textFieldAction
-     * @see bodylog.ui.edit.SessionEditor#textFieldAction
+     *
+     * @see bodylog.ui.edit.move.MoveEditor#textFieldAction
+     * @see bodylog.ui.edit.session.SessionEditor#textFieldAction
      */
     protected abstract void textFieldAction(String text);
 
@@ -326,9 +332,9 @@ public abstract class Editor extends JPanel implements ActionListener {
      * @param addition used in <code>userConfirmsSaveToFile</code> which is used
      * the ActionListener given to this button
      * @return JButton with a listener added
-     * @see bodylog.ui.dataediting.Editor#userConfirmsSaveToFile
-     * @see bodylog.ui.dataediting.SessionEditor#saveToFile
-     * @see bodylog.ui.dataediting.MoveEditor#saveToFile
+     * @see bodylog.ui.edit.Editor#userConfirmsSaveToFile
+     * @see bodylog.ui.edit.session.SessionEditor#saveToFile
+     * @see bodylog.ui.edit.move.MoveEditor#saveToFile
      */
     protected JButton saveButton(final String addition) {
         JButton tallennusNappi = new JButton(SAVE_TITLE);
@@ -349,8 +355,8 @@ public abstract class Editor extends JPanel implements ActionListener {
     /**
      * Saves the data put in by the user into this editor into a move.
      *
-     * @see bodylog.ui.dataediting.SessionEditor#saveToFile
-     * @see bodylog.ui.dataediting.MoveEditor#saveToFile
+     * @see bodylog.ui.edit.session.SessionEditor#saveToFile
+     * @see bodylog.ui.edit.move.MoveEditor#saveToFile
      */
     protected abstract void saveToFile();
 
@@ -359,7 +365,7 @@ public abstract class Editor extends JPanel implements ActionListener {
      * Used in <code>userConfirmsSaveToFile</code>.
      *
      * @return should return true if move exists, false otherwise
-     * @see bodylog.ui.dataediting.Editor#userConfirmsSaveToFile
+     * @see bodylog.ui.edit.Editor#userConfirmsSaveToFile
      */
     protected abstract boolean fileExists();
 
@@ -372,8 +378,10 @@ public abstract class Editor extends JPanel implements ActionListener {
      *
      * @param addition An optional addition to the the message given in the
      * option window shown to the user.
+     *
      * @return true if the user does want to overwrite, false otherwise
-     * @see bodylog.ui.dataediting.Editor#saveButton
+     *
+     * @see bodylog.ui.edit.Editor#saveButton
      */
     protected boolean userConfirmsSaveToFile(String addition) {
         if (fileExists()) {

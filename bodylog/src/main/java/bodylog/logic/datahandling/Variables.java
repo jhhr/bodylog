@@ -28,7 +28,7 @@ public class Variables {
      * @throws ParsingException when failing to parse the type from the line
      * @throws VariableStateException when the parsed Variable is not proper
      *
-     * @see bodylog.logic.datahandling.Names#nameIsAllowed
+     * @see bodylog.logic.datahandling.Names#isAllowed
      * @see bodylog.logic.Variable#checkState
      */
     public static Variable parseLine(String line)

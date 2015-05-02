@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class MoveEditorTable extends EditorTable {
 
     public MoveEditorTable(Move move) {
-        super(createTableData(move), new String[]{"Name", "Type", "Choices"},move);
+        super(createTableData(move), new String[]{"Name", "Type", "Choices"}, move);
     }
 
     public static Object[][] createTableData(Move move) {
@@ -53,14 +53,13 @@ public class MoveEditorTable extends EditorTable {
     protected Object parseValue(Object value, int row, int column) {
         Variable var = move.getVariable(row);
         switch (column) {
-            case 0: {
+            case 0:
                 try {
                     var.setName((String) value);
                 } catch (NameNotAllowedException ex) {
                     return null;
                 }
-            }
-            break;
+                break;
             case 1:
                 var.setType((Type) value);
                 break;
@@ -73,6 +72,6 @@ public class MoveEditorTable extends EditorTable {
 
     @Override
     protected Object[] defaultRowData() {
-        return new Object[]{"",Type.NUMERICAL,new String[0]};
+        return new Object[]{"", Type.NUMERICAL, new String[0]};
     }
 }

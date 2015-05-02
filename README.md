@@ -1,1 +1,4 @@
-jee # bodauslogi
+#### BodyLog
+
+Käyttöohjeet sisällytetty ohjelmaan.
+

@@ -26,7 +26,7 @@ public class Move extends VariableList implements Comparable<Move> {
      * Constructs a new Move with the given name and no Sessions or Variables.
      *
      * @param name Name given to move
-     * @see bodylog.logic.DataHandling#nameIsAllowed
+     * @see bodylog.logic.datahandling.Names#isAllowed
      */
     public Move(String name) {
         super();

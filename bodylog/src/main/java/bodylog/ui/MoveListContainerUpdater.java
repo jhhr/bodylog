@@ -5,7 +5,6 @@ import bodylog.logic.Move;
 import bodylog.logic.exceptions.ParsingException;
 import bodylog.logic.exceptions.VariableStateException;
 import bodylog.ui.view.StatisticsDisplayer;
-import java.awt.Frame;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
@@ -16,7 +15,7 @@ import java.util.ArrayList;
  * Contains a list of MoveListContainers. When a WindowWithMoveChooser is
  * created, it adds its MoveChooser to that list.
  *
- * @see bodylog.ui.edit.abstracts.WindowWithMoveChooser
+ * @see bodylog.ui.edit.WindowWithMoveChooser
  * @see bodylog.ui.edit.MoveChooser
  */
 public class MoveListContainerUpdater {
@@ -33,10 +32,26 @@ public class MoveListContainerUpdater {
         this.reader = new MoveReader();
     }
 
+    /**
+     * Sets the displayer for this.
+     *
+     * @param displayer the displayer to be remembered
+     */
     public void setDisplayer(StatisticsDisplayer displayer) {
         this.displayer = displayer;
     }
 
+    /**
+     * Tells the displayer to reset the display for the given Move. The
+     * displayer is null, if it has not been set which is the situation when a
+     * StatisticsViewerWindow has not been opened yet. Once one has been opened,
+     * the displayer stays non-null even when the window is closed. This method
+     * may still be called which results in a useless resetDisplay call.
+     *
+     * @param move the Move whose display should be reset
+     *
+     * @see bodylog.ui.view.StatisticsDisplayer#resetDisplay
+     */
     public void updateDisplayer(Move move) {
         if (displayer != null) {
             displayer.resetDisplay(move);

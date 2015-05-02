@@ -33,7 +33,7 @@ public abstract class MoveListContainer extends JPanel {
 
     /**
      * Removes the specified Move from the list.
-     * 
+     *
      * @param move the Move to be removed
      */
     public abstract void removeMove(Move move);

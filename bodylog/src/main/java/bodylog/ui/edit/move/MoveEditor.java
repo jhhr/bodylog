@@ -12,6 +12,7 @@ import bodylog.logic.exceptions.VariableStateException;
 import bodylog.ui.tables.edit.MoveEditorTable;
 import bodylog.ui.tables.abstracts.EditorTable;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,6 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
@@ -31,19 +33,21 @@ import javax.swing.table.TableColumnModel;
  *
  * @see bodylog.logic.Move
  * @see bodylog.ui.edit.move.MoveEditorWindow
- * @see bodylog.ui.dataediting.Editor
+ * @see bodylog.ui.edit.Editor
  */
 public class MoveEditor extends Editor {
-    
+
     private static final String ADD_VAR_TITLE = "Add Variable";
     private static final String REMOVE_VAR_TITLE = "Remove Variable";
-    
+
     /**
      * Creates a new <code>MoveEditor</code> for the given Saver which contains
      * the Move to be edited which can be a newly created blank one.
      *
-     * @param saver
-     * @param window Container of this <code>MoveEditor</code>
+     * @param saver the Saver used to write to file
+     * @param window the container of this <code>MoveEditor</code>
+     *
+     * @see bodylog.files.write.MoveSaver
      */
     public MoveEditor(Saver saver, MoveEditorWindow window) {
         super(saver, window);
@@ -51,12 +55,12 @@ public class MoveEditor extends Editor {
         setEditorBorder("");
 
         setButtonLayouts(
-                ADD_VAR_TITLE, 
+                ADD_VAR_TITLE,
                 REMOVE_VAR_TITLE,
                 "name:",
-                getMove().getName(), 
+                getMove().getName(),
                 "Press Enter to enact change, characters not allowed: "
-                + Names.IllegalCharsWithSpaces(Names.Illegal.MOVE_NAME),
+                + Names.illegalCharsWithSpaces(Names.Illegal.MOVE_NAME),
                 "");
     }
 
@@ -67,10 +71,34 @@ public class MoveEditor extends Editor {
 
     @Override
     protected JTable setTable() {
-        JTable newTable = new JTable(tableModel);
-        //tooltip displayed when hovering over the table
-        newTable.setToolTipText("Characters not allowed in name or choices: "
-                + Names.IllegalCharsWithSpaces(Names.Illegal.VARIABLE));
+        JTable newTable = new JTable(tableModel) {
+            //Implement table header tool tips.
+            @Override
+            protected JTableHeader createDefaultTableHeader() {
+                return new JTableHeader(columnModel) {
+                    @Override
+                    public String getToolTipText(MouseEvent e) {
+                        java.awt.Point p = e.getPoint();
+                        int index = columnModel.getColumnIndexAtX(p.x);
+                        switch (columnModel.getColumn(index).getModelIndex()) {
+                            case 0:
+                                return "Press enter to enact change, "
+                                        + "characters not allowed in name: "
+                                        + Names.illegalCharsWithSpaces(
+                                                Names.Illegal.MOVE_NAME);
+                            case 1:
+                                return "Choose type";
+                            case 2:
+                                return "Characters not allowed in choices: "
+                                        + Names.illegalCharsWithSpaces(
+                                                Names.Illegal.MOVE_NAME);
+                            default:
+                                return null;
+                        }
+                    }
+                };
+            }
+        };
         newTable.setRowHeight(20);
 
         TableColumnModel model = newTable.getColumnModel();
@@ -108,7 +136,7 @@ public class MoveEditor extends Editor {
      * change succeeds the border displaying the name is redrawn showing the
      * user that the name has been changed.
      *
-     * @see bodylog.ui.edit.abstracts.Editor#textField
+     * @see bodylog.ui.edit.Editor#textField
      */
     @Override
     protected void textFieldAction(String text) {
@@ -119,7 +147,7 @@ public class MoveEditor extends Editor {
         }
         setEditorBorder("");
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
         window.removeEditor(this);
@@ -134,7 +162,7 @@ public class MoveEditor extends Editor {
     /**
      * Writes the edited Move into a move file.
      *
-     * @see bodylog.files.edit.MoveSaver
+     * @see bodylog.files.write.MoveSaver
      */
     @Override
     protected void saveToFile() {
@@ -148,9 +176,10 @@ public class MoveEditor extends Editor {
                     expected.getMessage(),
                     "Saving canceled", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception unexpected) {
+            Throwable t = unexpected.getCause();
+            String cause = (t == null) ? "none or unknown" : t.toString();
             JOptionPane.showMessageDialog(getParent(),
-                    "cause: " + unexpected.getCause()
-                    + " message: " + unexpected.getMessage(),
+                    "cause: " + cause + " message: " + unexpected.getMessage(),
                     "Saving failed unexpectedly", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(this.getClass().getName()).log(
                     Level.SEVERE, null, unexpected);

@@ -13,7 +13,7 @@ public class NamesTest {
     
     @Test
     public void NoTrailingSpaceInString_IllegalCharsWithSpaces(){
-        assertTrue(Names.IllegalCharsWithSpaces(
+        assertTrue(Names.illegalCharsWithSpaces(
                 Names.Illegal.VARIABLE).matches("(\\S )+\\S"));
     }
 

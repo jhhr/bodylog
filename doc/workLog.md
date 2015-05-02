@@ -29,3 +29,6 @@
 - to 23.4 klo 13-01 muuttujatyyppi-feature valmis, bugeja liiskattu, testejä korjailtu
 - pe 24.4 klo 13-23:30 bugeja liiskattu, luokkakaavio päivitetty, sekvenssikaavioita tehty pari lisää, muutama uusi testi
 - ke 29.4 klo 15-01 käyttöohjeiden kirjoitusta, vähän korjattu koodia
+- to 30.4 klo 13-22 käyttöohjeiden kirjoitusta, koodikatselmointia
+- pe 1.5 klo 13-15, 18-00 rakennekuvauksen kirjoitusta, vähän javadocin korjailua
+- la 2.5 klo 16-17:30 javadocin korjausta

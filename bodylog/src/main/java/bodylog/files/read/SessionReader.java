@@ -26,7 +26,7 @@ public class SessionReader {
      * @throws ParsingException when failing to parse the type of a Variable
      * @throws VariableStateException when a parsed Variable is found not proper
      *
-     * @see bodylog.files.SessionFileFilter
+     * @see bodylog.files.filters.SessionFileFilter
      * @see bodylog.logic.Move
      * @see bodylog.logic.Session
      * @see bodylog.logic.Set
@@ -48,18 +48,17 @@ public class SessionReader {
      * TemporalAccessor. Sets are created from the contents, one line parsed to
      * one Set. into appropriate values.
      *
-     * @param sessionFile file to be read
+     * @param sessionFile the file to be read
      *
-     * @return A new Session populated with Sets, unless the file was empty
+     * @return a new Session populated with Sets, unless the file was empty
      *
      * @throws FileNotFoundException when the file cannot be found
      * @throws ParsingException when failing to parse the type of a Variable
      * @throws VariableStateException when a parsed Variable is found not proper
      *
-     * @see bodylog.logic.DataHandling#stringToSetValue(String)
+     * @see bodylog.logic.datahandling.Sessions#parse
      * @see bodylog.logic.Session
      * @see bodylog.logic.Set
-     * @see bodylog.files.Constant#FILE_DATE_FORMAT
      */
     public Session fetchSession(File sessionFile) throws FileNotFoundException,
             ParsingException, VariableStateException {
@@ -75,7 +74,9 @@ public class SessionReader {
      * TemporalAccessor.
      *
      * @param sessionFile file to be read
+     *
      * @return a TemporalAccessor used in the constructor of a Session
+     *
      * @see bodylog.logic.Session
      * @see bodylog.files.Constant#FILE_DATE_FORMAT
      */

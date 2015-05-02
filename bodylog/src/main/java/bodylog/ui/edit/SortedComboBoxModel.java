@@ -21,6 +21,8 @@ class SortedComboBoxModel<E> extends DefaultComboBoxModel<E> {
 
     /**
      * Create an empty model that will use the specified Comparator
+     *
+     * @param comparator the Comparator to use
      */
     public SortedComboBoxModel(Comparator comparator) {
         super();
@@ -28,14 +30,19 @@ class SortedComboBoxModel<E> extends DefaultComboBoxModel<E> {
     }
 
     /**
-     *	Create a model with data and use the natural sort order of the items
+     * Create a model with data and use the natural sort order of the items.
+     *
+     * @param items the data to use
      */
     public SortedComboBoxModel(E items[]) {
         this(items, null);
     }
 
     /**
-     *  Create a model with data and use the specified Comparator
+     * Create a model with data and use the specified Comparator.
+     *
+     * @param items the data to use
+     * @param comparator the Comparator to use
      */
     public SortedComboBoxModel(E items[], Comparator comparator) {
         this.comparator = comparator;
@@ -45,23 +52,6 @@ class SortedComboBoxModel<E> extends DefaultComboBoxModel<E> {
         }
     }
 
-//    /**
-//     *	Create a model with data and use the nature sort order of the items
-//     */
-//    public SortedComboBoxModel(Vector<E> items) {
-//        this(items, null);
-//    }
-//
-//    /**
-//     *  Create a model with data and use the specified Comparator
-//     */
-//    public SortedComboBoxModel(Vector<E> items, Comparator comparator) {
-//        this.comparator = comparator;
-//
-//        for (E item : items) {
-//            addElement(item);
-//        }
-//    }
     @Override
     public void addElement(E element) {
         insertElementAt(element, 0);

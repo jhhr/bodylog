@@ -68,7 +68,7 @@ public class MoveSelector extends MoveListContainer
      *
      * @param e the event that triggers this method call: user clicks on a Move
      * in the JList
-     * 
+     *
      * @see bodylog.ui.view.StatisticsViewerWindow#moveSelectedAction
      */
     @Override

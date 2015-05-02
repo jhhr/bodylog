@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
  * WindowWithMoveChooser. This is the container for the UI components
  * responsible for creating session data, SessionEditors.
  *
- * @see bodylog.ui.dataediting.WindowWithMoveChooser
+ * @see bodylog.ui.edit.WindowWithMoveChooser
  * @see bodylog.ui.edit.session.SessionEditor
  */
 public class SessionEditorWindow extends WindowWithMoveChooser {
@@ -22,7 +22,7 @@ public class SessionEditorWindow extends WindowWithMoveChooser {
 
     @Override
     protected void addEditor(Move move) {
-        editorPanel.add(new SessionEditor(new SessionSaver(updater,move), this));
+        editorPanel.add(new SessionEditor(new SessionSaver(updater, move), this));
         validate();
         repaint();
     }
@@ -33,8 +33,10 @@ public class SessionEditorWindow extends WindowWithMoveChooser {
      * the Move is not allowed. Used in <code>moveSelectedAction</code>.
      *
      * @param move Move used in checking if adding an Editor is allowed
+     *
      * @return true if allowed, false otherwise
-     * @see bodylog.ui.dataediting.SessionEditorWindow#addEditorAllowed
+     *
+     * @see bodylog.ui.edit.session.SessionEditorWindow#addEditorAllowed
      */
     @Override
     protected boolean addEditorAllowed(Move move) {

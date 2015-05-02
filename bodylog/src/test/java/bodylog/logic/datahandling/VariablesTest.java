@@ -9,7 +9,7 @@ public class VariablesTest {
 
     private final String optName = "opt";
     private final Type optType = Type.OPTIONAL_CHOICE;
-    private final String[] optChoices = new String[]{"one","two"};
+    private final String[] optChoices = {"one","two"};
     private final Variable optVar = new Variable(optName,optType,optChoices);
 
 

@@ -11,8 +11,7 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 /**
- * Class encapsulating the reading of move files and creating Moves from
- * them.
+ * Class encapsulating the reading of move files and creating Moves from them.
  */
 public class MoveReader {
 
@@ -40,13 +39,13 @@ public class MoveReader {
     /**
      * Creates a list of move files which are used to create new Moves.
      *
-     * @return an array of Files, empty if no move files are in the
-     * movements folder. Identifies the right kinds of files through the file
-     * ending using a MoveFileFilter
-     * 
+     * @return an array of Files, empty if no move files are in the movements
+     * folder. Identifies the right kinds of files through the file ending using
+     * a MoveFileFilter
+     *
      * @throws SecurityException if the files cannot be accessed
-     * 
-     * @see bodylog.files.MoveFileFilter
+     *
+     * @see bodylog.files.filters.MoveFileFilter
      */
     public File[] fetchMoveFileList() throws SecurityException {
         Constant.createMovesFolder();
@@ -54,24 +53,20 @@ public class MoveReader {
     }
 
     /**
-     * Creates a list of MoveFiles by reading all move files and creating a
-     * new MoveSaver from each one. Used in the MoveChooser UI class and the
-     * method allMovesWithSessions.
+     * Creates a list of Moves by reading all move files and creating a new Move
+     * from each one. Used by MoveListContainerUpdater.
      *
      * @return an array containing Moves with Sessions added. The array is empty
-     * if no fetchMove files are found. The Moves will contain no Sessions if no
+     * if no move files are found. The Moves will contain no Sessions if no
      * session files are found. The Sessions contain Sets when the session file
      * contains set data
-     * 
+     *
      * @throws FileNotFoundException when a move file is not found
      * @throws SecurityException when a move file cannot be accessed
      * @throws ParsingException when failing to parse the type of a Variable
      * @throws VariableStateException when a parsed Variable is found not proper
-     * 
-     * @see bodylog.files.FromFile#moveFileList
-     * @see bodylog.files.edit.MoveSaver
-     * @see bodylog.files.FromFile#allMovesWithSessions
-     * @see bodylog.ui.dataediting.MoveChooser
+     *
+     * @see bodylog.ui.MoveListContainerUpdater#newMoveList
      */
     public Move[] fetchAllMoves() throws FileNotFoundException,
             SecurityException, ParsingException, VariableStateException {

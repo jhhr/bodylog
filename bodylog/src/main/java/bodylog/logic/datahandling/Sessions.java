@@ -32,7 +32,7 @@ public class Sessions {
      *
      * @throws ParsingException when failing to parse the type of a Variable
      * @throws VariableStateException when a parsed Variable is found not proper
-     * 
+     *
      * @see bodylog.logic.datahandling.Sets#parseLine
      * @see bodylog.logic.datahandling.Variables#parseLine
      */

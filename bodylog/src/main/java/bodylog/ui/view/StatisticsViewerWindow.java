@@ -1,33 +1,3 @@
-/*
- * Copyright (c) 1995, 2008, Oracle and/or its affiliates. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   - Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *
- *   - Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *
- *   - Neither the name of Oracle or the names of its
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
- * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
 package bodylog.ui.view;
 
 import bodylog.logic.Move;
@@ -40,14 +10,12 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -69,6 +37,8 @@ public class StatisticsViewerWindow extends WindowWithMoveListContainer {
 
     private final StatisticsDisplayer displayer;
     private final JPanel tablePanel;
+    private final JLabel noMovementsLabel = new JLabel(
+            "Could not find any movements from which to display statistics");
 
     /**
      * Constructs a new statistics displaying window. All moves are read from
@@ -106,21 +76,7 @@ public class StatisticsViewerWindow extends WindowWithMoveListContainer {
         JPanel buttonPanel = createButtonPanel(selector);
 
         //the panel holding the buttonPanel and tablePanel
-        JPanel viewPanel = new JPanel();
-        viewPanel.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 1.0;
-        c.insets = new Insets(5, 5, 5, 5);
-        c.gridx = 0;
-        c.gridy = 0;    
-        viewPanel.add(buttonPanel,c);
-        c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 1;
-        c.weighty = 1.0;
-        c.anchor = GridBagConstraints.PAGE_START;
-        viewPanel.add(tablePanel,c);
+        JPanel viewPanel = createViewPanel(buttonPanel);
 
         //the scroll pane holding the move list, left side of the split pane
         JScrollPane listScrollPane = new JScrollPane(selector.getJList());
@@ -138,14 +94,13 @@ public class StatisticsViewerWindow extends WindowWithMoveListContainer {
         setViewportView(splitPane);
 
         //add default content to the tablePanel
-        tablePanel.add(new JLabel("Could not find any movements from "
-                + "which to display statistics"));
+        tablePanel.add(noMovementsLabel);
 
         //get the display for the first move, if null, the above is displayed
         moveSelectedAction(selector.getSelectedMove());
     }
-    
-    private JPanel createButtonPanel(final MoveSelector selector){
+
+    private JPanel createButtonPanel(final MoveSelector selector) {
         JPanel buttonPanel = new JPanel();
         //create and add the button to the panel
         JButton reloadButton = new JButton("Reload");
@@ -160,8 +115,30 @@ public class StatisticsViewerWindow extends WindowWithMoveListContainer {
 
         });
         buttonPanel.add(reloadButton);
-        
+
         return buttonPanel;
+    }
+
+    private JPanel createViewPanel(JPanel buttonPanel) {
+        JPanel viewPanel = new JPanel();
+        viewPanel.setLayout(new GridBagLayout());
+
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 1.0;
+        c.insets = new Insets(5, 5, 5, 5);
+        c.gridx = 0;
+        c.gridy = 0;
+        viewPanel.add(buttonPanel, c);
+
+        c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 1;
+        c.weighty = 1.0;
+        c.anchor = GridBagConstraints.PAGE_START;
+        viewPanel.add(tablePanel, c);
+
+        return viewPanel;
     }
 
     private JSplitPane createSplitPane(JScrollPane left, JScrollPane right) {
@@ -177,7 +154,7 @@ public class StatisticsViewerWindow extends WindowWithMoveListContainer {
     }
 
     @Override
-    public MoveListContainer getListContainer() {
+    public MoveListContainer getMoveListContainer() {
         return moveListContainer;
     }
 
@@ -196,17 +173,23 @@ public class StatisticsViewerWindow extends WindowWithMoveListContainer {
      */
     @Override
     public void moveSelectedAction(Move move) {
-        if (move == null) {
+        if (move == null) {//move can be null when move list is empty
             return;
         }
-        for (Component previousTables : tablePanel.getComponents()) {
-            tablePanel.remove(previousTables);
+        for (Component previousDisplay : tablePanel.getComponents()) {
+            tablePanel.remove(previousDisplay);
         }
         try {
             tablePanel.add(displayer.getStatisticsDisplay(move));
         } catch (FileNotFoundException | ParsingException |
-                VariableStateException ex) {
-            Logger.getLogger(StatisticsViewerWindow.class.getName()).log(Level.SEVERE, null, ex);
+                VariableStateException unexpected) {
+            Throwable t = unexpected.getCause();
+            String cause = (t == null) ? "none or unknown" : t.toString();
+            tablePanel.add(new JLabel("Fetching statistics display failed.\n"
+                    + "cause: " + cause + "\n"
+                    + " message: " + unexpected.getMessage()));
+            Logger.getLogger(this.getClass().getName()).log(
+                    Level.SEVERE, null, unexpected);
         }
         validate();
         repaint();

@@ -1,4 +1,3 @@
-
 package bodylog.logic.exceptions;
 
 import java.nio.file.FileSystemException;
@@ -6,7 +5,7 @@ import java.nio.file.FileSystemException;
 /**
  * Custom exception used for creating files or folders.
  *
- * @see bodylog.files.edit.MoveSaver#createSessionFolder
+ * @see bodylog.files.write.MoveSaver#createSessionFolder
  */
 public class FileCreationException extends FileSystemException {
 

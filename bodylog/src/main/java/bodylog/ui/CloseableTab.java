@@ -30,7 +30,6 @@
  */
 package bodylog.ui;
 
-import bodylog.ui.edit.WindowWithMoveChooser;
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
@@ -38,9 +37,9 @@ import java.awt.event.*;
 
 /**
  * Custom tab component that contains a button which will remove the Component
- associated with this tab from its containing JTabbedPane and, if the
- Component being removed is a WindowWithMoveChooser, remove the associated
- MoveChooser from the MoveListContainerUpdater's list of choosers.
+ * associated with this tab from its containing JTabbedPane and, if the
+ * Component being removed is a WindowWithMoveChooser, remove the associated
+ * MoveChooser from the MoveListContainerUpdater's list of choosers.
  *
  * Code from Oracle's
  * <a href="https://docs.oracle.com/javase/tutorial/uiswing/examples/components/TabComponentsDemoProject/src/components/ButtonTabComponent.java">TabComponentsDemo</a>
@@ -102,7 +101,7 @@ public class CloseableTab extends JPanel {
             setBorderPainted(false);
             //Making nice rollover effect
             //we use the same listener for all buttons
-            addMouseListener(buttonMouseListener);
+            addMouseListener(BUTTON_MOUSE_LISTENER);
             setRolloverEnabled(true);
             //Close the proper tab by clicking the button
             addActionListener(this);
@@ -113,9 +112,10 @@ public class CloseableTab extends JPanel {
             int i = pane.indexOfTabComponent(CloseableTab.this);
             if (i != -1) {
                 Component comp = pane.getComponent(i);
-                if (comp instanceof WindowWithMoveChooser) {
-                    WindowWithMoveChooser win = (WindowWithMoveChooser) comp;
-                    win.getUpdater().removeContainer(win.getListContainer());
+                if (comp instanceof WindowWithMoveListContainer) {
+                    WindowWithMoveListContainer win
+                            = (WindowWithMoveListContainer) comp;
+                    win.getUpdater().removeContainer(win.getMoveListContainer());
                 }
                 pane.remove(i);
             }
@@ -149,7 +149,7 @@ public class CloseableTab extends JPanel {
         }
     }
 
-    private final static MouseListener buttonMouseListener = new MouseAdapter() {
+    private final static MouseListener BUTTON_MOUSE_LISTENER = new MouseAdapter() {
         @Override
         public void mouseEntered(MouseEvent e) {
             paintButtonBorder(e, true);

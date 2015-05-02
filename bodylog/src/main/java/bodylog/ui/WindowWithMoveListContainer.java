@@ -30,9 +30,9 @@ public abstract class WindowWithMoveListContainer extends JScrollPane {
      * when the move list needs to be updated.
      *
      * @return the MoveListContainer of this window, a MoveChooser
-     * @see bodylog.ui.dataediting.MoveEditor#saveToFile
+     * @see bodylog.ui.edit.move.MoveEditor#saveToFile
      */
-    public MoveListContainer getListContainer() {
+    public MoveListContainer getMoveListContainer() {
         return moveListContainer;
     }
 
@@ -43,7 +43,7 @@ public abstract class WindowWithMoveListContainer extends JScrollPane {
      *
      * @return the MoveListContainerUpdater of this window, it is the same
      * object for all windows
-     * 
+     *
      * @see bodylog.ui.CloseableTab
      */
     public MoveListContainerUpdater getUpdater() {

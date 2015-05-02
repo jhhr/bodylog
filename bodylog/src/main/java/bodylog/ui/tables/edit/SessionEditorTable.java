@@ -16,7 +16,7 @@ public class SessionEditorTable extends EditorTable {
      * Creates a new table model for editing a Session of a Move. Adds a new
      * Session to the Move and a Set to the Session.
      *
-     * @param move
+     * @param move the Move to be edited
      */
     public SessionEditorTable(Move move) {
         super(createTableData(move), move.getVariableNames(), move);

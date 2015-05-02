@@ -30,13 +30,13 @@ public class VariableChoicesEditor extends AbstractCellEditor
 
     private final JButton button;
     private String[] currentChoices;
-    private ChoiceEditor editor;
+    private final ChoiceEditor editor;
 
     public VariableChoicesEditor(JTable table) {
         this.button = new JButton(Arrays.toString(currentChoices));
         button.setActionCommand(EDIT);
         button.addActionListener(this);
-        editor = new ChoiceEditor(this,table);
+        editor = new ChoiceEditor(this, table);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class VariableChoicesEditor extends AbstractCellEditor
         if (EDIT.equals(e.getActionCommand())) {
             editor.setTable(currentChoices);
             editor.setVisible(true);
-            
+
             fireEditingStopped();
         } else {
             currentChoices = editor.updateChoices();
@@ -74,7 +74,7 @@ public class VariableChoicesEditor extends AbstractCellEditor
         public ChoiceEditor(ActionListener doneListener, JTable table) {
             super(JOptionPane.getRootFrame(), "edit choices", true);
             tablePane = new JScrollPane();
-            
+
             setLocationRelativeTo(null);
 
             setMinimumSize(new Dimension(120, 200));
@@ -143,7 +143,7 @@ public class VariableChoicesEditor extends AbstractCellEditor
             innerPanel.add(tablePane, c);
 
             setContentPane(new JScrollPane(outerPanel));
-            pack();            
+            pack();
         }
 
         private void setTable(String[] currentChoices) {
@@ -161,7 +161,7 @@ public class VariableChoicesEditor extends AbstractCellEditor
 
             table = new JTable(model);
             table.setToolTipText("Characters not allowed in choices: "
-                    + Names.IllegalCharsWithSpaces(Names.Illegal.VARIABLE));
+                    + Names.illegalCharsWithSpaces(Names.Illegal.VARIABLE));
             table.setPreferredScrollableViewportSize(table.getPreferredSize());
             table.getTableHeader().setReorderingAllowed(false);
             tablePane.setViewportView(table);
@@ -199,6 +199,7 @@ public class VariableChoicesEditor extends AbstractCellEditor
                         parsedValue = Names.isAllowed(
                                 (String) value, Names.Illegal.VARIABLE);
                     } catch (NameNotAllowedException n) {
+                        return;
                     }
                     Vector rowVector = (Vector) dataVector.elementAt(row);
                     rowVector.setElementAt(parsedValue, column);

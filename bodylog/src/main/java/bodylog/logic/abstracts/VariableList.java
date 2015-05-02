@@ -111,17 +111,17 @@ public abstract class VariableList {
     public String getVariableName(int index) {
         return variables[index].getName();
     }
-    
-    public Object[] getDefaultValues(){
+
+    public Object[] getDefaultValues() {
         Object[] defaultValues = new Object[getVariableCount()];
         for (int index = 0; index < defaultValues.length; index++) {
             defaultValues[index] = getVariable(index).getDefaultValue();
         }
         return defaultValues;
     }
-    
-    public void checkVariables() throws VariableStateException, 
-            DuplicateVariableNameException{
+
+    public void checkVariables() throws VariableStateException,
+            DuplicateVariableNameException {
         for (Variable var : variables) {
             var.checkState();
         }

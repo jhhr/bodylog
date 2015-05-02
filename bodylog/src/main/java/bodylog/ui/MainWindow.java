@@ -26,34 +26,34 @@ import javax.swing.JTabbedPane;
  * @see bodylog.ui.edit.move.MoveEditorWindow
  * @see bodylog.ui.edit.session.SessionEditorWindow
  * @see bodylog.ui.view.StatisticsViewerWindow
- * @see bodylog.ui.HelpWindow
+ * @see bodylog.ui.help.HelpWindow
  */
 public class MainWindow extends JFrame implements ActionListener {
 
     private final JTabbedPane tabs;
     private final JMenuBar menuBar;
     private final MoveListContainerUpdater updater;
-    
+
     private static final String SESSION_EDITOR = "Session Editor";
     private static final String MOVE_EDITOR = "Move Editor";
     private static final String STATISTICS = "Statistics";
     private static final String INFO = "Help";
-    
+
     private static final String SESSION_ITEM_TITLE = "Add Sessions";
     private static final String MOVE_ITEM_TITLE = "Add/Edit Movements";
     private static final String STAT_ITEM_TITLE = "View Statistics";
-    
+
     private static final String MAIN_MENU_TITLE = "Menu";
     private static final String HELP_MENU_TITLE = "Help";
-    
+
     private static final String HELP_ITEM_TITLE = "View Help";
 
     /**
-     * Creates a new MainWindow. Adds the menuBar, two menus and the
-     * <code>JTabbedPane</code> which displays the other UI windows in tabs.
-     * Opens the help window in a tab in the beginning so it is the first thing
-     * shown to the user. Tabs use a custom tab button containing a button that
-     * closes the tab.
+     * Creates a new MainWindow with the HelpWindow already open. Creates a
+     * menuBar, two menus and the <code>JTabbedPane</code> which displays the
+     * other UI windows in tabs. Opens the help window in a tab in the beginning
+     * so it is the first thing shown to the user. Tabs use a custom tab button
+     * containing a button that closes the tab.
      *
      * @see javax.swing.JTabbedPane
      * @see bodylog.ui.CloseableTab
@@ -82,7 +82,7 @@ public class MainWindow extends JFrame implements ActionListener {
         JMenu mainMenu = new JMenu(MAIN_MENU_TITLE);
 
         mainMenu.add(sessionEditMenuItem());
-        mainMenu.add(moveEditMenuItem());        
+        mainMenu.add(moveEditMenuItem());
         mainMenu.add(statisticsMenuItem());
 
         return mainMenu;
@@ -125,10 +125,10 @@ public class MainWindow extends JFrame implements ActionListener {
 
     /**
      * When the user clicks on a menu button a window of the corresponding kind
-     * is opened unless that window has already been opened in which case is
+     * is opened unless that window has already been opened in which case it is
      * simply made selected.
      *
-     * @param e click event
+     * @param e the event
      */
     @Override
     public void actionPerformed(ActionEvent e) {

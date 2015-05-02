@@ -25,7 +25,6 @@ public class MoveChooser extends MoveListContainer
      *
      * @param window the WindowWithMoveChooser that contains this
      * @param moves the list of Moves initially used to populate the JComboBox
-     * @see bodylog.files.FromFile#allMovesWithoutSessions
      */
     public MoveChooser(WindowWithMoveChooser window, Move[] moves) {
         super(window);

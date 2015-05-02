@@ -6,8 +6,6 @@ import javax.swing.table.AbstractTableModel;
 /**
  * Abstract TableModel used a base for TableModel implementations used to edit
  * Moves or Sessions.
- *
- * @see bodylog.ui.dataviewing.MoveTables
  */
 public abstract class MoveTableModel extends AbstractTableModel {
 
@@ -22,14 +20,16 @@ public abstract class MoveTableModel extends AbstractTableModel {
      */
     public MoveTableModel(Move move) {
         this.move = move;
-    }  
+    }
 
     /**
      * Returns column name which is the name of a variable of the Move.
      *
      * @param colummn index to get variable
+     *
      * @return the variable
-     * @see bodylog.logic.Move#getVariableName(int)
+     *
+     * @see bodylog.logic.Move#getVariableName
      */
     @Override
     public String getColumnName(int colummn) {
@@ -40,6 +40,7 @@ public abstract class MoveTableModel extends AbstractTableModel {
      * Returns column count which is the number of variables in the Move.
      *
      * @return the number of variables
+     *
      * @see bodylog.logic.Move#getVariableCount
      */
     @Override

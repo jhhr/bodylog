@@ -21,16 +21,18 @@ import java.nio.file.FileSystemException;
  */
 public class MoveSaver extends Saver {
 
-    private final String oldName;
+    private String oldName;
 
     private static final int SUCCESS = 0;
     private static final int FILE_RENAME_FAILED = 1;
     private static final int FOLDER_RENAME_FAILED = 2;
     private static final int BOTH_RENAMES_FAILED = 3;
+    private SaveStatus saveStatus;
 
-    private static final int NEW_MOVE = 4;
-    private static final int MOVE_UPDATED = 5;
-    private static final int MOVE_RENAMED = 6;
+    private enum SaveStatus {
+
+        NONE, NEW_MOVE, MOVE_UPDATED, MOVE_RENAMED
+    }
 
     /**
      * Creates a new MoveSaver for the specified Move and with the given
@@ -43,9 +45,10 @@ public class MoveSaver extends Saver {
      * @see bodylog.logic.Move
      */
     public MoveSaver(MoveListContainerUpdater updater, Move move) {
-        //this will be an empty string if the Move was not loaded from file
         super(updater, move);
+        //the name will be an empty string if the Move was not loaded from file
         this.oldName = move.getName();
+        this.saveStatus = SaveStatus.NONE;
     }
 
     /**
@@ -95,52 +98,66 @@ public class MoveSaver extends Saver {
     public void saveToFile() throws SecurityException, IllegalArgumentException,
             FileCreationException, FileRenameException, IOException,
             VariableStateException, DuplicateVariableNameException {
-        int updateStatus = 0;
-        if (move.getName().isEmpty()) {//is the name blank?
+        checkMovePropriety();
+        if (oldName.isEmpty()) {//is this a new Move?
+            checkNameUsage();
+            createSessionFolder();
+            saveStatus = SaveStatus.NEW_MOVE;
+        } else if (!oldName.equals(move.getName())) {//was the name changed?
+            renameFilesAndCheckResult();
+            saveStatus = SaveStatus.MOVE_RENAMED;
+        } else {//the Move was edited but name wasn't changed
+            saveStatus = SaveStatus.MOVE_UPDATED;
+        }
+        //overwriting renamed files: if an error occurs, old data is not lost
+        writeToFile();
+        informUpdater();
+    }
+
+    private void checkMovePropriety() throws IllegalArgumentException,
+            VariableStateException, DuplicateVariableNameException {
+        if (move.getName().isEmpty()) {
             throw new IllegalArgumentException(
                     "Saving a move with a blank name is not allowed.");
         } else {
             move.checkVariables();
         }
-        if (oldName.isEmpty()) {//is this a new Move?
-            if (fileExists()) {//has the name already been used?
-                throw new IllegalArgumentException(
-                        "There already is a file for a movement with this name.");
-            }
-            createSessionFolder();
-            updateStatus = NEW_MOVE;
-        } else if (!oldName.equals(move.getName())) {//was the name changed?
-            switch (renameFiles()) {
-                //response to results of file renaming
-                case SUCCESS:
-                    updateStatus = MOVE_RENAMED;
-                    break;
-                case FILE_RENAME_FAILED:
-                    throw new FileRenameException(oldName, move.getName(),
-                            "Move file renaming failed for unknown reasons. "
-                            + "Folder renaming not attempted. "
-                            + "Try saving again or fix this manually.");
-                case FOLDER_RENAME_FAILED:
-                    throw new FileRenameException(oldName, move.getName(),
-                            "Move file rename succeeded but "
-                            + "Move folder renaming failed for unknown reasons."
-                            + "You need to manually fix this.");
-                case BOTH_RENAMES_FAILED:
-                    throw new FileRenameException(oldName, move.getName(),
-                            "Both Move file and folder renaming failed "
-                            + "for unknown reasons. "
-                            + "Try saving again or fix this manually.");
-            }
-        } else {//the Move was edited but name wasn't changed
-            updateStatus = MOVE_UPDATED;
+    }
+
+    private void checkNameUsage() throws IllegalArgumentException,
+            FileCreationException {
+        if (fileExists()) {//has the name already been used?
+            throw new IllegalArgumentException(
+                    "There already is a file for a movement with this name.");
         }
-        /**
-         * Why rename instead of deleting if it's just going to be overwritten?
-         * Because an error might occur here and the previous data would be
-         * lost.
-         */
-        writeToFile();
-        informUpdater(updateStatus);
+    }
+
+    private void renameFilesAndCheckResult() throws FileSystemException,
+            FileRenameException {
+        switch (renameFiles()) {
+            //response to results of file renaming
+            case SUCCESS:
+                break;
+            case FILE_RENAME_FAILED:
+                throw new FileRenameException(oldName, move.getName(),
+                        "Move file renaming failed for unknown reasons. "
+                        + "Folder renaming not attempted. "
+                        + "Try saving again or fix this manually.");
+            case FOLDER_RENAME_FAILED:
+                throw new FileRenameException(oldName, move.getName(),
+                        "Move file rename succeeded but "
+                        + "Move folder renaming failed for unknown reasons."
+                        + "You need to manually fix this.");
+            case BOTH_RENAMES_FAILED:
+                throw new FileRenameException(oldName, move.getName(),
+                        "Both Move file and folder renaming failed "
+                        + "for unknown reasons. "
+                        + "Try saving again or fix this manually.");
+            default:
+                throw new FileRenameException(oldName, move.getName(),
+                        "Result of renaming is UNKNOWN. "
+                        + "Check files to verify whether rename failed or not.");
+        }
     }
 
     /**
@@ -177,11 +194,9 @@ public class MoveSaver extends Saver {
 
         //throw exception if renaming would fail with move folders
         throwRenameException(oldFolder, newFolder, "folder");
-        /**
-         * Now the only way to fail is by not being able to access the file
-         * (throws a SecurityException) or some other unexpected way. Returning
-         * false will signal this unexpected failure having happened.
-         */
+        /*Now the only way to fail is by not being able to access the file
+         (throws a SecurityException) or some other unexpected way. Returning
+         false will signal this unexpected failure having happened.*/
         int returnValue = 0;
         //add 0 if rename successful, 1 if not
         returnValue += oldFile.renameTo(newFile) ? 0 : 1;
@@ -213,17 +228,20 @@ public class MoveSaver extends Saver {
         File moveFile = new File(Constant.MOVES_DIR, move.getName() + Constant.MOVE_END);
         FileWriter writer = new FileWriter(moveFile);
         writer.write(Moves.format(move));
+
+        oldName = move.getName();
         writer.close();
     }
 
-    private void informUpdater(int updateStatus) {
-        switch (updateStatus) {
+    private void informUpdater() {
+        switch (saveStatus) {
             case NEW_MOVE:
                 updater.updateContainersWithNewMove(move);
                 break;
             case MOVE_UPDATED:
             case MOVE_RENAMED:
                 updater.updateContainersWithChangedMove(new Move(oldName), move);
+                break;
         }
     }
 
